@@ -39,27 +39,6 @@ public class AltimeterController implements Subscribable {
 	@Override
 	public void handle(Event<?> event) {
 
-		if (event instanceof AltimeterChangeEvent altimeterChangeEvent) {
-			move(altimeterChangeEvent);
-		}
-
-	}
-
-	private void move(AltimeterChangeEvent altimeterChangeEvent) {
-		double angleToRotateHeading = (altimeterChangeEvent.getData().getHeading() % (2 * Math.PI));
-		altimeterView.getCylindricalHeadingTransform().setRotation(QuaternionF.RotationZ(angleToRotateHeading));
-
-		double angleToRotatePitch = altimeterChangeEvent.getData().getPitch() % (2 * Math.PI);
-		altimeterView.getCylindricalPitchTransform().setRotation(QuaternionF.RotationY(-angleToRotatePitch));
-
-		renderBus.dispatch(new RenderUpdateEvents(
-				new RenderUpdateData(() -> {
-					altimeterView.getRollTextItem().changeText(String.valueOf((int) Math.toDegrees(altimeterChangeEvent.getData().getRoll() % (2 * Math.PI))));
-					altimeterView.getRollTextTransform().setPosition(new Vec3f(0, 0, -altimeterView.getRollTextItem().getWidth()/2.0f));
-					altimeterView.getAltTextItem().changeText(String.valueOf((int) altimeterChangeEvent.getData().getAltitude()));
-				}),
-				RenderUpdateEventType.FUNCTION));
-
 	}
 
 	@Override

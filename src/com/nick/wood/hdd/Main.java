@@ -71,7 +71,7 @@ public class Main {
 		// player camera
 		Camera camera = new Camera(1.22173f, 0.001f, 100);
 		Transform cameraTransform = transformBuilder
-				.setPosition(new Vec3f(0, 0, 0))
+				.setPosition(new Vec3f(1000, 0, 0))
 				.setScale(Vec3f.ONE)
 				.setRotation(CAMERA_ROTATION)
 				.build();
@@ -102,7 +102,7 @@ public class Main {
 		RenderBus renderBus = new RenderBus();
 		ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-		AltimeterSceneController altimeterSceneController = new AltimeterSceneController(altimeterSceneView);
+		AltimeterSceneController altimeterSceneController = new AltimeterSceneController(altimeterSceneView, renderBus);
 		renderBus.register(altimeterSceneController);
 
 		AltimeterController altimeterController = new AltimeterController(altimeterView, renderBus);
@@ -116,7 +116,7 @@ public class Main {
 			while (true) {
 				Thread.sleep(10);
 				renderBus.dispatch(new AltimeterChangeEvent(
-						new AltimeterChangeData((float)i/1000, (float)i/1000, 0, (float) i, (float)i),
+						new AltimeterChangeData((float)i/1000, (float)i/1000, 0, (float) i, (float)i, (float)i),
 						AltimeterChangeDataType.CHANGE
 				));
 				i++;
