@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
 
 public class RendererManager implements Subscribable {
 
@@ -39,7 +38,6 @@ public class RendererManager implements Subscribable {
 		supports.add(RenderManagementEvents.class);
 		supports.add(RenderUpdateEvents.class);
 	}
-
 
 
 	private void init(RenderManagementInitData data) {
@@ -71,29 +69,10 @@ public class RendererManager implements Subscribable {
 			RenderUpdateEvents poll = renderUpdateEvents.poll();
 			if (poll != null) {
 				switch (poll.getType()) {
-					case SCENE -> {
-						gameObjects.forEach((uuid, sceneGraph) -> {
-							for (SceneGraphNode child : sceneGraph.getSceneGraphNodeData().getChildren()) {
-								findAndEdit(child, poll.getData().getText());
-							}
-						});
-					}
+					case FUNCTION -> poll.getData().getRunnable().run();
 					default -> {
 						System.out.println("Wut?");
 					}
-				}
-			}
-		}
-	}
-
-	private void findAndEdit(SceneGraphNode child, String text) {
-		for (SceneGraphNode sceneGraphNode : child.getSceneGraphNodeData().getChildren()) {
-			if (sceneGraphNode instanceof MeshSceneGraph) {
-				MeshSceneGraph meshSceneGraph = (MeshSceneGraph) sceneGraphNode;
-				if (meshSceneGraph.getMeshObject() instanceof TextItem textItem) {
-					textItem.changeText(text);
-				} else {
-					findAndEdit(sceneGraphNode, text);
 				}
 			}
 		}
@@ -114,6 +93,8 @@ public class RendererManager implements Subscribable {
 			switch (renderManagementEvents.getType()) {
 				case START -> init((RenderManagementInitData) renderManagementEvents.getData());
 			}
+		} else if (event instanceof RenderUpdateEvents renderUpdateEvent) {
+			renderUpdateEvents.add(renderUpdateEvent);
 		}
 
 	}

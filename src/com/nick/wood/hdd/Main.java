@@ -4,6 +4,9 @@ import com.nick.wood.graphics_library.WindowInitialisationParametersBuilder;
 import com.nick.wood.graphics_library.lighting.Attenuation;
 import com.nick.wood.graphics_library.lighting.PointLight;
 import com.nick.wood.graphics_library.objects.Camera;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
+import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.altimeter.AltimeterController;
@@ -12,10 +15,13 @@ import com.nick.wood.hdd.altimeter.AltimeterSceneView;
 import com.nick.wood.hdd.event_bus.busses.RenderBus;
 import com.nick.wood.hdd.event_bus.data.AltimeterChangeData;
 import com.nick.wood.hdd.event_bus.data.RenderManagementInitData;
+import com.nick.wood.hdd.event_bus.data.RenderUpdateData;
 import com.nick.wood.hdd.event_bus.event_types.AltimeterChangeDataType;
 import com.nick.wood.hdd.event_bus.event_types.RenderManagementEventType;
+import com.nick.wood.hdd.event_bus.event_types.RenderUpdateEventType;
 import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
+import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
 import com.nick.wood.hdd.event_bus.subscribables.RendererManager;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
@@ -58,7 +64,7 @@ public class Main {
 				.setPosition(Vec3f.ZERO).build();
 
 		Transform altimeterTransform = transformBuilder
-				.setPosition(new Vec3f(10, 0, 0)).build();
+				.setPosition(new Vec3f(5, 0, 0)).build();
 		TransformSceneGraph altimeterTransformGraph = new TransformSceneGraph(playerViewTransformGraph, altimeterTransform);
 
 
@@ -78,8 +84,7 @@ public class Main {
 		// lights
 		PointLight pointLight = new PointLight(
 				Vec3f.ONE,
-				1,
-				new Attenuation(0, 0.1f, 0.1f)
+				1
 		);
 		Creation.CreateLight(pointLight, cameraTransformGameObject, transformBuilder
 						.setPosition(Vec3f.ZERO)
@@ -100,7 +105,7 @@ public class Main {
 		AltimeterSceneController altimeterSceneController = new AltimeterSceneController(altimeterSceneView);
 		renderBus.register(altimeterSceneController);
 
-		AltimeterController altimeterController = new AltimeterController(altimeterView);
+		AltimeterController altimeterController = new AltimeterController(altimeterView, renderBus);
 		renderBus.register(altimeterController);
 
 		RendererManager renderer = new RendererManager();
@@ -111,7 +116,7 @@ public class Main {
 			while (true) {
 				Thread.sleep(10);
 				renderBus.dispatch(new AltimeterChangeEvent(
-						new AltimeterChangeData(0, 0, (float) i/1000, (float) i),
+						new AltimeterChangeData((float)i/1000, (float)i/1000, 0, (float) i, (float)i),
 						AltimeterChangeDataType.CHANGE
 				));
 				i++;

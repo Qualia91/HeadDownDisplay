@@ -5,5 +5,6 @@ import com.nick.wood.hdd.event_bus.interfaces.BaseEventType;
 public enum RenderUpdateEventType implements BaseEventType {
 	SCENE,
 	HUD,
-	CAMERA
+	CAMERA,
+	FUNCTION;
 }

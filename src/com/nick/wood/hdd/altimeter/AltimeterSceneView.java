@@ -5,6 +5,7 @@ import com.nick.wood.graphics_library.objects.Camera;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
+import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.Main;
@@ -16,11 +17,7 @@ import com.nick.wood.maths.objects.vector.Vec3f;
 public class AltimeterSceneView {
 
 	private final Transform fobCameraTransform;
-	private final Transform cylindricalAltitudeTransform;
-	private final double altAngleStepSize;
-	private final Transform cylindricalRollTransform;
-	private final double rollAngleStepSize;
-	private float radiusOfAltCylinder = 5;
+	private float radiusOfPitchCylinder = 5;
 
 	public AltimeterSceneView(SceneGraphNode fboViewTransformGraph) {
 
@@ -40,6 +37,7 @@ public class AltimeterSceneView {
 		TransformSceneGraph fboCameraTransformGameObject = new TransformSceneGraph(persistentFboCameraTransformGameObject, fobCameraTransform);
 		CameraSceneGraph fboCameraGameObject = new CameraSceneGraph(fboCameraTransformGameObject, fboCamera, CameraType.FBO_CAMERA);
 
+/*
 		MeshObject levelBlackMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/black.png")
@@ -51,48 +49,46 @@ public class AltimeterSceneView {
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
+						.resetRotation()
+
 						.build()).build();
 
 		// Level marker
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfAltCylinder + 1).add(new Vec3f(1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfAltCylinder + 1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfAltCylinder + 1).add(new Vec3f(-1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder + 1).add(new Vec3f(1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder + 1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder + 1).add(new Vec3f(-1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
 
 
-		// roll circle
-		this.cylindricalRollTransform = transformBuilder.reset().build();
-		TransformSceneGraph cylindricalRollTransformObject = new TransformSceneGraph(fboCameraTransformGameObject, cylindricalRollTransform);
-
-		// create boxes all around at regular angular intervals
-		int rollIntervals = 36;
-		this.rollAngleStepSize = (2 * Math.PI / rollIntervals);
-		for (int i = 0; i < rollIntervals; i++) {
-			double angleRad = i * rollAngleStepSize;
-
-			float posY = (float) (Math.sin(angleRad) * radiusOfAltCylinder/1.5);
-			float posX = (float) (Math.cos(angleRad) * radiusOfAltCylinder/4.0);
-
-			Creation.CreateObject(new Vec3f(posX, posY, -radiusOfAltCylinder), QuaternionF.RotationZ(angleRad), cylindricalRollTransformObject, whiteMarkers);
-		}
-
-
-		// altitude cylinder
-		this.cylindricalAltitudeTransform = transformBuilder.reset().build();
-		TransformSceneGraph cylindricalAltitudeTransformObject = new TransformSceneGraph(fboCameraTransformGameObject, cylindricalAltitudeTransform);
+		// pitch cylinder
+		this.cylindricalPitchTransform = transformBuilder.reset().build();
+		TransformSceneGraph cylindricalAltitudeTransformObject = new TransformSceneGraph(fboViewTransformGraph, cylindricalPitchTransform);
 
 		// create boxes all around at regular angular intervals
-		int altIntervals = 50;
-		this.altAngleStepSize = (2 * Math.PI / altIntervals);
-		for (int i = 0; i < altIntervals; i++) {
-			double angleRad = i * altAngleStepSize;
+		int pitchIntervals = 36;
+		this.pitchAngleStepSize = (2 * Math.PI / pitchIntervals);
+		for (int i = 0; i < pitchIntervals; i++) {
+			double angleRad = i * pitchAngleStepSize;
 
-			float posY = (float) (Math.sin(angleRad) * radiusOfAltCylinder);
-			float posZ = (float) (Math.cos(angleRad) * radiusOfAltCylinder);
+			float posX = (float) (Math.sin(angleRad) * radiusOfPitchCylinder);
+			float posZ = (float) (Math.cos(angleRad) * radiusOfPitchCylinder);
 
-			Creation.CreateObject(new Vec3f(0, posY, posZ), cylindricalAltitudeTransformObject, whiteMarkers);
+			MeshSceneGraph meshSceneGraph = Creation.CreateObjectAndGetSceneObject(new Vec3f(posX, 0, posZ),cylindricalAltitudeTransformObject, whiteMarkers);
+
+			// text
+			TextItem pitchText = (TextItem) new MeshBuilder()
+					.setMeshType(MeshType.TEXT)
+					.setText(String.valueOf((int) Math.toDegrees(angleRad)))
+					.build();
+			Transform headingNumberText = transformBuilder
+					.setPosition(new Vec3f(0, pitchText.getWidth(), 0))
+					.setRotation(QuaternionF.RotationX(Math.PI/2.0))
+					.setScale(Vec3f.ONE.scale(2))
+					.build();
+			TransformSceneGraph headingNumberTextSceneGraph = new TransformSceneGraph(meshSceneGraph, headingNumberText);
+			MeshSceneGraph headingTextMeshObject = new MeshSceneGraph(headingNumberTextSceneGraph, pitchText);
 		}
 
-
+*/
 		// skybox
 		Transform sphereTransform = transformBuilder
 				.setScale(Vec3f.ONE)
@@ -125,15 +121,4 @@ public class AltimeterSceneView {
 		return fobCameraTransform;
 	}
 
-	public Transform getCylindricalAltitudeTransform() {
-		return cylindricalAltitudeTransform;
-	}
-
-	public float getRadiusOfAltCylinder() {
-		return radiusOfAltCylinder;
-	}
-
-	public double getAltAngleStepSize() {
-		return altAngleStepSize;
-	}
 }

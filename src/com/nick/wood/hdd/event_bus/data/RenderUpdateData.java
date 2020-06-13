@@ -4,14 +4,13 @@ import com.nick.wood.hdd.event_bus.interfaces.RenderManagementData;
 
 public class RenderUpdateData implements RenderManagementData {
 
-	private final String text;
+	private final Runnable runnable;
 
-	public RenderUpdateData(String text) {
-		this.text = text;
+	public RenderUpdateData(Runnable runnable) {
+		this.runnable = runnable;
 	}
 
-	public String getText() {
-		return text;
+	public Runnable getRunnable() {
+		return runnable;
 	}
-
 }

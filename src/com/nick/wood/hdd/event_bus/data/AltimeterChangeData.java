@@ -7,12 +7,14 @@ public class AltimeterChangeData {
 	private final float pitch;
 	private final float roll;
 	private final float altitude;
+	private final float speed;
 
-	public AltimeterChangeData(float heading, float pitch, float roll, float altitude) {
+	public AltimeterChangeData(float heading, float pitch, float roll, float altitude, float speed) {
 		this.heading = heading;
 		this.pitch = pitch;
 		this.roll = roll;
 		this.altitude = altitude;
+		this.speed = speed;
 	}
 
 	public float getHeading() {
@@ -29,5 +31,9 @@ public class AltimeterChangeData {
 
 	public float getAltitude() {
 		return altitude;
+	}
+
+	public float getSpeed() {
+		return speed;
 	}
 }

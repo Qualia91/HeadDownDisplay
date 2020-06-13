@@ -23,14 +23,9 @@ public class AltimeterSceneController implements Subscribable {
 
 	private void moveCamera(AltimeterChangeEvent altimeterChangeEvent) {
 		QuaternionF rotation = QuaternionF.RotationZ(-altimeterChangeEvent.getData().getRoll())
-				.multiply(QuaternionF.RotationX(altimeterChangeEvent.getData().getPitch()))
-				.multiply(QuaternionF.RotationY(altimeterChangeEvent.getData().getHeading()));
+				.multiply(QuaternionF.RotationX(altimeterChangeEvent.getData().getPitch()));
 
 		altimeterSceneView.getFobCameraTransform().setRotation(rotation);
-
-		double angleToRotate = (altimeterChangeEvent.getData().getAltitude() / 1000.0 * altimeterSceneView.getAltAngleStepSize()) % (2 * Math.PI);
-
-		altimeterSceneView.getCylindricalAltitudeTransform().setRotation(QuaternionF.RotationX(angleToRotate));
 	}
 
 	@Override
