@@ -89,7 +89,7 @@ public class LinearReadout {
 				arrowMesh
 		);
 
-		// throttle text
+		// text
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
 				.build();

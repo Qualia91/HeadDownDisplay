@@ -51,17 +51,19 @@ public class AltimeterSceneController implements Subscribable {
 	private void move(AltimeterChangeEvent altimeterChangeEvent) {
 
 
-		double angleToRotateHeading = (altimeterChangeEvent.getData().getHeading() % (2 * Math.PI));
-		double angleToRotatePitch = altimeterChangeEvent.getData().getPitch() % (2 * Math.PI);
+		double angleToRotateHeading = altimeterChangeEvent.getData().getHeading();
+		double angleToRotatePitch = altimeterChangeEvent.getData().getPitch();
 		altimeterSceneView.getHeadingReadout().setAngle(-angleToRotateHeading);
 		altimeterSceneView.getPitchReadout().setAngle(angleToRotatePitch);
 		altimeterSceneView.getThrottleReadout().setPercent(altimeterChangeEvent.getData().getThrottle());
+		altimeterSceneView.getRollReadout().setRollStick(altimeterChangeEvent.getData().getRollStick());
+		altimeterSceneView.getPitchChangeIndicator().setPitchStick(altimeterChangeEvent.getData().getPitchStick());
+		altimeterSceneView.getYawChangeIndicator().setPitchStick(altimeterChangeEvent.getData().getYawStick());
 
 		renderBus.dispatch(new RenderUpdateEvents(
 				new RenderUpdateData(() -> {
-					altimeterSceneView.getRollTextItem().changeText(String.valueOf((int) Math.toDegrees(altimeterChangeEvent.getData().getRoll() % (2 * Math.PI))));
-					altimeterSceneView.getRollTextTransform().setPosition(new Vec3f(0, 0, -altimeterSceneView.getRollTextItem().getWidth()/2.0f));
-					altimeterSceneView.getAltTextItem().changeText(String.valueOf((int) altimeterChangeEvent.getData().getAltitude()));
+					altimeterSceneView.getRollReadout().setRoll(altimeterChangeEvent.getData().getRoll());
+					altimeterSceneView.getAltitudeReadout().setAltitude(altimeterChangeEvent.getData().getAltitude());
 					altimeterSceneView.getThrottleReadout().getTextItem().changeText(String.valueOf((int) (altimeterChangeEvent.getData().getThrottle() * 100)));
 				}),
 				RenderUpdateEventType.FUNCTION));

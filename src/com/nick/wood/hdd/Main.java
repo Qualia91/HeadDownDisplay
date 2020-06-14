@@ -115,8 +115,20 @@ public class Main {
 			int i = 0;
 			while (true) {
 				Thread.sleep(10);
+				float angle = (float) ((i/1000.0) % Math.PI);
+				float angleRequest = (float) (-Math.PI/2 + ((i/100.0) % Math.PI));
 				renderBus.dispatch(new AltimeterChangeEvent(
-						new AltimeterChangeData((float)i/1000 % 360, (float)i/1000 % 360, (float)i/1000 % 360, (float) i, (float)i, (float)((i/10) % 120)/ 100),
+						new AltimeterChangeData(
+								angle,
+								angle,
+								angle,
+								(float) i,
+								(float)i,
+								(float)((i/10) % 120)/ 100,
+								angleRequest,
+								angleRequest,
+								angleRequest
+								),
 						AltimeterChangeDataType.CHANGE
 				));
 				i++;

@@ -9,8 +9,7 @@ import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.Main;
-import com.nick.wood.hdd.gui_components.CylindricalReadout;
-import com.nick.wood.hdd.gui_components.LinearReadout;
+import com.nick.wood.hdd.gui_components.*;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -19,12 +18,12 @@ import com.nick.wood.maths.objects.vector.Vec3f;
 public class AltimeterSceneView {
 
 	private final Transform fobCameraTransform;
-	private final TextItem rollTextItem;
-	private final Transform rollTextTransform;
-	private final TextItem altTextItem;
-	private final Transform altTextTransform;
 	private final Transform skyboxTransform;
 	private final LinearReadout throttleReadout;
+	private final RollReadout rollReadout;
+	private final AltitudeReadout altitudeReadout;
+	private final ChangeIndicator pitchChangeIndicator;
+	private final ChangeIndicator yawChangeIndicator;
 	private TransformBuilder transformBuilder = new TransformBuilder();
 
 
@@ -56,13 +55,23 @@ public class AltimeterSceneView {
 				.setNormalTexture("/textures/gunMetalNormal.jpg")
 				.setTransform(transformBuilder
 						.setRotation(QuaternionF.RotationZ(Math.PI/2.0))
-						.setScale(new Vec3f(0.05f, 0.5f, 0.05f)).build()).build();
+						.setScale(new Vec3f(0.03f, 0.5f, 0.03f)).build()).build();
+
+		MeshObject whiteMarkers = new MeshBuilder()
+				.setMeshType(MeshType.CUBOID)
+				.setTexture("/textures/white.png")
+				.setTransform(transformBuilder
+						.resetPosition()
+						.setScale(new Vec3f(0.01f, 0.01f, 0.25f))
+						.build()).build();
 
 
 		// Level marker
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		double angleToRotate = Math.atan2(1, 1);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), QuaternionF.RotationY(-angleToRotate), fboCameraTransformGameObject, levelBlackMarkers);
 		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), QuaternionF.RotationY(angleToRotate), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, -0.8f, 0)), QuaternionF.RotationZ(Math.PI/2).multiply(QuaternionF.RotationY(angleToRotate)), fboCameraTransformGameObject, levelBlackMarkers);
 
 		// skybox
 		this.skyboxTransform = transformBuilder
@@ -91,70 +100,13 @@ public class AltimeterSceneView {
 				.setPosition(Vec3f.ZERO)
 				.setRotation(QuaternionF.Identity).build());// roll text
 
-		// alt text
-		this.altTextItem = (TextItem) new MeshBuilder()
-				.setMeshType(MeshType.TEXT)
-				.build();
-		Transform persistentAltTextTransform = transformBuilder
-				.reset()
-				.setRotation(QuaternionF.RotationX(Math.PI/2))
-				.setPosition(new Vec3f(1, 1, 0.05f))
-				.build();
-		this.altTextTransform = transformBuilder
-				.reset()
-				.setPosition(new Vec3f(0, 0, 0))
-				.build();
-		TransformSceneGraph textTransformSceneGraphPersistentAlt = new TransformSceneGraph(fboViewTransformGraph, persistentAltTextTransform);
-		TransformSceneGraph textTransformSceneGraphAlt = new TransformSceneGraph(textTransformSceneGraphPersistentAlt, altTextTransform);
-		MeshSceneGraph textMeshObjectAlt = new MeshSceneGraph(textTransformSceneGraphAlt, altTextItem);
+		this.altitudeReadout = new AltitudeReadout(fboViewTransformGraph);
 
-		// roll text
-		this.rollTextItem = (TextItem) new MeshBuilder()
-				.setMeshType(MeshType.TEXT)
-				.build();
-		Transform persistentRollTextTransform = transformBuilder
-				.reset()
-				.setRotation(QuaternionF.RotationX(Math.PI/2))
-				.setPosition(new Vec3f(0.8f, 0, 0.525f))
-				.build();
-		this.rollTextTransform = transformBuilder
-				.reset()
-				.setPosition(new Vec3f(0, 0, 0))
-				.build();
-		TransformSceneGraph textTransformSceneGraphPersistentRoll = new TransformSceneGraph(fboViewTransformGraph, persistentRollTextTransform);
-		TransformSceneGraph textTransformSceneGraphRoll = new TransformSceneGraph(textTransformSceneGraphPersistentRoll, rollTextTransform);
-		MeshSceneGraph textMeshObjectRoll = new MeshSceneGraph(textTransformSceneGraphRoll, rollTextItem);
+		this.pitchChangeIndicator = new ChangeIndicator(fboViewTransformGraph, new Vec3f(0.5f, 0.15f, 0), QuaternionF.RotationZ(Math.atan2(0.15, 0.5)));
 
-		// curve
-		MeshObject curveMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\curve.obj")
-				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/textures/gunMetalNormal.jpg")
-				.setTransform(
-						transformBuilder
-								.reset()
-								.setScale(0.2f)
-								.setRotation(QuaternionF.RotationX(Math.PI/2))
-								.build()
-				)
-				.build();
+		this.yawChangeIndicator = new ChangeIndicator(fboViewTransformGraph, new Vec3f(0.5f, 0, -0.35f), QuaternionF.RotationY(Math.atan2(0.35, 0.5)).multiply(QuaternionF.RotationX(Math.PI/2)));
 
-		TransformSceneGraph curveMeshTransformSceneGraph = new TransformSceneGraph(fboViewTransformGraph,
-				transformBuilder
-						.reset()
-				.setPosition(new Vec3f(1, 0, 0.5f)).build());
-
-		MeshSceneGraph curveMeshSceneGraph = new MeshSceneGraph(curveMeshTransformSceneGraph, curveMesh);
-
-
-		MeshObject whiteMarkers = new MeshBuilder()
-				.setMeshType(MeshType.CUBOID)
-				.setTexture("/textures/white.png")
-				.setTransform(transformBuilder
-						.resetPosition()
-						.setScale(new Vec3f(0.01f, 0.01f, 0.25f))
-						.build()).build();
+		this.rollReadout = new RollReadout(fboViewTransformGraph);
 
 		this.pitchReadout = new CylindricalReadout(
 				36,
@@ -180,13 +132,11 @@ public class AltimeterSceneView {
 				QuaternionF.Identity,
 				true,
 				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0))),
-				(angle, textItem) -> {
-						return new TransformBuilder()
-						.setPosition(new Vec3f(0, textItem.getWidth(), 0.15f))
-						.setRotation(QuaternionF.RotationX(Math.PI/2))
-						.setScale(Vec3f.ONE.scale(2))
-						.build();
-				});
+				(angle, textItem) -> new TransformBuilder()
+				.setPosition(new Vec3f(0, textItem.getWidth(), 0.15f))
+				.setRotation(QuaternionF.RotationX(Math.PI/2))
+				.setScale(Vec3f.ONE.scale(2))
+				.build());
 
 		this.throttleReadout = new LinearReadout(fboViewTransformGraph);
 
@@ -196,20 +146,8 @@ public class AltimeterSceneView {
 		return throttleReadout;
 	}
 
-	public TextItem getRollTextItem() {
-		return rollTextItem;
-	}
-
-	public Transform getRollTextTransform() {
-		return rollTextTransform;
-	}
-
-	public TextItem getAltTextItem() {
-		return altTextItem;
-	}
-
-	public Transform getAltTextTransform() {
-		return altTextTransform;
+	public RollReadout getRollReadout() {
+		return rollReadout;
 	}
 
 	public TransformBuilder getTransformBuilder() {
@@ -230,5 +168,17 @@ public class AltimeterSceneView {
 
 	public CylindricalReadout getHeadingReadout() {
 		return headingReadout;
+	}
+
+	public AltitudeReadout getAltitudeReadout() {
+		return altitudeReadout;
+	}
+
+	public ChangeIndicator getPitchChangeIndicator() {
+		return pitchChangeIndicator;
+	}
+
+	public ChangeIndicator getYawChangeIndicator() {
+		return yawChangeIndicator;
 	}
 }
