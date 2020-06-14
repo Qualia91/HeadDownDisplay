@@ -24,6 +24,7 @@ public class AltimeterSceneView {
 	private final AltitudeReadout altitudeReadout;
 	private final ChangeIndicator pitchChangeIndicator;
 	private final ChangeIndicator yawChangeIndicator;
+	private final CameraSceneGraph fboCameraGameObject;
 	private TransformBuilder transformBuilder = new TransformBuilder();
 
 
@@ -46,7 +47,7 @@ public class AltimeterSceneView {
 				.resetRotation()
 				.build();
 		TransformSceneGraph fboCameraTransformGameObject = new TransformSceneGraph(persistentFboCameraTransformGameObject, fobCameraTransform);
-		CameraSceneGraph fboCameraGameObject = new CameraSceneGraph(fboCameraTransformGameObject, fboCamera, CameraType.FBO_CAMERA);
+		this.fboCameraGameObject = new CameraSceneGraph(fboCameraTransformGameObject, fboCamera, CameraType.FBO_CAMERA);
 
 
 		MeshObject levelBlackMarkers = new MeshBuilder()
@@ -180,5 +181,9 @@ public class AltimeterSceneView {
 
 	public ChangeIndicator getYawChangeIndicator() {
 		return yawChangeIndicator;
+	}
+
+	public CameraSceneGraph getFboCameraGameObject() {
+		return fboCameraGameObject;
 	}
 }

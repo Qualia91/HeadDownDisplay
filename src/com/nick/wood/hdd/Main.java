@@ -67,19 +67,34 @@ public class Main {
 				.setPosition(new Vec3f(5, 0, 0)).build();
 		TransformSceneGraph altimeterTransformGraph = new TransformSceneGraph(playerViewTransformGraph, altimeterTransform);
 
-
-		// player camera
-		Camera camera = new Camera(1.22173f, 0.001f, 100);
-		Transform cameraTransform = transformBuilder
-				.setPosition(new Vec3f(0, 0, 0))
-				.setScale(Vec3f.ONE)
-				.setRotation(CAMERA_ROTATION)
-				.build();
-		TransformSceneGraph cameraTransformGameObject = new TransformSceneGraph(playerViewTransformGraph, cameraTransform);
-		CameraSceneGraph cameraGameObject = new CameraSceneGraph(cameraTransformGameObject, camera, CameraType.PRIMARY);
-
 		AltimeterView altimeterView = new AltimeterView(altimeterTransformGraph);
 		AltimeterSceneView altimeterSceneView = new AltimeterSceneView(fboViewTransformGraph);
+
+		Camera camera = new Camera(1.22173f, 0.001f, 100);
+		TransformSceneGraph cameraTransformGameObject;
+
+		// attach camera to fbo
+		if (false) {
+			CameraSceneGraph fboCameraGameObject = altimeterSceneView.getFboCameraGameObject();
+			Transform cameraTransform = transformBuilder
+					.setPosition(new Vec3f(0, 0, 0))
+					.setScale(Vec3f.ONE)
+					.build();
+			cameraTransformGameObject = new TransformSceneGraph(fboCameraGameObject, cameraTransform);
+		} else {
+			// separate camera
+			// player camera
+			Transform cameraTransform = transformBuilder
+					.setPosition(new Vec3f(0, 0, 0))
+					.setScale(Vec3f.ONE)
+					.setRotation(CAMERA_ROTATION)
+					.build();
+			cameraTransformGameObject = new TransformSceneGraph(playerViewTransformGraph, cameraTransform);
+		}
+
+
+		CameraSceneGraph cameraGameObject = new CameraSceneGraph(cameraTransformGameObject, camera, CameraType.PRIMARY);
+
 
 		// lights
 		PointLight pointLight = new PointLight(
