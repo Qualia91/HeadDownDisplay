@@ -116,7 +116,7 @@ public class Main {
 			while (true) {
 				Thread.sleep(10);
 				renderBus.dispatch(new AltimeterChangeEvent(
-						new AltimeterChangeData((float)i/1000 % 360, (float)i/1000 % 360, (float)i/1000 % 360, (float) i, (float)i, (float)i),
+						new AltimeterChangeData((float)i/1000 % 360, (float)i/1000 % 360, (float)i/1000 % 360, (float) i, (float)i, (float)((i/10) % 120)/ 100),
 						AltimeterChangeDataType.CHANGE
 				));
 				i++;

@@ -10,6 +10,7 @@ import com.nick.wood.graphics_library.objects.scene_graph_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.Main;
 import com.nick.wood.hdd.gui_components.CylindricalReadout;
+import com.nick.wood.hdd.gui_components.LinearReadout;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -23,6 +24,7 @@ public class AltimeterSceneView {
 	private final TextItem altTextItem;
 	private final Transform altTextTransform;
 	private final Transform skyboxTransform;
+	private final LinearReadout throttleReadout;
 	private TransformBuilder transformBuilder = new TransformBuilder();
 
 
@@ -88,54 +90,42 @@ public class AltimeterSceneView {
 		Creation.CreateLight(pointLight, fboCameraTransformGameObject, transformBuilder
 				.setPosition(Vec3f.ZERO)
 				.setRotation(QuaternionF.Identity).build());// roll text
-		this.rollTextItem = (TextItem) new MeshBuilder()
-				.setMeshType(MeshType.TEXT)
-				.build();
-		Transform persistentRollTextTransform = transformBuilder
-				.setScale(Vec3f.ONE)
-				.setRotation(QuaternionF.RotationX((float) Math.PI / 2))
-				.setPosition(new Vec3f(-4, 0, 0.6f))
-				.build();
-		this.rollTextTransform = transformBuilder
-				.resetRotation()
-				.setPosition(new Vec3f(0, 0, -rollTextItem.getWidth()/2.0f))
-				.build();
-		TransformSceneGraph textTransformSceneGraphPersistent = new TransformSceneGraph(fboViewTransformGraph, persistentRollTextTransform);
-		TransformSceneGraph textTransformSceneGraph = new TransformSceneGraph(textTransformSceneGraphPersistent, rollTextTransform);
-		MeshSceneGraph textMeshObject = new MeshSceneGraph(textTransformSceneGraph, rollTextItem);
 
-		// text
+		// alt text
 		this.altTextItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setText("HELLO")
 				.build();
 		Transform persistentAltTextTransform = transformBuilder
-				.setScale(Vec3f.ONE)
-				.resetRotation()
-				.setRotation(QuaternionF.RotationX((float) Math.PI / 2))
-				.setPosition(new Vec3f(-4, 1, -altTextItem.getHeight()/2f))
+				.reset()
+				.setRotation(QuaternionF.RotationX(Math.PI/2))
+				.setPosition(new Vec3f(1, 1, 0.05f))
 				.build();
 		this.altTextTransform = transformBuilder
+				.reset()
 				.setPosition(new Vec3f(0, 0, 0))
-				.resetRotation()
 				.build();
 		TransformSceneGraph textTransformSceneGraphPersistentAlt = new TransformSceneGraph(fboViewTransformGraph, persistentAltTextTransform);
 		TransformSceneGraph textTransformSceneGraphAlt = new TransformSceneGraph(textTransformSceneGraphPersistentAlt, altTextTransform);
 		MeshSceneGraph textMeshObjectAlt = new MeshSceneGraph(textTransformSceneGraphAlt, altTextItem);
 
-		// arrow
-		MeshObject arrowMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\arrow.obj")
-				.setTransform(
-						transformBuilder
-								.setScale(Vec3f.ONE.scale(0.1f))
-								.setRotation(QuaternionF.RotationZ((float) -Math.PI / 2))
-								.build()
-				)
+		// roll text
+		this.rollTextItem = (TextItem) new MeshBuilder()
+				.setMeshType(MeshType.TEXT)
 				.build();
+		Transform persistentRollTextTransform = transformBuilder
+				.reset()
+				.setRotation(QuaternionF.RotationX(Math.PI/2))
+				.setPosition(new Vec3f(0.8f, 0, 0.525f))
+				.build();
+		this.rollTextTransform = transformBuilder
+				.reset()
+				.setPosition(new Vec3f(0, 0, 0))
+				.build();
+		TransformSceneGraph textTransformSceneGraphPersistentRoll = new TransformSceneGraph(fboViewTransformGraph, persistentRollTextTransform);
+		TransformSceneGraph textTransformSceneGraphRoll = new TransformSceneGraph(textTransformSceneGraphPersistentRoll, rollTextTransform);
+		MeshSceneGraph textMeshObjectRoll = new MeshSceneGraph(textTransformSceneGraphRoll, rollTextItem);
 
-		// arrow
+		// curve
 		MeshObject curveMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\curve.obj")
@@ -170,7 +160,7 @@ public class AltimeterSceneView {
 				36,
 				Vec3f.ZERO,
 				fboViewTransformGraph,
-				2,
+				2.5,
 				whiteMarkers,
 				QuaternionF.RotationX(Math.PI/2),
 				true,
@@ -183,9 +173,9 @@ public class AltimeterSceneView {
 
 		this.headingReadout = new CylindricalReadout(
 				36,
-				new Vec3f(0, 0, -1),
+				new Vec3f(0, 0, -1.2f),
 				fboViewTransformGraph,
-				2.5,
+				2,
 				whiteMarkers,
 				QuaternionF.Identity,
 				true,
@@ -198,22 +188,12 @@ public class AltimeterSceneView {
 						.build();
 				});
 
+		this.throttleReadout = new LinearReadout(fboViewTransformGraph);
 
-		// thrust indicator
+	}
 
-		Transform thrustIndicatorTransform = transformBuilder
-				.reset()
-				.setPosition(Vec3f.Y.scale(4))
-				.setRotation(QuaternionF.RotationZ(Math.PI/2))
-				.setScale(Vec3f.ONE.scale(2))
-				.build();
-
-		TransformSceneGraph thrustIndicatorTransformGraph = new TransformSceneGraph(fboViewTransformGraph, thrustIndicatorTransform);
-
-		MeshSceneGraph meshGameObject = new MeshSceneGraph(
-				thrustIndicatorTransformGraph,
-				whiteMarkers
-		);
+	public LinearReadout getThrottleReadout() {
+		return throttleReadout;
 	}
 
 	public TextItem getRollTextItem() {
