@@ -49,11 +49,12 @@ public class AltimeterSceneController implements Subscribable {
 	}
 
 	private void move(AltimeterChangeEvent altimeterChangeEvent) {
-		double angleToRotateHeading = (altimeterChangeEvent.getData().getHeading() % (2 * Math.PI));
-		altimeterSceneView.getCylindricalHeadingTransform().setRotation(QuaternionF.RotationZ(angleToRotateHeading));
 
+
+		double angleToRotateHeading = (altimeterChangeEvent.getData().getHeading() % (2 * Math.PI));
 		double angleToRotatePitch = altimeterChangeEvent.getData().getPitch() % (2 * Math.PI);
-		altimeterSceneView.getCylindricalPitchTransform().setRotation(QuaternionF.RotationZ(-angleToRotatePitch));
+		altimeterSceneView.getHeadingReadout().setAngle(-angleToRotateHeading);
+		altimeterSceneView.getPitchReadout().setAngle(angleToRotatePitch);
 
 		renderBus.dispatch(new RenderUpdateEvents(
 				new RenderUpdateData(() -> {

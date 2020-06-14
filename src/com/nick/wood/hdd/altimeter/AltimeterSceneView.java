@@ -1,6 +1,5 @@
 package com.nick.wood.hdd.altimeter;
 
-import com.nick.wood.graphics_library.input.DirectTransformController;
 import com.nick.wood.graphics_library.lighting.PointLight;
 import com.nick.wood.graphics_library.objects.Camera;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
@@ -10,29 +9,25 @@ import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.Main;
+import com.nick.wood.hdd.gui_components.CylindricalReadout;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class AltimeterSceneView {
 
 	private final Transform fobCameraTransform;
 	private final TextItem rollTextItem;
 	private final Transform rollTextTransform;
-	private final double headingAngleStepSize;
 	private final TextItem altTextItem;
 	private final Transform altTextTransform;
-	private final Transform cylindricalPitchTransform;
-	private final Transform cylindricalHeadingTransform;
-	private final float radiusOfHeadingCylinder = 2f;
-	private final float radiusOfPitchCylinder = 2.5f;
 	private final Transform skyboxTransform;
-	private double pitchAngleStepSize;
 	private TransformBuilder transformBuilder = new TransformBuilder();
+
+
+	private final CylindricalReadout pitchReadout;
+	private final CylindricalReadout headingReadout;
 
 	public AltimeterSceneView(SceneGraphNode fboViewTransformGraph) {
 
@@ -55,16 +50,17 @@ public class AltimeterSceneView {
 
 		MeshObject levelBlackMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
-				.setTexture("/textures/black.png")
+				.setTexture("/textures/gunMetalTexture.jpg")
+				.setNormalTexture("/textures/gunMetalNormal.jpg")
 				.setTransform(transformBuilder
 						.setRotation(QuaternionF.RotationZ(Math.PI/2.0))
 						.setScale(new Vec3f(0.05f, 0.5f, 0.05f)).build()).build();
 
 
 		// Level marker
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder - 1).add(new Vec3f(1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder - 1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder - 1).add(new Vec3f(-1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
 
 		// skybox
 		this.skyboxTransform = transformBuilder
@@ -143,7 +139,8 @@ public class AltimeterSceneView {
 		MeshObject curveMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\curve.obj")
-				.setTexture("/textures/black.png")
+				.setTexture("/textures/gunMetalTexture.jpg")
+				.setNormalTexture("/textures/gunMetalNormal.jpg")
 				.setTransform(
 						transformBuilder
 								.reset()
@@ -169,37 +166,29 @@ public class AltimeterSceneView {
 						.setScale(new Vec3f(0.01f, 0.01f, 0.25f))
 						.build()).build();
 
-		int pitchIntervals = 36;
-		this.pitchAngleStepSize = (2 * Math.PI / pitchIntervals);
-		this.cylindricalPitchTransform = createDataCylinder(
+		this.pitchReadout = new CylindricalReadout(
+				36,
 				Vec3f.ZERO,
 				fboViewTransformGraph,
-				pitchAngleStepSize,
-				radiusOfPitchCylinder,
+				2,
 				whiteMarkers,
 				QuaternionF.RotationX(Math.PI/2),
 				true,
-				-pitchIntervals/2,
-				pitchIntervals/2,
-				(val) -> String.valueOf((int)(Math.round( Math.toDegrees(val) / 10.0) * 10)),
+				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(angle) / 10.0) * 10)),
 				(angle, textItem) -> transformBuilder
 						.setPosition(new Vec3f(0, 0, -textItem.getWidth()))
 						.resetRotation()
 						.setScale(Vec3f.ONE.scale(2))
 						.build());
 
-		int headingIntervals = 36;
-		this.headingAngleStepSize = (2 * Math.PI / headingIntervals);
-		this.cylindricalHeadingTransform = createDataCylinder(
+		this.headingReadout = new CylindricalReadout(
+				36,
 				new Vec3f(0, 0, -1),
 				fboViewTransformGraph,
-				headingAngleStepSize,
-				radiusOfHeadingCylinder,
+				2.5,
 				whiteMarkers,
 				QuaternionF.Identity,
 				true,
-				-headingIntervals/2,
-				headingIntervals/2,
 				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0))),
 				(angle, textItem) -> {
 						return new TransformBuilder()
@@ -227,74 +216,6 @@ public class AltimeterSceneView {
 		);
 	}
 
-	private Transform createDataCylinder(Vec3f origin,
-	                                     SceneGraphNode parent,
-	                                     double stepSize,
-	                                     double radius,
-	                                     MeshObject markerMesh,
-	                                     QuaternionF cylinderPersistentRotation,
-	                                     boolean hasText,
-	                                     int from,
-	                                     int to,
-	                                     Function<Double, String> stringFunction,
-	                                     BiFunction<Double, TextItem, Transform> textTransformFunction) {
-
-		Transform cylindricalTransformPers = transformBuilder
-				.reset()
-				.setPosition(origin)
-				.setRotation(cylinderPersistentRotation)
-				.build();
-
-		Transform cylindricalTransform = transformBuilder
-				.reset()
-				.build();
-
-		TransformSceneGraph cylindricalHeadingTransformObjectPers = new TransformSceneGraph(parent, cylindricalTransformPers);
-		TransformSceneGraph cylindricalHeadingTransformObject = new TransformSceneGraph(cylindricalHeadingTransformObjectPers, cylindricalTransform);
-
-		// create boxes all around at regular angular intervals
-		for (int i = from; i < to; i++) {
-			double angleRad = i * stepSize;
-
-			float posX = (float) (Math.cos(angleRad) * radius);
-			float posY = (float) (Math.sin(angleRad) * radius);
-
-			Transform transformMesh = new TransformBuilder()
-					.setPosition(new Vec3f(posX, posY, 0))
-					.setRotation(QuaternionF.RotationZ(angleRad))
-					.build();
-
-			TransformSceneGraph meshTransform = new TransformSceneGraph(cylindricalHeadingTransformObject, transformMesh);
-
-			MeshSceneGraph meshSceneGraph = new MeshSceneGraph(
-					meshTransform,
-					markerMesh
-			);
-
-			if (hasText) {
-				// text
-				TextItem text = (TextItem) new MeshBuilder()
-						.setMeshType(MeshType.TEXT)
-						.setText(stringFunction.apply(angleRad))
-						.build();
-				Transform textTransform = textTransformFunction.apply(angleRad, text);
-
-				TransformSceneGraph textSceneGraph = new TransformSceneGraph(meshSceneGraph, textTransform);
-				MeshSceneGraph textMeshObject = new MeshSceneGraph(textSceneGraph, text);
-			}
-		}
-
-		return cylindricalTransform;
-	}
-
-	public Transform getCylindricalHeadingTransform() {
-		return cylindricalHeadingTransform;
-	}
-
-	public double getHeadingAngleStepSize() {
-		return headingAngleStepSize;
-	}
-
 	public TextItem getRollTextItem() {
 		return rollTextItem;
 	}
@@ -315,27 +236,19 @@ public class AltimeterSceneView {
 		return transformBuilder;
 	}
 
-	public double getRadiusOfHeadingCylinder() {
-		return radiusOfHeadingCylinder;
-	}
-
-	public float getRadiusOfPitchCylinder() {
-		return radiusOfPitchCylinder;
-	}
-
-	public Transform getCylindricalPitchTransform() {
-		return cylindricalPitchTransform;
-	}
-
-	public double getPitchAngleStepSize() {
-		return pitchAngleStepSize;
-	}
-
 	public Transform getFobCameraTransform() {
 		return fobCameraTransform;
 	}
 
 	public Transform getSkyboxTransform() {
 		return skyboxTransform;
+	}
+
+	public CylindricalReadout getPitchReadout() {
+		return pitchReadout;
+	}
+
+	public CylindricalReadout getHeadingReadout() {
+		return headingReadout;
 	}
 }
