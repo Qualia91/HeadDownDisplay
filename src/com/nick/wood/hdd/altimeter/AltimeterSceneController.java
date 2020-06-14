@@ -30,9 +30,9 @@ public class AltimeterSceneController implements Subscribable {
 
 	private void moveCamera(AltimeterChangeEvent altimeterChangeEvent) {
 		QuaternionF rotation = QuaternionF.RotationZ(-altimeterChangeEvent.getData().getRoll())
-				.multiply(QuaternionF.RotationX(altimeterChangeEvent.getData().getPitch()));
+				.multiply(QuaternionF.RotationY(altimeterChangeEvent.getData().getPitch()));
 
-		altimeterSceneView.getFobCameraTransform().setRotation(rotation);
+		altimeterSceneView.getSkyboxTransform().setRotation(rotation);
 	}
 
 
@@ -49,11 +49,11 @@ public class AltimeterSceneController implements Subscribable {
 	}
 
 	private void move(AltimeterChangeEvent altimeterChangeEvent) {
-		//double angleToRotateHeading = (altimeterChangeEvent.getData().getHeading() % (2 * Math.PI));
-		//altimeterSceneView.getCylindricalHeadingTransform().setRotation(QuaternionF.RotationZ(angleToRotateHeading));
-//
-		//double angleToRotatePitch = altimeterChangeEvent.getData().getPitch() % (2 * Math.PI);
-		//altimeterSceneView.getCylindricalPitchTransform().setRotation(QuaternionF.RotationZ(angleToRotatePitch));
+		double angleToRotateHeading = (altimeterChangeEvent.getData().getHeading() % (2 * Math.PI));
+		altimeterSceneView.getCylindricalHeadingTransform().setRotation(QuaternionF.RotationZ(angleToRotateHeading));
+
+		double angleToRotatePitch = altimeterChangeEvent.getData().getPitch() % (2 * Math.PI);
+		altimeterSceneView.getCylindricalPitchTransform().setRotation(QuaternionF.RotationZ(-angleToRotatePitch));
 
 		renderBus.dispatch(new RenderUpdateEvents(
 				new RenderUpdateData(() -> {

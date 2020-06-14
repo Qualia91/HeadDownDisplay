@@ -24,7 +24,7 @@ public class AltimeterView {
 		MeshObject sphere = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
 				.setTransform(transformBuilder
-						.setRotation(QuaternionF.RotationX(Math.PI/2))
+						.setRotation(QuaternionF.RotationX(-Math.PI/2))
 						.setScale(Vec3f.ONE.scale(5))
 						.build())
 				.setTextureViaFbo(true)

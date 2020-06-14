@@ -15,6 +15,7 @@ import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class AltimeterSceneView {
@@ -27,8 +28,9 @@ public class AltimeterSceneView {
 	private final Transform altTextTransform;
 	private final Transform cylindricalPitchTransform;
 	private final Transform cylindricalHeadingTransform;
-	private final double radiusOfHeadingCylinder = 3;
-	private float radiusOfPitchCylinder = 3;
+	private final float radiusOfHeadingCylinder = 2f;
+	private final float radiusOfPitchCylinder = 2.5f;
+	private final Transform skyboxTransform;
 	private double pitchAngleStepSize;
 	private TransformBuilder transformBuilder = new TransformBuilder();
 
@@ -60,17 +62,17 @@ public class AltimeterSceneView {
 
 
 		// Level marker
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder + 1).add(new Vec3f(1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder + 1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder + 1).add(new Vec3f(-1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder - 1).add(new Vec3f(1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder - 1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-radiusOfPitchCylinder - 1).add(new Vec3f(-1, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
 
 		// skybox
-		Transform sphereTransform = transformBuilder
+		this.skyboxTransform = transformBuilder
 				.setScale(Vec3f.ONE)
 				.setPosition(new Vec3f(0, 0, 0))
 				.setRotation(QuaternionF.Identity)
 				.build();
-		TransformSceneGraph sphereTransformSceneGraph = new TransformSceneGraph(fboViewTransformGraph, sphereTransform);
+		TransformSceneGraph sphereTransformSceneGraph = new TransformSceneGraph(fboViewTransformGraph, skyboxTransform);
 		MeshObject sphere = new MeshBuilder()
 				.setMeshType(MeshType.SPHERE)
 				.setTexture("/textures/altimeterSphere.png")
@@ -137,10 +139,26 @@ public class AltimeterSceneView {
 				)
 				.build();
 
-		TransformSceneGraph arrowTransformSceneGraph = new TransformSceneGraph(fboViewTransformGraph,
-				transformBuilder.reset().setPosition(new Vec3f(-1, 2.5f, 0)).build());
+		// arrow
+		MeshObject curveMesh = new MeshBuilder()
+				.setMeshType(MeshType.MODEL)
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\curve.obj")
+				.setTexture("/textures/black.png")
+				.setTransform(
+						transformBuilder
+								.reset()
+								.setScale(0.2f)
+								.setRotation(QuaternionF.RotationX(Math.PI/2))
+								.build()
+				)
+				.build();
 
-		MeshSceneGraph arrowMeshSceneGraph = new MeshSceneGraph(arrowTransformSceneGraph, arrowMesh);
+		TransformSceneGraph curveMeshTransformSceneGraph = new TransformSceneGraph(fboViewTransformGraph,
+				transformBuilder
+						.reset()
+				.setPosition(new Vec3f(1, 0, 0.5f)).build());
+
+		MeshSceneGraph curveMeshSceneGraph = new MeshSceneGraph(curveMeshTransformSceneGraph, curveMesh);
 
 
 		MeshObject whiteMarkers = new MeshBuilder()
@@ -161,13 +179,16 @@ public class AltimeterSceneView {
 				whiteMarkers,
 				QuaternionF.RotationX(Math.PI/2),
 				true,
-				4,
 				-pitchIntervals/2,
 				pitchIntervals/2,
-				(val) -> String.valueOf((int)(Math.round( Math.toDegrees(-val + Math.PI/2) / 10.0) * 10)),
-				(val) -> QuaternionF.RotationZ(Math.PI/2));
+				(val) -> String.valueOf((int)(Math.round( Math.toDegrees(val) / 10.0) * 10)),
+				(angle, textItem) -> transformBuilder
+						.setPosition(new Vec3f(0, 0, -textItem.getWidth()))
+						.resetRotation()
+						.setScale(Vec3f.ONE.scale(2))
+						.build());
 
-		int headingIntervals = 18;
+		int headingIntervals = 36;
 		this.headingAngleStepSize = (2 * Math.PI / headingIntervals);
 		this.cylindricalHeadingTransform = createDataCylinder(
 				new Vec3f(0, 0, -1),
@@ -177,11 +198,16 @@ public class AltimeterSceneView {
 				whiteMarkers,
 				QuaternionF.Identity,
 				true,
-				3,
 				-headingIntervals/2,
 				headingIntervals/2,
-				(val) -> String.valueOf((int)(Math.round( Math.toDegrees(val - Math.PI/2) / 10.0) * 10)),
-				(val) -> QuaternionF.RotationZ(Math.PI/2).multiply(QuaternionF.RotationX(Math.PI/2)));
+				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0))),
+				(angle, textItem) -> {
+						return new TransformBuilder()
+						.setPosition(new Vec3f(0, textItem.getWidth(), 0.15f))
+						.setRotation(QuaternionF.RotationX(Math.PI/2))
+						.setScale(Vec3f.ONE.scale(2))
+						.build();
+				});
 
 
 		// thrust indicator
@@ -208,11 +234,10 @@ public class AltimeterSceneView {
 	                                     MeshObject markerMesh,
 	                                     QuaternionF cylinderPersistentRotation,
 	                                     boolean hasText,
-	                                     float textScale,
 	                                     int from,
 	                                     int to,
 	                                     Function<Double, String> stringFunction,
-	                                     Function<Double, QuaternionF> textRotation) {
+	                                     BiFunction<Double, TextItem, Transform> textTransformFunction) {
 
 		Transform cylindricalTransformPers = transformBuilder
 				.reset()
@@ -231,12 +256,12 @@ public class AltimeterSceneView {
 		for (int i = from; i < to; i++) {
 			double angleRad = i * stepSize;
 
-			float posX = (float) -(Math.sin(angleRad) * radius);
-			float posY = (float) (Math.cos(angleRad) * radius);
+			float posX = (float) (Math.cos(angleRad) * radius);
+			float posY = (float) (Math.sin(angleRad) * radius);
 
 			Transform transformMesh = new TransformBuilder()
 					.setPosition(new Vec3f(posX, posY, 0))
-					.setRotation(QuaternionF.RotationZ(angleRad - Math.PI))
+					.setRotation(QuaternionF.RotationZ(angleRad))
 					.build();
 
 			TransformSceneGraph meshTransform = new TransformSceneGraph(cylindricalHeadingTransformObject, transformMesh);
@@ -252,11 +277,8 @@ public class AltimeterSceneView {
 						.setMeshType(MeshType.TEXT)
 						.setText(stringFunction.apply(angleRad))
 						.build();
-				Transform textTransform = transformBuilder
-						.setPosition(new Vec3f(0, 0, 0))
-						.setRotation(textRotation.apply(angleRad))
-						.setScale(Vec3f.ONE.scale(textScale))
-						.build();
+				Transform textTransform = textTransformFunction.apply(angleRad, text);
+
 				TransformSceneGraph textSceneGraph = new TransformSceneGraph(meshSceneGraph, textTransform);
 				MeshSceneGraph textMeshObject = new MeshSceneGraph(textSceneGraph, text);
 			}
@@ -313,4 +335,7 @@ public class AltimeterSceneView {
 		return fobCameraTransform;
 	}
 
+	public Transform getSkyboxTransform() {
+		return skyboxTransform;
+	}
 }
