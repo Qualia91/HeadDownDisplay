@@ -138,7 +138,7 @@ public class Main {
 								angle,
 								angle,
 								(float) i,
-								(float)i,
+								(float) i/50,
 								(float)((i/10) % 120)/ 100,
 								angleRequest,
 								angleRequest,

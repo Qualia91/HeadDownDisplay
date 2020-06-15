@@ -30,7 +30,7 @@ public class AltimeterSceneController implements Subscribable {
 
 	private void moveCamera(AltimeterChangeEvent altimeterChangeEvent) {
 		QuaternionF rotation = QuaternionF.RotationZ(-altimeterChangeEvent.getData().getRoll())
-				.multiply(QuaternionF.RotationY(altimeterChangeEvent.getData().getPitch()));
+				.multiply(QuaternionF.RotationX(-altimeterChangeEvent.getData().getPitch()));
 
 		altimeterSceneView.getSkyboxTransform().setRotation(rotation);
 	}
@@ -59,12 +59,15 @@ public class AltimeterSceneController implements Subscribable {
 		altimeterSceneView.getRollReadout().setRollStick(altimeterChangeEvent.getData().getRollStick());
 		altimeterSceneView.getPitchChangeIndicator().setPitchStick(altimeterChangeEvent.getData().getPitchStick());
 		altimeterSceneView.getYawChangeIndicator().setPitchStick(altimeterChangeEvent.getData().getYawStick());
+		altimeterSceneView.getSpeedReadout().moveToValue(altimeterChangeEvent.getData().getSpeed());
+		altimeterSceneView.getAltitudeReadout().moveToValue(altimeterChangeEvent.getData().getAltitude());
 
 		renderBus.dispatch(new RenderUpdateEvents(
 				new RenderUpdateData(() -> {
 					altimeterSceneView.getRollReadout().setRoll(altimeterChangeEvent.getData().getRoll());
-					altimeterSceneView.getAltitudeReadout().setAltitude(altimeterChangeEvent.getData().getAltitude());
+					altimeterSceneView.getAltitudeReadout().getTextItem().changeText(String.valueOf((int) altimeterChangeEvent.getData().getAltitude()));
 					altimeterSceneView.getThrottleReadout().getTextItem().changeText(String.valueOf((int) (altimeterChangeEvent.getData().getThrottle() * 100)));
+					altimeterSceneView.getSpeedReadout().getTextItem().changeText(String.valueOf((int) altimeterChangeEvent.getData().getSpeed()));
 				}),
 				RenderUpdateEventType.FUNCTION));
 

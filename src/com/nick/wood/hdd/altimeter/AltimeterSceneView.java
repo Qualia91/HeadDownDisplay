@@ -21,10 +21,11 @@ public class AltimeterSceneView {
 	private final Transform skyboxTransform;
 	private final LinearReadout throttleReadout;
 	private final RollReadout rollReadout;
-	private final AltitudeReadout altitudeReadout;
+	private final LinearInfiniteReadout altitudeReadout;
 	private final ChangeIndicator pitchChangeIndicator;
 	private final ChangeIndicator yawChangeIndicator;
 	private final CameraSceneGraph fboCameraGameObject;
+	private final LinearInfiniteReadout speedReadout;
 	private TransformBuilder transformBuilder = new TransformBuilder();
 
 
@@ -101,8 +102,6 @@ public class AltimeterSceneView {
 				.setPosition(Vec3f.ZERO)
 				.setRotation(QuaternionF.Identity).build());// roll text
 
-		this.altitudeReadout = new AltitudeReadout(fboViewTransformGraph);
-
 		this.pitchChangeIndicator = new ChangeIndicator(fboViewTransformGraph, new Vec3f(0.5f, 0.15f, 0), QuaternionF.RotationZ(Math.atan2(0.15, 0.5)));
 
 		this.yawChangeIndicator = new ChangeIndicator(fboViewTransformGraph, new Vec3f(0.5f, 0, -0.35f), QuaternionF.RotationY(Math.atan2(0.35, 0.5)).multiply(QuaternionF.RotationX(Math.PI/2)));
@@ -139,8 +138,15 @@ public class AltimeterSceneView {
 				.setScale(Vec3f.ONE.scale(2))
 				.build());
 
-		this.throttleReadout = new LinearReadout(fboViewTransformGraph);
+		this.throttleReadout = new LinearReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, 0.5f), QuaternionF.Identity);
 
+		this.speedReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, -0.3f), QuaternionF.Identity, 10);
+		this.altitudeReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, -0.3f), QuaternionF.RotationZ(Math.PI), 100);
+
+	}
+
+	public LinearInfiniteReadout getSpeedReadout() {
+		return speedReadout;
 	}
 
 	public LinearReadout getThrottleReadout() {
@@ -171,7 +177,7 @@ public class AltimeterSceneView {
 		return headingReadout;
 	}
 
-	public AltitudeReadout getAltitudeReadout() {
+	public LinearInfiniteReadout getAltitudeReadout() {
 		return altitudeReadout;
 	}
 
