@@ -15,6 +15,9 @@ public class Grid {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 
+	// player is in the middle
+	// width and height increments are either side
+	// make a grid with dimensions of 2 in y and z plane, center at 0
 	public Grid(SceneGraphNode parent, Vec3f position, QuaternionF rotation, int widthIncrements, int heightIncrements) {
 
 		MeshObject whiteMarkers = new MeshBuilder()
@@ -25,19 +28,22 @@ public class Grid {
 				.build();
 
 		Transform gridTransform = transformBuilder
-				.reset()
+				.resetScale()
 				.setPosition(position)
 				.setRotation(rotation)
 				.build();
 
 		TransformSceneGraph gridTransformGraph = new TransformSceneGraph(parent, gridTransform);
 
-		for (int i = -widthIncrements/2; i <= widthIncrements/2; i++) {
+		float widthStepSize = 1.0f/widthIncrements;
+		float heightStepSize = 1.0f/heightIncrements;
+
+		for (int i = -widthIncrements; i <= widthIncrements; i++) {
 
 			Transform transform = transformBuilder
 					.reset()
-					.setPosition(new Vec3f(0, i, 0))
-					.setScale(new Vec3f(0.05f, 0.05f, 10))
+					.setPosition(new Vec3f(0, i * widthStepSize, 0))
+					.setScale(new Vec3f(0.01f, 0.01f, 2))
 					.build();
 
 			TransformSceneGraph stepTransformGraph = new TransformSceneGraph(gridTransformGraph, transform);
@@ -46,12 +52,12 @@ public class Grid {
 
 		}
 
-		for (int i = -heightIncrements/2; i <= heightIncrements/2; i++) {
+		for (int i = -heightIncrements; i <= heightIncrements; i++) {
 
 			Transform transform = transformBuilder
 					.reset()
-					.setPosition(new Vec3f(0, 0, i))
-					.setScale(new Vec3f(0.05f, 10, 0.05f))
+					.setPosition(new Vec3f(0, 0, i * heightStepSize))
+					.setScale(new Vec3f(0.01f, 2, 0.01f))
 					.build();
 
 			TransformSceneGraph stepTransformGraph = new TransformSceneGraph(gridTransformGraph, transform);

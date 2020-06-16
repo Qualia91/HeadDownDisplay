@@ -14,12 +14,16 @@ import com.nick.wood.hdd.altimeter.AltimeterSceneView;
 import com.nick.wood.hdd.altimeter.AltimeterView;
 import com.nick.wood.hdd.event_bus.busses.RenderBus;
 import com.nick.wood.hdd.event_bus.data.AltimeterChangeData;
+import com.nick.wood.hdd.event_bus.data.PlotsListChangeData;
 import com.nick.wood.hdd.event_bus.data.RenderManagementInitData;
 import com.nick.wood.hdd.event_bus.event_types.AltimeterChangeDataType;
+import com.nick.wood.hdd.event_bus.event_types.PlotListChangeDataType;
 import com.nick.wood.hdd.event_bus.event_types.RenderManagementEventType;
 import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
+import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
 import com.nick.wood.hdd.event_bus.subscribables.RendererManager;
+import com.nick.wood.hdd.situation_awareness.Plot;
 import com.nick.wood.hdd.situation_awareness.SAController;
 import com.nick.wood.hdd.situation_awareness.SAView;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -27,6 +31,7 @@ import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -54,7 +59,7 @@ public class Main2 {
 		TransformSceneGraph playerViewTransformGraph = new TransformSceneGraph(rootGameObject, playerViewTransform);
 
 		Transform altimeterTransform = transformBuilder
-				.setPosition(new Vec3f(5, 0, 0)).build();
+				.setPosition(new Vec3f(2, 0, 0)).build();
 		TransformSceneGraph saTransformGraph = new TransformSceneGraph(playerViewTransformGraph, altimeterTransform);
 
 		SAView saView = new SAView(saTransformGraph);
@@ -97,24 +102,36 @@ public class Main2 {
 		renderBus.register(renderer);
 
 		executorService.submit(() -> {
+
+			ArrayList<Plot> plots = new ArrayList<>();
+
+			for (int j = 0; j < 10; j++) {
+				plots.add(new Plot(
+						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
+						QuaternionF.RotationX((float) (Math.PI/8 * j))
+				));
+			}
+
+			float bearingIncrement = 0.01f;
+
 			int i = 0;
 			while (true) {
-				Thread.sleep(10);
-				float angle = (float) ((i/1000.0) % Math.PI);
-				float angleRequest = (float) (-Math.PI/2 + ((i/100.0) % Math.PI));
-				renderBus.dispatch(new AltimeterChangeEvent(
-						new AltimeterChangeData(
-								angle,
-								angle,
-								angle,
-								(float) i,
-								(float)i,
-								(float)((i/10) % 120)/ 100,
-								angleRequest,
-								angleRequest,
-								angleRequest
+				Thread.sleep(100);
+
+				ArrayList<Plot> newPlots = new ArrayList<>();
+
+				for (Plot plot : plots) {
+					newPlots.add(new Plot(
+							new Vec3f(plot.getBra().getX() + (i * bearingIncrement), plot.getBra().getY(), 0),
+							plot.getOrientation()
+					));
+				}
+
+				renderBus.dispatch(new PlotListChangeEvent(
+						new PlotsListChangeData(
+								newPlots
 						),
-						AltimeterChangeDataType.CHANGE
+						PlotListChangeDataType.CHANGE
 				));
 				i++;
 			}
