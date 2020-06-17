@@ -38,7 +38,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Main2 {
+public class MainFull {
 
 	// this is to get world in sensible coordinate system to start with
 	static private final QuaternionF quaternionX = QuaternionF.RotationX((float) Math.toRadians(-90));
@@ -47,34 +47,90 @@ public class Main2 {
 	public static final QuaternionF CAMERA_ROTATION = quaternionZ.multiply(quaternionY).multiply(quaternionX);
 
 	public static void main(String[] args) {
-		new Main2().launch();
+		new MainFull().launch();
 	}
 
 	private void launch() {
 
 		TransformBuilder transformBuilder = new TransformBuilder();
 
+
+
 		// main scene
 		SceneGraph rootGameObject = new SceneGraph();
 		Transform playerViewTransform = transformBuilder.build();
 		TransformSceneGraph playerViewTransformGraph = new TransformSceneGraph(rootGameObject, playerViewTransform);
 
-		Transform altimeterTransform = transformBuilder
-				.setPosition(new Vec3f(2, 0, 0)).build();
-		TransformSceneGraph saTransformGraph = new TransformSceneGraph(playerViewTransformGraph, altimeterTransform);
 
-		SAView saView = new SAView(saTransformGraph);
 
-		Camera camera = new Camera(1.22173f, 0.001f, 100);
-
-		Transform cameraTransform = transformBuilder
-				.setPosition(new Vec3f(0, 0, 0))
-				.setScale(Vec3f.ONE)
-				.setRotation(CAMERA_ROTATION)
+		// view wheel transform
+		Transform wheelTransform = transformBuilder
+				.reset()
 				.build();
-		TransformSceneGraph cameraTransformGameObject = new TransformSceneGraph(playerViewTransformGraph, cameraTransform);
+		TransformSceneGraph wheelTransformGraph = new TransformSceneGraph(playerViewTransformGraph, wheelTransform);
 
+
+
+		// sa transform
+		Transform saTransform = transformBuilder
+				.setPosition(new Vec3f(5, 2.5f, 0))
+				.setRotation(QuaternionF.RotationZ(Math.atan2(2.5f, 5)/4))
+				.setScale(2.5f)
+				.build();
+		TransformSceneGraph saTransformGraph = new TransformSceneGraph(wheelTransformGraph, saTransform);
+
+
+
+		// altimeter transform
+		Transform altimeterTransform = transformBuilder
+				.resetScale()
+				.setPosition(new Vec3f(5, -2.5f, 0))
+				.setRotation(QuaternionF.RotationZ(Math.atan2(-2.5f, 5)/4))
+				.build();
+		TransformSceneGraph altimeterTransformGraph = new TransformSceneGraph(wheelTransformGraph, altimeterTransform);
+
+
+
+		// fbo scene transform
+		Transform fboViewTransform = transformBuilder
+				.setPosition(new Vec3f(1000, 0, 0))
+				.build();
+		TransformSceneGraph fboViewTransformGraph = new TransformSceneGraph(rootGameObject, fboViewTransform);
+
+
+
+		// create views
+		SAView saView = new SAView(saTransformGraph);
+		AltimeterView altimeterView = new AltimeterView(altimeterTransformGraph);
+		AltimeterSceneView altimeterSceneView = new AltimeterSceneView(fboViewTransformGraph);
+
+
+
+		// create camera
+		Camera camera = new Camera(1.22173f, 0.001f, 100);
+		TransformSceneGraph cameraTransformGameObject;
+
+		// attach camera to fbo
+		if (false) {
+			CameraSceneGraph fboCameraGameObject = altimeterSceneView.getFboCameraGameObject();
+			Transform cameraTransform = transformBuilder
+					.setPosition(new Vec3f(0, 0, 0))
+					.setScale(Vec3f.ONE)
+					.build();
+			cameraTransformGameObject = new TransformSceneGraph(fboCameraGameObject, cameraTransform);
+		} else {
+			// separate camera
+			// player camera
+			Transform cameraTransform = transformBuilder
+					.setPosition(new Vec3f(0, 0, 0))
+					.setScale(Vec3f.ONE)
+					.setRotation(CAMERA_ROTATION)
+					.build();
+			cameraTransformGameObject = new TransformSceneGraph(playerViewTransformGraph, cameraTransform);
+		}
 		CameraSceneGraph cameraGameObject = new CameraSceneGraph(cameraTransformGameObject, camera, CameraType.PRIMARY);
+
+
 
 		// lights
 		PointLight pointLight = new PointLight(
@@ -84,6 +140,7 @@ public class Main2 {
 		Creation.CreateLight(pointLight, cameraTransformGameObject, transformBuilder
 				.setPosition(Vec3f.ZERO)
 				.setRotation(QuaternionF.Identity).build());
+
 
 		// add roots to map
 		HashMap<UUID, SceneGraph> gameObjects = new HashMap<>();
@@ -96,8 +153,17 @@ public class Main2 {
 		RenderBus renderBus = new RenderBus();
 		ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-		SAController altimeterSceneController = new SAController(saView, renderBus);
+
+
+		// create controllers and attach to Bus
+		AltimeterSceneController altimeterSceneController = new AltimeterSceneController(altimeterSceneView, renderBus);
 		renderBus.register(altimeterSceneController);
+		AltimeterController altimeterController = new AltimeterController(altimeterView, renderBus);
+		renderBus.register(altimeterController);
+		SAController saSceneController = new SAController(saView, renderBus);
+		renderBus.register(saSceneController);
+
+
 
 		RendererManager renderer = new RendererManager();
 		renderBus.register(renderer);
@@ -123,7 +189,7 @@ public class Main2 {
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						false,
 						Allegiance.FRIENDLY
-						));
+				));
 			}
 
 			for (int j = 8; j < 10; j++) {
@@ -169,6 +235,30 @@ public class Main2 {
 								newPlots
 						),
 						PlotListChangeDataType.CHANGE
+				));
+				i++;
+			}
+		});
+
+		executorService.submit(() -> {
+			int i = 0;
+			while (true) {
+				Thread.sleep(10);
+				float angle = (float) ((i/1000.0) % Math.PI);
+				float angleRequest = (float) (-Math.PI/2 + ((i/100.0) % Math.PI));
+				renderBus.dispatch(new AltimeterChangeEvent(
+						new AltimeterChangeData(
+								angle,
+								angle,
+								angle,
+								(float) i,
+								(float) i/50,
+								(float)((i/10) % 120)/ 100,
+								angleRequest,
+								angleRequest,
+								angleRequest
+						),
+						AltimeterChangeDataType.CHANGE
 				));
 				i++;
 			}

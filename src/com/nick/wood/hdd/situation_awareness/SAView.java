@@ -4,7 +4,7 @@ import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.MeshSceneGraph;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.TransformSceneGraph;
-import com.nick.wood.hdd.gui_components.Grid;
+import com.nick.wood.hdd.gui_components.SquareGrid;
 import com.nick.wood.hdd.gui_components.PlotListPlane;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
@@ -20,12 +20,14 @@ public class SAView {
 
 		this.saTransformGraph = saTransformGraph;
 
-		Grid grid = new Grid(
+		SquareGrid squareGrid = new SquareGrid(
 				saTransformGraph,
 				new Vec3f(0, 0, 0),
 				QuaternionF.Identity,
-				5,
-				5);
+				2,
+				2,
+				1000,
+				1000);
 
 		// aircraft
 		MeshObject build = new MeshBuilder().build();
@@ -43,8 +45,8 @@ public class SAView {
 				saTransformGraph,
 				new Vec3f(0, 0, 0),
 				QuaternionF.Identity,
-				500,
-				500,
+				1000,
+				1000,
 				Vec3f.ZERO
 		);
 

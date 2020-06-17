@@ -1,6 +1,6 @@
 package com.nick.wood.hdd.situation_awareness;
 
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.*;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.MeshSceneGraph;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.SceneGraphNode;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.TransformSceneGraph;
@@ -12,11 +12,74 @@ import com.nick.wood.maths.objects.vector.Vec3f;
 public class PlotItemView {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
-	private final Transform trackTransform;
 	private final float maxWidth;
 	private final float maxHeight;
+	private final Transform textTransform;
+	private final TextItem textItem;
+	private final Transform trackLocationTransform;
+	private final Transform trackRotationTransform;
+	private final Transform selectedMeshTransform;
 
-	public PlotItemView(Vec3f position, QuaternionF orientation, SceneGraphNode parent, MeshObject trackMesh, float maxWidth, float maxHeight) {
+	private static final Vec3f outOfTheWayVec = new Vec3f(-100, 0, 0);
+	private final MeshObject neutralTrackMesh;
+	private final MeshObject friendlyTrackMesh;
+	private final MeshObject enemyTrackMesh;
+	private final MeshObject unknownTrackMesh;
+	private final MeshSceneGraph trackMeshGraph;
+
+	public PlotItemView(Vec3f position, QuaternionF orientation, SceneGraphNode parent, float maxWidth, float maxHeight) {
+
+		MeshObject selectedOutline = new MeshBuilder()
+				.setMeshType(MeshType.SQUARE)
+				.build();
+
+		this.enemyTrackMesh = new MeshBuilder()
+				.setMeshType(MeshType.MODEL)
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setTexture("/textures/red.png")
+				.setTransform(transformBuilder
+						.setScale(0.2f)
+						.setRotation(
+								QuaternionF.RotationY(-Math.PI/2)
+										.multiply(QuaternionF.RotationX(Math.PI/2))
+						)
+						.build()).build();
+
+		this.unknownTrackMesh = new MeshBuilder()
+				.setMeshType(MeshType.MODEL)
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setTexture("/textures/yellow.png")
+				.setTransform(transformBuilder
+						.setScale(0.2f)
+						.setRotation(
+								QuaternionF.RotationY(-Math.PI/2)
+										.multiply(QuaternionF.RotationX(Math.PI/2))
+						)
+						.build()).build();
+
+		this.friendlyTrackMesh = new MeshBuilder()
+				.setMeshType(MeshType.MODEL)
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setTexture("/textures/blue.png")
+				.setTransform(transformBuilder
+						.setScale(0.2f)
+						.setRotation(
+								QuaternionF.RotationY(-Math.PI/2)
+										.multiply(QuaternionF.RotationX(Math.PI/2))
+						)
+						.build()).build();
+
+		this.neutralTrackMesh = new MeshBuilder()
+				.setMeshType(MeshType.MODEL)
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setTexture("/textures/green.png")
+				.setTransform(transformBuilder
+						.setScale(0.2f)
+						.setRotation(
+								QuaternionF.RotationY(-Math.PI/2)
+										.multiply(QuaternionF.RotationX(Math.PI/2))
+						)
+						.build()).build();
 
 		this.maxWidth = maxWidth;
 		this.maxHeight = maxHeight;
@@ -26,15 +89,48 @@ public class PlotItemView {
 		float forward = (float) (position.getY() * Math.cos(position.getX())) / maxWidth;
 		float side = (float) (position.getY() * Math.sin(position.getX())) / maxHeight;
 
-		this.trackTransform = transformBuilder
+		this.trackLocationTransform = transformBuilder
+				.reset()
 				.setPosition(new Vec3f(0, forward, side))
-				.setRotation(orientation)
 				.setScale(0.2f)
 				.build();
 
-		TransformSceneGraph trackTransformGraph = new TransformSceneGraph(parent, trackTransform);
+		TransformSceneGraph trackLocationTransformGraph = new TransformSceneGraph(parent, trackLocationTransform);
 
-		MeshSceneGraph meshSceneGraph = new MeshSceneGraph(trackTransformGraph, trackMesh);
+		this.trackRotationTransform = transformBuilder
+				.reset()
+				.setRotation(orientation)
+				.build();
+
+		TransformSceneGraph trackRotationTransformGraph = new TransformSceneGraph(trackLocationTransformGraph, trackRotationTransform);
+
+		this.trackMeshGraph = new MeshSceneGraph(trackRotationTransformGraph, unknownTrackMesh);
+
+		this.selectedMeshTransform = transformBuilder
+				.reset()
+				.setScale(0.5f)
+				.setPosition(outOfTheWayVec)
+				.build();
+
+		TransformSceneGraph selectedMeshTransformGraph = new TransformSceneGraph(trackMeshGraph, selectedMeshTransform);
+
+		MeshSceneGraph selectedMeshSceneGraph = new MeshSceneGraph(selectedMeshTransformGraph, selectedOutline);
+
+		this.textItem = (TextItem) new MeshBuilder()
+				.setMeshType(MeshType.TEXT)
+				.setText("HELLO")
+				.setFontFile("/font/MontserratLightGreenBold.png")
+				.build();
+
+		this.textTransform = transformBuilder
+				.reset()
+				.setScale(8)
+				.setPosition(new Vec3f(-0.2f, -0.2f, 0.2f))
+				.build();
+
+		TransformSceneGraph textTransformGraph = new TransformSceneGraph(trackLocationTransformGraph, textTransform);
+
+		MeshSceneGraph textSceneGraph = new MeshSceneGraph(textTransformGraph, textItem);
 
 	}
 
@@ -52,11 +148,27 @@ public class PlotItemView {
 		if (Math.abs(forward) > 1) {
 			forward = Math.copySign(1, forward);
 		}
-		this.trackTransform.setPosition(new Vec3f(0, -side, forward));
-		this.trackTransform.setRotation(plot.getOrientation());
+		this.trackLocationTransform.setPosition(new Vec3f(0, -side, forward));
+		this.trackRotationTransform.setRotation(plot.getOrientation());
+
+		this.textTransform.setRotation(
+				QuaternionF.RotationX(Math.PI/2)
+		);
+
+		this.textItem.changeText(String.valueOf(plot.getId()));
+
+
+		selectedMeshTransform.setPosition(plot.isSelected() ? Vec3f.ZERO : outOfTheWayVec);
+
+		switch (plot.getAllegiance()) {
+			case NEUTRAL -> trackMeshGraph.setMeshObject(neutralTrackMesh);
+			case FRIENDLY -> trackMeshGraph.setMeshObject(friendlyTrackMesh);
+			case ENEMY -> trackMeshGraph.setMeshObject(enemyTrackMesh);
+			case UNKNOWN -> trackMeshGraph.setMeshObject(unknownTrackMesh);
+		}
 	}
 
 	public void hide() {
-		this.trackTransform.setPosition(new Vec3f(-100, 0, 0));
+		this.trackLocationTransform.setPosition(new Vec3f(-100, 0, 0));
 	}
 }

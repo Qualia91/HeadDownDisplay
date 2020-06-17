@@ -100,6 +100,7 @@ public class LinearInfiniteReadout {
 		// text
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
+				.setFontFile("/font/MontserratLightGreenBold.png")
 				.build();
 		this.textTransform = transformBuilder
 				.reset()

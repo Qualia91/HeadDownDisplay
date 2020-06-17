@@ -73,6 +73,7 @@ public class CylindricalReadout {
 				// text
 				TextItem text = (TextItem) new MeshBuilder()
 						.setMeshType(MeshType.TEXT)
+						.setFontFile("/font/MontserratLightGreenBold.png")
 						.setText(stringFunction.apply(angleRad))
 						.build();
 				Transform textTransform = textTransformFunction.apply(angleRad, text);

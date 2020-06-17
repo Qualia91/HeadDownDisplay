@@ -11,17 +11,28 @@ import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
 
-public class Grid {
+public class SquareGrid {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
+	private final int widthMaxValue;
+	private final int heightMaxValue;
 
 	// player is in the middle
 	// width and height increments are either side
 	// make a grid with dimensions of 2 in y and z plane, center at 0
-	public Grid(SceneGraphNode parent, Vec3f position, QuaternionF rotation, int widthIncrements, int heightIncrements) {
+	public SquareGrid(SceneGraphNode parent,
+	                  Vec3f position,
+	                  QuaternionF rotation,
+	                  int widthIncrements,
+	                  int heightIncrements,
+	                  int widthMaxValue,
+	                  int heightMaxValue) {
+
+		this.widthMaxValue = widthMaxValue;
+		this.heightMaxValue = heightMaxValue;
 
 		MeshObject whiteMarkers = new MeshBuilder()
-				.setMeshType(MeshType.CUBOID)
+				.setMeshType(MeshType.SQUARE)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
 						.build())
@@ -65,6 +76,7 @@ public class Grid {
 			MeshSceneGraph stepMeshGraph = new MeshSceneGraph(stepTransformGraph, whiteMarkers);
 
 		}
+
 
 	}
 

@@ -10,7 +10,6 @@ import com.nick.wood.hdd.situation_awareness.PlotItemView;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
-import com.nick.wood.maths.objects.vector.Vec;
 import com.nick.wood.maths.objects.vector.Vec3f;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 public class PlotListPlane {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
-	private final MeshObject trackMesh;
 	private final TransformSceneGraph parent;
 	private final Transform transform;
 	private final TransformSceneGraph transformGraph;
@@ -35,11 +33,6 @@ public class PlotListPlane {
 
 		this.maxWidth = maxWidth;
 		this.maxHeight = maxHeight;
-
-		this.trackMesh = new MeshBuilder()
-				.setMeshType(MeshType.CUBOID)
-				.setTexture("/textures/red.png")
-				.setTransform(transformBuilder.setScale(0.2f).build()).build();
 
 		this.transform = transformBuilder
 				.reset()
@@ -74,7 +67,6 @@ public class PlotListPlane {
 				bra,
 				orientation,
 				transformGraph,
-				trackMesh,
 				this.maxWidth,
 				this.maxHeight
 		));
@@ -91,7 +83,6 @@ public class PlotListPlane {
 						plots.get(index).getBra(),
 						plots.get(index).getOrientation(),
 						transformGraph,
-						trackMesh,
 						this.maxWidth,
 						this.maxHeight));
 			}
@@ -102,6 +93,5 @@ public class PlotListPlane {
 			plotItemViews.get(i).hide();
 		}
 
-		System.out.println(plotItemViews.size());
 	}
 }
