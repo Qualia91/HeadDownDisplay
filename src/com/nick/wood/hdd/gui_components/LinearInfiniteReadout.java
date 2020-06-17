@@ -104,6 +104,7 @@ public class LinearInfiniteReadout {
 				.build();
 		this.textTransform = transformBuilder
 				.reset()
+				.setScale(new Vec3f(1, 1, 0.6f))
 				.setRotation(
 						rotation
 						.multiply(QuaternionF.RotationX(Math.PI/2))

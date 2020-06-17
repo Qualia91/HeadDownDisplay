@@ -23,11 +23,13 @@ public class RollReadout {
 		// roll text
 		this.rollTextItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
+				.setFontFile("/font/MontserratLightGreenBold.png")
 				.build();
 		Transform rollTextTransformPers = transformBuilder
 				.reset()
 				.setRotation(QuaternionF.RotationX(Math.PI/2))
 				.setPosition(new Vec3f(0.8f, 0, 0.525f))
+				.setScale(new Vec3f(1, 1, 0.6f))
 				.build();
 		TransformSceneGraph rollTextTransformGraphPers = new TransformSceneGraph(parent, rollTextTransformPers);
 		Transform rollTextTransform = transformBuilder

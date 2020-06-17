@@ -74,7 +74,6 @@ public class MainFull {
 		// sa transform
 		Transform saTransform = transformBuilder
 				.setPosition(new Vec3f(5, 2.5f, 0))
-				.setRotation(QuaternionF.RotationZ(Math.atan2(2.5f, 5)/4))
 				.setScale(2.5f)
 				.build();
 		TransformSceneGraph saTransformGraph = new TransformSceneGraph(wheelTransformGraph, saTransform);
@@ -85,7 +84,6 @@ public class MainFull {
 		Transform altimeterTransform = transformBuilder
 				.resetScale()
 				.setPosition(new Vec3f(5, -2.5f, 0))
-				.setRotation(QuaternionF.RotationZ(Math.atan2(-2.5f, 5)/4))
 				.build();
 		TransformSceneGraph altimeterTransformGraph = new TransformSceneGraph(wheelTransformGraph, altimeterTransform);
 

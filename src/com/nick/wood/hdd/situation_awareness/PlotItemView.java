@@ -31,11 +31,12 @@ public class PlotItemView {
 
 		MeshObject selectedOutline = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
+				.setTexture("/textures/selectedTexture.png")
 				.build();
 
 		this.enemyTrackMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\deps\\flatCone.obj")
 				.setTexture("/textures/red.png")
 				.setTransform(transformBuilder
 						.setScale(0.2f)
@@ -47,7 +48,7 @@ public class PlotItemView {
 
 		this.unknownTrackMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\deps\\flatCone.obj")
 				.setTexture("/textures/yellow.png")
 				.setTransform(transformBuilder
 						.setScale(0.2f)
@@ -59,7 +60,7 @@ public class PlotItemView {
 
 		this.friendlyTrackMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\deps\\flatCone.obj")
 				.setTexture("/textures/blue.png")
 				.setTransform(transformBuilder
 						.setScale(0.2f)
@@ -71,7 +72,7 @@ public class PlotItemView {
 
 		this.neutralTrackMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\flatCone.obj")
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\HeadDownDisplay\\deps\\flatCone.obj")
 				.setTexture("/textures/green.png")
 				.setTransform(transformBuilder
 						.setScale(0.2f)
@@ -124,7 +125,7 @@ public class PlotItemView {
 
 		this.textTransform = transformBuilder
 				.reset()
-				.setScale(8)
+				.setScale(new Vec3f(5, 5, 3))
 				.setPosition(new Vec3f(-0.2f, -0.2f, 0.2f))
 				.build();
 
@@ -158,7 +159,7 @@ public class PlotItemView {
 		this.textItem.changeText(String.valueOf(plot.getId()));
 
 
-		selectedMeshTransform.setPosition(plot.isSelected() ? Vec3f.ZERO : outOfTheWayVec);
+		selectedMeshTransform.setPosition(plot.isSelected() ? new Vec3f(0.01f, 0, 0) : outOfTheWayVec);
 
 		switch (plot.getAllegiance()) {
 			case NEUTRAL -> trackMeshGraph.setMeshObject(neutralTrackMesh);

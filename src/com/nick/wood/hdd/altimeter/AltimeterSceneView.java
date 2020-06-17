@@ -118,9 +118,9 @@ public class AltimeterSceneView {
 				true,
 				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(angle) / 10.0) * 10)),
 				(angle, textItem) -> transformBuilder
-						.setPosition(new Vec3f(0, 0, -textItem.getWidth()))
+						.setPosition(new Vec3f(0, 0, -textItem.getWidth()/2))
 						.resetRotation()
-						.setScale(Vec3f.ONE.scale(2))
+						.setScale(new Vec3f(2, 2, 1.2f))
 						.build());
 
 		this.headingReadout = new CylindricalReadout(
@@ -131,11 +131,11 @@ public class AltimeterSceneView {
 				whiteMarkers,
 				QuaternionF.Identity,
 				true,
-				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0))),
+				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0) * 10)),
 				(angle, textItem) -> new TransformBuilder()
-				.setPosition(new Vec3f(0, textItem.getWidth(), 0.15f))
+				.setPosition(new Vec3f(0, textItem.getWidth()/2, 0.15f))
 				.setRotation(QuaternionF.RotationX(Math.PI/2))
-				.setScale(Vec3f.ONE.scale(2))
+				.setScale(new Vec3f(2, 2, 1.2f))
 				.build());
 
 		this.throttleReadout = new LinearReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, 0.5f), QuaternionF.Identity);
