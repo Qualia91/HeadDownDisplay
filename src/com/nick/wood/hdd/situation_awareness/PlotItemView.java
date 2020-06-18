@@ -119,8 +119,7 @@ public class PlotItemView {
 
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setText("HELLO")
-				.setFontFile("/font/MontserratLightGreenBold.png")
+				.setFontFile("/font/verandaGreenBold.png")
 				.build();
 
 		this.textTransform = transformBuilder

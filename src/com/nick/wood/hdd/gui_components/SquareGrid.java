@@ -65,12 +65,12 @@ public class SquareGrid {
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
 					.setText(String.valueOf(-i * stepWidthsReal))
-					.setFontFile("/font/MontserratLightGreenBold.png")
+					.setFontFile("/font/verandaGreenBold.png")
 					.build();
 
 			Transform textTransform = transformBuilder
 					.setScale(new Vec3f(1, 1, 0.6f))
-					.setPosition(new Vec3f(0, i * widthStepSize + textItem.getWidth() / 2, 1))
+					.setPosition(new Vec3f(0, (i * widthStepSize), 1))
 					.setRotation(QuaternionF.RotationX(Math.PI/2))
 					.build();
 
@@ -95,12 +95,12 @@ public class SquareGrid {
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
 					.setText(String.valueOf(i * stepWidthsReal))
-					.setFontFile("/font/MontserratLightGreenBold.png")
+					.setFontFile("/font/verandaGreenBold.png")
 					.build();
 
 			Transform textTransform = transformBuilder
 					.setScale(new Vec3f(1, 1, 0.6f))
-					.setPosition(new Vec3f(0,  1, i * widthStepSize - textItem.getHeight()))
+					.setPosition(new Vec3f(0,  1 - 0.02f, i * widthStepSize - textItem.getHeight()))
 					.setRotation(QuaternionF.RotationX(Math.PI/2))
 					.build();
 

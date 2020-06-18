@@ -1,9 +1,5 @@
 package com.nick.wood.hdd.gui_components;
 
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.MeshSceneGraph;
 import com.nick.wood.graphics_library.objects.scene_graph_objects.TransformSceneGraph;
 import com.nick.wood.hdd.situation_awareness.Plot;
 import com.nick.wood.hdd.situation_awareness.PlotItemView;
@@ -41,35 +37,6 @@ public class PlotListPlane {
 				.build();
 
 		this.transformGraph = new TransformSceneGraph(parent, transform);
-
-		addTrack(
-				new Vec3f(0, 100, 0),
-				QuaternionF.RotationX(0)
-		);
-		addTrack(
-				new Vec3f((float) Math.PI/2, 300, 0),
-				QuaternionF.RotationX( Math.PI/4)
-		);
-		addTrack(
-				new Vec3f((float) Math.PI, 500, 0),
-				QuaternionF.RotationX( Math.PI/4)
-		);
-		addTrack(
-				new Vec3f((float) (3 * Math.PI/2), 800, 0),
-				QuaternionF.RotationX((Math.PI/4))
-		);
-
-	}
-
-	private void addTrack(Vec3f bra, QuaternionF orientation) {
-
-		plotItemViews.add(new PlotItemView(
-				bra,
-				orientation,
-				transformGraph,
-				this.maxWidth,
-				this.maxHeight
-		));
 
 	}
 
