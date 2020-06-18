@@ -19,7 +19,14 @@ public class RollReadout {
 	private final TransformSceneGraph rollTextTransformGraph;
 	private final TransformSceneGraph circleTransformSceneGraph;
 
-	public RollReadout(SceneGraphNode parent) {
+	public RollReadout(SceneGraphNode parent, Vec3f position) {
+
+		Transform rollReadoutTransform = transformBuilder
+				.reset()
+				.setPosition(position)
+				.build();
+		TransformSceneGraph rollTransformGraph = new TransformSceneGraph(parent, rollReadoutTransform);
+
 		// roll text
 		this.rollTextItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
@@ -27,9 +34,9 @@ public class RollReadout {
 				.build();
 		Transform rollTextTransformPers = transformBuilder
 				.reset()
-				.setPosition(new Vec3f(0.8f, -0.075f, 0.52f))
+				.setPosition(new Vec3f(-0.005f, -0.075f, 0.15f))
 				.build();
-		TransformSceneGraph rollTextTransformGraphPers = new TransformSceneGraph(parent, rollTextTransformPers);
+		TransformSceneGraph rollTextTransformGraphPers = new TransformSceneGraph(rollTransformGraph, rollTextTransformPers);
 		Transform rollTextTransform = transformBuilder
 				.reset()
 				.build();
@@ -51,10 +58,10 @@ public class RollReadout {
 				)
 				.build();
 
-		TransformSceneGraph curveMeshTransformSceneGraph = new TransformSceneGraph(parent,
+		TransformSceneGraph curveMeshTransformSceneGraph = new TransformSceneGraph(rollTransformGraph,
 				transformBuilder
 						.reset()
-						.setPosition(new Vec3f(1, 0, 0.5f)).build());
+						.build());
 
 		MeshSceneGraph curveMeshSceneGraph = new MeshSceneGraph(curveMeshTransformSceneGraph, curveMesh);
 

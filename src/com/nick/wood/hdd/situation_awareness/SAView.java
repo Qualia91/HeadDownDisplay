@@ -30,11 +30,12 @@ public class SAView {
 				1000);
 
 		// aircraft
-		MeshObject build = new MeshBuilder().build();
+		MeshObject build = new MeshBuilder()
+				.setTexture("/textures/green.png").build();
 
 		Transform transform = transformBuilder
 				.reset()
-				.setScale(0.1f)
+				.setScale(0.05f)
 				.build();
 
 		TransformSceneGraph stepTransformGraph = new TransformSceneGraph(saTransformGraph, transform);

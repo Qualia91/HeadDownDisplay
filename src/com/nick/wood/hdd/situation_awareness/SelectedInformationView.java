@@ -13,6 +13,7 @@ public class SelectedInformationView {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final TextItem idText;
+	private final TextItem typeText;
 	private final TextItem bearingText;
 	private final TextItem rangeText;
 	private final TextItem altText;
@@ -24,6 +25,11 @@ public class SelectedInformationView {
 	public SelectedInformationView(TransformSceneGraph parent) {
 
 		this.idText = (TextItem) new MeshBuilder()
+				.setMeshType(MeshType.TEXT)
+				.setFontFile("/font/verandaGreenBold.png")
+				.build();
+
+		this.typeText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
 				.setFontFile("/font/verandaGreenBold.png")
 				.build();
@@ -64,14 +70,15 @@ public class SelectedInformationView {
 				.build();
 
 
-		createTextLine(new Vec3f(0, 0, 0), parent, "ID", idText);
-		createTextLine(new Vec3f(0, 0, -0.1f), parent, "BEARING", bearingText);
-		createTextLine(new Vec3f(0, 0, -0.2f), parent, "RANGE", rangeText);
-		createTextLine(new Vec3f(0, 0, -0.3f), parent, "ALTITUDE", altText);
-		createTextLine(new Vec3f(0, 0, -0.4f), parent, "HEADING", enemyHeadingText);
-		createTextLine(new Vec3f(0, 0, -0.5f), parent, "PITCH", enemyPitchText);
-		createTextLine(new Vec3f(0, 0, -0.6f), parent, "ROLL", enemyRollText);
-		createTextLine(new Vec3f(0, 0, -0.7f), parent, "ALLEGIANCE", allegianceText);
+		createTextLine(new Vec3f(0, 0.25f, 0), parent, "ID", idText);
+		createTextLine(new Vec3f(0, 0.25f, -0.1f), parent, "TYPE", typeText);
+		createTextLine(new Vec3f(0, 0.25f, -0.2f), parent, "BEARING", bearingText);
+		createTextLine(new Vec3f(0, 0.25f, -0.3f), parent, "RANGE", rangeText);
+		createTextLine(new Vec3f(0, 0.25f, -0.4f), parent, "ALTITUDE", altText);
+		createTextLine(new Vec3f(0, 0.25f, -0.5f), parent, "HEADING", enemyHeadingText);
+		createTextLine(new Vec3f(0, 0.25f, -0.6f), parent, "PITCH", enemyPitchText);
+		createTextLine(new Vec3f(0, 0.25f, -0.7f), parent, "ROLL", enemyRollText);
+		createTextLine(new Vec3f(0, 0.25f, -0.8f), parent, "ALLEGIANCE", allegianceText);
 
 	}
 
@@ -94,7 +101,7 @@ public class SelectedInformationView {
 
 		Transform textTransform = transformBuilder
 				.reset()
-				.setPosition(position.add(new Vec3f(0, -1, 0)))
+				.setPosition(position.add(new Vec3f(0, -1.25f, 0)))
 				.build();
 
 		TransformSceneGraph textTransformGraph = new TransformSceneGraph(parent, textTransform);
@@ -104,6 +111,10 @@ public class SelectedInformationView {
 
 	public TextItem getIdText() {
 		return idText;
+	}
+
+	public TextItem getTypeText() {
+		return typeText;
 	}
 
 	public TextItem getBearingText() {

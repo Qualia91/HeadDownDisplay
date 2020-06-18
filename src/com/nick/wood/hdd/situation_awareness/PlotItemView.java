@@ -124,8 +124,8 @@ public class PlotItemView {
 
 		this.textTransform = transformBuilder
 				.reset()
-				.setScale(new Vec3f(5, 5, 3))
-				.setPosition(new Vec3f(-0.2f, -0.2f, 0.2f))
+				.setPosition(new Vec3f(-1, 0, 0))
+				.setScale(5)
 				.build();
 
 		TransformSceneGraph textTransformGraph = new TransformSceneGraph(trackLocationTransformGraph, textTransform);
@@ -151,12 +151,7 @@ public class PlotItemView {
 		this.trackLocationTransform.setPosition(new Vec3f(0, -side, forward));
 		this.trackRotationTransform.setRotation(plot.getOrientation());
 
-		this.textTransform.setRotation(
-				QuaternionF.RotationX(Math.PI/2)
-		);
-
 		this.textItem.changeText(String.valueOf(plot.getId()));
-
 
 		selectedMeshTransform.setPosition(plot.isSelected() ? new Vec3f(0.01f, 0, 0) : outOfTheWayVec);
 

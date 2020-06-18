@@ -8,7 +8,6 @@ import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
 import com.nick.wood.maths.objects.QuaternionF;
-import com.nick.wood.maths.objects.vector.Vec3f;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -53,8 +52,8 @@ public class AltimeterSceneController implements Subscribable {
 
 		double angleToRotateHeading = altimeterChangeEvent.getData().getHeading();
 		double angleToRotatePitch = altimeterChangeEvent.getData().getPitch();
-		altimeterSceneView.getHeadingReadout().setAngle(-angleToRotateHeading);
-		altimeterSceneView.getPitchReadout().setAngle(-angleToRotatePitch);
+		altimeterSceneView.getHeadingReadout().setRotation(angleToRotateHeading);
+		altimeterSceneView.getPitchReadout().setRotation(angleToRotatePitch);
 		altimeterSceneView.getThrottleReadout().setPercent(altimeterChangeEvent.getData().getThrottle());
 		altimeterSceneView.getRollReadout().setRollStick(altimeterChangeEvent.getData().getRollStick());
 		altimeterSceneView.getPitchChangeIndicator().setPitchStick(altimeterChangeEvent.getData().getPitchStick());

@@ -106,7 +106,7 @@ public class AltimeterSceneView {
 
 		this.yawChangeIndicator = new ChangeIndicator(fboViewTransformGraph, new Vec3f(0.5f, 0, -0.35f), QuaternionF.RotationY(Math.atan2(0.35, 0.5)).multiply(QuaternionF.RotationX(Math.PI/2)));
 
-		this.rollReadout = new RollReadout(fboViewTransformGraph);
+		this.rollReadout = new RollReadout(fboViewTransformGraph, new Vec3f(1, 0, 0.7f));
 
 		this.pitchReadout = new CylindricalReadout(
 				36,
@@ -118,8 +118,8 @@ public class AltimeterSceneView {
 				true,
 				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0) * 10)),
 				(angle, textItem) -> transformBuilder
-						.reset()
-						.setPosition(new Vec3f(0, 0, -0.1f-textItem.getWidth()/4))
+						.setScale(2)
+						.setPosition(new Vec3f(0, 0, -0.2f-textItem.getWidth()/2))
 						.setRotation(QuaternionF.RotationX(Math.PI/2))
 						.build());
 
@@ -138,10 +138,10 @@ public class AltimeterSceneView {
 						.resetScale()
 				.build());
 
-		this.throttleReadout = new LinearReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, 0.5f), QuaternionF.Identity);
+		this.throttleReadout = new LinearReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, 0.5f));
 
-		this.speedReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, -0.3f), QuaternionF.Identity, 10);
-		this.altitudeReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, -0.3f), QuaternionF.RotationZ(-Math.PI), 100);
+		this.speedReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, -0.3f), 10);
+		this.altitudeReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, 0.5f), 100);
 
 	}
 

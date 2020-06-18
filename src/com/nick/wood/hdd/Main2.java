@@ -23,10 +23,7 @@ import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
 import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
 import com.nick.wood.hdd.event_bus.subscribables.RendererManager;
-import com.nick.wood.hdd.situation_awareness.Allegiance;
-import com.nick.wood.hdd.situation_awareness.Plot;
-import com.nick.wood.hdd.situation_awareness.SAController;
-import com.nick.wood.hdd.situation_awareness.SAView;
+import com.nick.wood.hdd.situation_awareness.*;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -102,6 +99,8 @@ public class Main2 {
 		RendererManager renderer = new RendererManager();
 		renderBus.register(renderer);
 
+		SisoEnum sisoEnum = new SisoEnum(1,2 , 227, 12, 55, 1, 0);
+
 		executorService.submit(() -> {
 
 			ArrayList<Plot> plots = new ArrayList<>();
@@ -109,6 +108,7 @@ public class Main2 {
 			for (int j = 1; j < 3; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						j == 1,
@@ -119,6 +119,7 @@ public class Main2 {
 			for (int j = 3; j < 8; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						false,
@@ -129,6 +130,7 @@ public class Main2 {
 			for (int j = 8; j < 10; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						false,
@@ -139,6 +141,7 @@ public class Main2 {
 			for (int j = 10; j < 13; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						false,
@@ -157,6 +160,7 @@ public class Main2 {
 				for (Plot plot : plots) {
 					newPlots.add(new Plot(
 							plot.getId(),
+							plot.getSisoEnum(),
 							new Vec3f(plot.getBra().getX() + (i * bearingIncrement), plot.getBra().getY(), 0),
 							plot.getOrientation(),
 							plot.isSelected(),

@@ -6,13 +6,15 @@ import com.nick.wood.maths.objects.vector.Vec3f;
 public class Plot {
 
 	private final int id;
+	private final SisoEnum sisoEnum;
 	private final Vec3f bra;
 	private final QuaternionF orientation;
 	private final boolean selected;
 	private final Allegiance allegiance;
 
-	public Plot(int id, Vec3f bra, QuaternionF orientation, boolean selected, Allegiance allegiance) {
+	public Plot(int id, SisoEnum sisoEnum, Vec3f bra, QuaternionF orientation, boolean selected, Allegiance allegiance) {
 		this.id = id;
+		this.sisoEnum = sisoEnum;
 		this.bra = bra;
 		this.orientation = orientation;
 		this.selected = selected;
@@ -21,6 +23,10 @@ public class Plot {
 
 	public int getId() {
 		return id;
+	}
+
+	public SisoEnum getSisoEnum() {
+		return sisoEnum;
 	}
 
 	public Vec3f getBra() {

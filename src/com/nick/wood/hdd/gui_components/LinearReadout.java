@@ -20,7 +20,7 @@ public class LinearReadout {
 	private final double heightDiff = 0.25 + 0.24;
 	private final TextItem textItem;
 
-	public LinearReadout(SceneGraphNode parent, Vec3f position, QuaternionF rotation) {
+	public LinearReadout(SceneGraphNode parent, Vec3f position) {
 
 		MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
@@ -56,7 +56,6 @@ public class LinearReadout {
 		Transform indicatorTransform = transformBuilder
 				.reset()
 				.setPosition(position)
-				.setRotation(rotation)
 				.build();
 
 		TransformSceneGraph indicatorTransformGraph = new TransformSceneGraph(parent, indicatorTransform);
@@ -93,7 +92,7 @@ public class LinearReadout {
 		// text
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/MontserratLightGreenBold.png")
+				.setFontFile("/font/verandaGreenBold.png")
 				.build();
 		Transform textTransform = transformBuilder
 				.reset()

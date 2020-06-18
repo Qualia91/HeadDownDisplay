@@ -27,13 +27,11 @@ public class LinearInfiniteReadout {
 	private final double lastValue = 0;
 	private final float stepWidth;
 	private final Transform textTransform;
-	private final QuaternionF rotation;
 
-	public LinearInfiniteReadout(SceneGraphNode parent, Vec3f position, QuaternionF rotation, double stepValue) {
+	public LinearInfiniteReadout(SceneGraphNode parent, Vec3f position, double stepValue) {
 
 		this.stepValue = stepValue;
 		stepWidth = (float) (0.05 / stepValue);
-		this.rotation = rotation;
 
 		MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
@@ -55,13 +53,11 @@ public class LinearInfiniteReadout {
 								.setScale(0.025f)
 								.setRotation(QuaternionF.RotationZ(Math.PI/2))
 								.build()
-				)
-				.build();
+				).build();
 
 		Transform indicatorTransform = transformBuilder
 				.reset()
 				.setPosition(position)
-				.setRotation(rotation)
 				.build();
 
 		TransformSceneGraph indicatorTransformGraph = new TransformSceneGraph(parent, indicatorTransform);
@@ -86,7 +82,8 @@ public class LinearInfiniteReadout {
 
 		this.arrowTransform = transformBuilder
 				.reset()
-				.setPosition(new Vec3f(0, -0.1f, 0))
+				.setPosition(new Vec3f(0, 0.1f, 0))
+				.setRotation(QuaternionF.RotationX(Math.PI))
 				.build();
 
 		TransformSceneGraph arrowTransformGraph = new TransformSceneGraph(indicatorTransformGraph, arrowTransform);
@@ -98,14 +95,17 @@ public class LinearInfiniteReadout {
 
 		// text
 		this.textItem = (TextItem) new MeshBuilder()
-				.setMeshType(MeshType.TEXT)
 				.setFontFile("/font/verandaGreenBold.png")
+				.setMeshType(MeshType.TEXT)
+				.setTransform(
+						transformBuilder
+						.reset()
+						.build())
 				.build();
 		this.textTransform = transformBuilder
 				.reset()
-				.setRotation(rotation)
 				.build();
-		TransformSceneGraph transformSceneGraphThrottle = new TransformSceneGraph(arrowTransformGraph, textTransform);
+		TransformSceneGraph transformSceneGraphThrottle = new TransformSceneGraph(indicatorTransformGraph, textTransform);
 		MeshSceneGraph textMeshObjectThrottle = new MeshSceneGraph(transformSceneGraphThrottle, textItem);
 
 	}
@@ -143,8 +143,6 @@ public class LinearInfiniteReadout {
 
 		}
 
-		// calculate movement inwards of text
-		//QuaternionF quaternionF = rotation.rotateVector(new Vec3f(0, 0, -textItem.getHeight()/2));
-		this.textTransform.setPosition(new Vec3f(0, -0.1f-this.textItem.getWidth(), -this.textItem.getHeight()/2));
+		this.textTransform.setPosition(new Vec3f(0, 0.05f, -this.textItem.getHeight()/2));
 	}
 }

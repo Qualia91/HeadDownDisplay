@@ -84,7 +84,7 @@ public class CylindricalReadout {
 		}
 	}
 
-	public void setAngle(double angle) {
-		cylindricalTransform.setRotation(QuaternionF.RotationZ(-angle));
+	public void setRotation(double angle) {
+		cylindricalTransform.setRotation(QuaternionF.RotationZ(angle));
 	}
 }

@@ -70,7 +70,7 @@ public class MainFull {
 
 		// selected item information
 		Transform siiTransform = transformBuilder
-				.setPosition(new Vec3f(7, 0, -3))
+				.setPosition(new Vec3f(7, 6, 2.5f))
 				.setScale(2.5f)
 				.build();
 		TransformSceneGraph siiTransformGraph = new TransformSceneGraph(wheelTransformGraph, siiTransform);
@@ -176,6 +176,8 @@ public class MainFull {
 		RendererManager renderer = new RendererManager();
 		renderBus.register(renderer);
 
+		SisoEnum sisoEnum = new SisoEnum(1, 2, 227, 23, 42, 1, 1);
+
 		executorService.submit(() -> {
 
 			ArrayList<Plot> plots = new ArrayList<>();
@@ -183,6 +185,7 @@ public class MainFull {
 			for (int j = 1; j < 3; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						j == 1,
@@ -193,6 +196,7 @@ public class MainFull {
 			for (int j = 3; j < 8; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						false,
@@ -203,6 +207,7 @@ public class MainFull {
 			for (int j = 8; j < 10; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						false,
@@ -213,6 +218,7 @@ public class MainFull {
 			for (int j = 10; j < 13; j++) {
 				plots.add(new Plot(
 						j,
+						sisoEnum,
 						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
 						QuaternionF.RotationX((float) (Math.PI/8 * j)),
 						false,
@@ -231,6 +237,7 @@ public class MainFull {
 				for (Plot plot : plots) {
 					newPlots.add(new Plot(
 							plot.getId(),
+							plot.getSisoEnum(),
 							new Vec3f(plot.getBra().getX() + (i * bearingIncrement), plot.getBra().getY(), 0),
 							plot.getOrientation(),
 							plot.isSelected(),

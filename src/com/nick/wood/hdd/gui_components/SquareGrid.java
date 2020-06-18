@@ -69,8 +69,8 @@ public class SquareGrid {
 					.build();
 
 			Transform textTransform = transformBuilder
-					.setScale(new Vec3f(1, 1, 0.6f))
-					.setPosition(new Vec3f(0, (i * widthStepSize), 1))
+					.reset()
+					.setPosition(new Vec3f(0, (i * widthStepSize) - 0.07f - textItem.getWidth()/2, 1.1f))
 					.build();
 
 			TransformSceneGraph textTransformGraph = new TransformSceneGraph(gridTransformGraph, textTransform);
@@ -98,8 +98,8 @@ public class SquareGrid {
 					.build();
 
 			Transform textTransform = transformBuilder
-					.setScale(new Vec3f(1, 1, 0.6f))
-					.setPosition(new Vec3f(0,  1 - 0.02f, i * widthStepSize - textItem.getHeight()))
+					.reset()
+					.setPosition(new Vec3f(0,  1 - 0.02f, i * widthStepSize - textItem.getHeight()/2))
 					.build();
 
 			TransformSceneGraph textTransformGraph = new TransformSceneGraph(gridTransformGraph, textTransform);
