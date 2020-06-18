@@ -23,10 +23,7 @@ import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
 import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
 import com.nick.wood.hdd.event_bus.subscribables.RendererManager;
-import com.nick.wood.hdd.situation_awareness.Allegiance;
-import com.nick.wood.hdd.situation_awareness.Plot;
-import com.nick.wood.hdd.situation_awareness.SAController;
-import com.nick.wood.hdd.situation_awareness.SAView;
+import com.nick.wood.hdd.situation_awareness.*;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -71,9 +68,19 @@ public class MainFull {
 
 
 
+		// selected item information
+		Transform siiTransform = transformBuilder
+				.setPosition(new Vec3f(7, 0, -3))
+				.setScale(2.5f)
+				.build();
+		TransformSceneGraph siiTransformGraph = new TransformSceneGraph(wheelTransformGraph, siiTransform);
+
+
+
+
 		// sa transform
 		Transform saTransform = transformBuilder
-				.setPosition(new Vec3f(5, 2.5f, 0))
+				.setPosition(new Vec3f(7, 0, 0))
 				.setScale(2.5f)
 				.build();
 		TransformSceneGraph saTransformGraph = new TransformSceneGraph(wheelTransformGraph, saTransform);
@@ -83,7 +90,7 @@ public class MainFull {
 		// altimeter transform
 		Transform altimeterTransform = transformBuilder
 				.resetScale()
-				.setPosition(new Vec3f(5, -2.5f, 0))
+				.setPosition(new Vec3f(7, -5f, 0))
 				.build();
 		TransformSceneGraph altimeterTransformGraph = new TransformSceneGraph(wheelTransformGraph, altimeterTransform);
 
@@ -101,6 +108,7 @@ public class MainFull {
 		SAView saView = new SAView(saTransformGraph);
 		AltimeterView altimeterView = new AltimeterView(altimeterTransformGraph);
 		AltimeterSceneView altimeterSceneView = new AltimeterSceneView(fboViewTransformGraph);
+		SelectedInformationView selectedInformationView = new SelectedInformationView(siiTransformGraph);
 
 
 
@@ -160,6 +168,8 @@ public class MainFull {
 		renderBus.register(altimeterController);
 		SAController saSceneController = new SAController(saView, renderBus);
 		renderBus.register(saSceneController);
+		SelectedInformationController selectedInformationController = new SelectedInformationController(selectedInformationView, renderBus);
+		renderBus.register(selectedInformationController);
 
 
 

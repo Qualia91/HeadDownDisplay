@@ -23,13 +23,11 @@ public class RollReadout {
 		// roll text
 		this.rollTextItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/MontserratLightGreenBold.png")
+				.setFontFile("/font/verandaGreenBold.png")
 				.build();
 		Transform rollTextTransformPers = transformBuilder
 				.reset()
-				.setRotation(QuaternionF.RotationX(Math.PI/2))
-				.setPosition(new Vec3f(0.8f, 0, 0.525f))
-				.setScale(new Vec3f(1, 1, 0.6f))
+				.setPosition(new Vec3f(0.8f, -0.075f, 0.52f))
 				.build();
 		TransformSceneGraph rollTextTransformGraphPers = new TransformSceneGraph(parent, rollTextTransformPers);
 		Transform rollTextTransform = transformBuilder
@@ -100,7 +98,7 @@ public class RollReadout {
 
 	public void setRoll(float roll) {
 		rollTextItem.changeText(String.valueOf((int) Math.toDegrees(roll % (2 * Math.PI))));
-		rollTextTransformGraph.setPosition(new Vec3f(0, 0, -rollTextItem.getWidth()/2.0f));
+		rollTextTransformGraph.setPosition(new Vec3f(0, -rollTextItem.getWidth()/2.0f, 0));
 	}
 
 	public void setRollStick(double rollStick) {

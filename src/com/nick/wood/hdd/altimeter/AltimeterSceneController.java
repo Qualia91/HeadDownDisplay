@@ -54,7 +54,7 @@ public class AltimeterSceneController implements Subscribable {
 		double angleToRotateHeading = altimeterChangeEvent.getData().getHeading();
 		double angleToRotatePitch = altimeterChangeEvent.getData().getPitch();
 		altimeterSceneView.getHeadingReadout().setAngle(-angleToRotateHeading);
-		altimeterSceneView.getPitchReadout().setAngle(angleToRotatePitch);
+		altimeterSceneView.getPitchReadout().setAngle(-angleToRotatePitch);
 		altimeterSceneView.getThrottleReadout().setPercent(altimeterChangeEvent.getData().getThrottle());
 		altimeterSceneView.getRollReadout().setRollStick(altimeterChangeEvent.getData().getRollStick());
 		altimeterSceneView.getPitchChangeIndicator().setPitchStick(altimeterChangeEvent.getData().getPitchStick());

@@ -73,12 +73,12 @@ public class CylindricalReadout {
 				// text
 				TextItem text = (TextItem) new MeshBuilder()
 						.setMeshType(MeshType.TEXT)
-						.setFontFile("/font/MontserratLightGreenBold.png")
+						.setFontFile("/font/verandaGreenBold.png")
 						.setText(stringFunction.apply(angleRad))
 						.build();
 				Transform textTransform = textTransformFunction.apply(angleRad, text);
 
-				TransformSceneGraph textSceneGraph = new TransformSceneGraph(meshSceneGraph, textTransform);
+				TransformSceneGraph textSceneGraph = new TransformSceneGraph(meshTransform, textTransform);
 				MeshSceneGraph textMeshObject = new MeshSceneGraph(textSceneGraph, text);
 			}
 		}

@@ -64,7 +64,7 @@ public class AltimeterSceneView {
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
 						.resetPosition()
-						.setScale(new Vec3f(0.01f, 0.01f, 0.25f))
+						.setScale(new Vec3f(0.01f, 0.01f, 0.2f))
 						.build()).build();
 
 
@@ -114,13 +114,13 @@ public class AltimeterSceneView {
 				fboViewTransformGraph,
 				2.5,
 				whiteMarkers,
-				QuaternionF.RotationX(Math.PI/2),
+				QuaternionF.RotationX(-Math.PI/2),
 				true,
-				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(angle) / 10.0) * 10)),
+				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0) * 10)),
 				(angle, textItem) -> transformBuilder
-						.setPosition(new Vec3f(0, 0, -textItem.getWidth()/2))
-						.resetRotation()
-						.setScale(new Vec3f(2, 2, 1.2f))
+						.reset()
+						.setPosition(new Vec3f(0, 0, -0.1f-textItem.getWidth()/4))
+						.setRotation(QuaternionF.RotationX(Math.PI/2))
 						.build());
 
 		this.headingReadout = new CylindricalReadout(
@@ -133,15 +133,15 @@ public class AltimeterSceneView {
 				true,
 				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0) * 10)),
 				(angle, textItem) -> new TransformBuilder()
-				.setPosition(new Vec3f(0, textItem.getWidth()/2, 0.15f))
-				.setRotation(QuaternionF.RotationX(Math.PI/2))
-				.setScale(new Vec3f(2, 2, 1.2f))
+						.setPosition(new Vec3f(0, -textItem.getWidth()/4, 0))
+						.resetRotation()
+						.resetScale()
 				.build());
 
 		this.throttleReadout = new LinearReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, 0.5f), QuaternionF.Identity);
 
 		this.speedReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, -0.3f), QuaternionF.Identity, 10);
-		this.altitudeReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, -0.3f), QuaternionF.RotationZ(Math.PI), 100);
+		this.altitudeReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, -0.3f), QuaternionF.RotationZ(-Math.PI), 100);
 
 	}
 

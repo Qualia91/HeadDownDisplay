@@ -71,7 +71,6 @@ public class LinearInfiniteReadout {
 		for (int i = -5; i < 6; i++) {
 
 			Transform transform = transformBuilder
-					.reset()
 					.setPosition(new Vec3f(0, 0, i * 0.05f))
 					.setRotation(QuaternionF.RotationX(Math.PI / 2))
 					.setScale(new Vec3f(1, 1, 0.1f))
@@ -100,17 +99,13 @@ public class LinearInfiniteReadout {
 		// text
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/MontserratLightGreenBold.png")
+				.setFontFile("/font/verandaGreenBold.png")
 				.build();
 		this.textTransform = transformBuilder
 				.reset()
-				.setScale(new Vec3f(1, 1, 0.6f))
-				.setRotation(
-						rotation
-						.multiply(QuaternionF.RotationX(Math.PI/2))
-				)
+				.setRotation(rotation)
 				.build();
-		TransformSceneGraph transformSceneGraphThrottle = new TransformSceneGraph(indicatorTransformGraph, textTransform);
+		TransformSceneGraph transformSceneGraphThrottle = new TransformSceneGraph(arrowTransformGraph, textTransform);
 		MeshSceneGraph textMeshObjectThrottle = new MeshSceneGraph(transformSceneGraphThrottle, textItem);
 
 	}
@@ -149,7 +144,7 @@ public class LinearInfiniteReadout {
 		}
 
 		// calculate movement inwards of text
-		//QuaternionF quaternionF = rotation.rotateVector(new Vec3f(0, textItem.getWidth(), textItem.getHeight()));
-		this.textTransform.setPosition(new Vec3f(0, -textItem.getWidth() - 0.1f, -textItem.getHeight()/2));
+		//QuaternionF quaternionF = rotation.rotateVector(new Vec3f(0, 0, -textItem.getHeight()/2));
+		this.textTransform.setPosition(new Vec3f(0, -0.1f-this.textItem.getWidth(), -this.textItem.getHeight()/2));
 	}
 }
