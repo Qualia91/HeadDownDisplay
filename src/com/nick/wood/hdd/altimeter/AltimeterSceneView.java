@@ -80,13 +80,27 @@ public class AltimeterSceneView {
 						.setScale(new Vec3f(0.1f, 0.1f, 0.1f))
 						.build()).build();
 
+		MeshObject pinMesh = new MeshBuilder()
+				.setMeshType(MeshType.MODEL)
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\pin.obj")
+				.setTexture("/textures/gunMetalTexture.jpg")
+				.setNormalTexture("/textures/gunMetalNormal.jpg")
+				.setTransform(transformBuilder
+						.resetPosition()
+						.setRotation(
+								QuaternionF.RotationZ(Math.PI/2)
+										.multiply(QuaternionF.RotationX(Math.PI/2))
+						)
+						.setScale(new Vec3f(0.2f, 0.2f, 0.2f))
+						.build()).build();
+
 
 		// Level marker
 		double angleToRotate = Math.atan2(1, 1);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), QuaternionF.RotationY(-angleToRotate), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), QuaternionF.RotationY(-angleToRotate), fboCameraTransformGameObject, pinMesh);
 		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, aimMarker);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), QuaternionF.RotationY(angleToRotate), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, -0.8f, 0)), QuaternionF.RotationZ(Math.PI/2).multiply(QuaternionF.RotationY(angleToRotate)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), QuaternionF.RotationY(angleToRotate), fboCameraTransformGameObject, pinMesh);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, -1f, 0)), QuaternionF.RotationZ(Math.PI/2).multiply(QuaternionF.RotationY(angleToRotate)), fboCameraTransformGameObject, pinMesh);
 
 		// skybox
 		this.skyboxTransform = transformBuilder
