@@ -1,21 +1,14 @@
 package com.nick.wood.hdd.event_bus.subscribables;
 
 import com.nick.wood.graphics_library.Window;
-import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.SceneGraph;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.SceneGraphNode;
+import com.nick.wood.graphics_library.objects.game_objects.RootObject;
 import com.nick.wood.hdd.event_bus.data.RenderManagementInitData;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
 import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
-import com.nick.wood.maths.objects.vector.Vec3f;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RendererManager implements Subscribable {
@@ -25,14 +18,14 @@ public class RendererManager implements Subscribable {
 	private Window window;
 
 	private final ConcurrentLinkedQueue<RenderUpdateEvents> renderUpdateEvents = new ConcurrentLinkedQueue<>();
-	private final HashMap<UUID, SceneGraph> gameObjects;
-	private final HashMap<UUID, SceneGraph> hudObjects;
+	private final ArrayList<RootObject> gameObjects;
+	private final ArrayList<RootObject> hudObjects;
 	private UUID cameraUUID;
 
 	public RendererManager() {
 
-		this.gameObjects = new HashMap<>();
-		this.hudObjects = new HashMap<>();
+		this.gameObjects = new ArrayList<>();
+		this.hudObjects = new ArrayList<>();
 		this.cameraUUID = UUID.randomUUID();
 
 		supports.add(RenderManagementEvents.class);
@@ -45,8 +38,8 @@ public class RendererManager implements Subscribable {
 		try {
 			this.window = new Window();
 			window.init(data.getWindowInitialisationParameters());
-			this.gameObjects.putAll(data.getGameObjects());
-			this.hudObjects.putAll(data.getHudObjects());
+			this.gameObjects.addAll(data.getGameObjects());
+			this.hudObjects.addAll(data.getHudObjects());
 			this.cameraUUID = data.getCameraUUID();
 		} catch (Exception e) {
 			System.out.println("Failed");

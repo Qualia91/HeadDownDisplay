@@ -1,6 +1,6 @@
 package com.nick.wood.hdd.gui_components;
 
-import com.nick.wood.graphics_library.objects.scene_graph_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
 import com.nick.wood.hdd.situation_awareness.Plot;
 import com.nick.wood.hdd.situation_awareness.PlotItemView;
 import com.nick.wood.maths.objects.QuaternionF;

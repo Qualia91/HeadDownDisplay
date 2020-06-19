@@ -4,9 +4,9 @@ import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
+import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -26,7 +26,6 @@ public class LinearReadout {
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
-						.setScale(new Vec3f(0.01f, 0.01f, 0.5f))
 						.build())
 				.build();
 
@@ -34,7 +33,6 @@ public class LinearReadout {
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/red.png")
 				.setTransform(transformBuilder
-						.setScale(new Vec3f(0.01f, 0.01f, 0.1f))
 						.build())
 				.build();
 
@@ -60,14 +58,22 @@ public class LinearReadout {
 
 		TransformSceneGraph indicatorTransformGraph = new TransformSceneGraph(parent, indicatorTransform);
 
+		Transform whiteLineTransform = transformBuilder
+				.reset()
+				.setScale(new Vec3f(1, 1, 2))
+				.build();
+
+		TransformSceneGraph whiteLineTransformGraph = new TransformSceneGraph(indicatorTransformGraph, whiteLineTransform);
+
 		MeshSceneGraph meshGameObject = new MeshSceneGraph(
-				indicatorTransformGraph,
+				whiteLineTransformGraph,
 				whiteMarkers
 		);
 
 		Transform redIndicatorTransform = transformBuilder
 				.reset()
 				.setPosition(new Vec3f(0, 0, 0.3f))
+				.setScale(new Vec3f(0.01f, 0.01f, 0.1f))
 				.build();
 
 		TransformSceneGraph redIndicatorTransformGraph = new TransformSceneGraph(indicatorTransformGraph, redIndicatorTransform);

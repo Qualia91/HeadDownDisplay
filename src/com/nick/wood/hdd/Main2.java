@@ -3,23 +3,16 @@ package com.nick.wood.hdd;
 import com.nick.wood.graphics_library.WindowInitialisationParametersBuilder;
 import com.nick.wood.graphics_library.lighting.PointLight;
 import com.nick.wood.graphics_library.objects.Camera;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.CameraSceneGraph;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.CameraType;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.SceneGraph;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.CameraSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.CameraType;
+import com.nick.wood.graphics_library.objects.game_objects.RootObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
 import com.nick.wood.graphics_library.utils.Creation;
-import com.nick.wood.hdd.altimeter.AltimeterController;
-import com.nick.wood.hdd.altimeter.AltimeterSceneController;
-import com.nick.wood.hdd.altimeter.AltimeterSceneView;
-import com.nick.wood.hdd.altimeter.AltimeterView;
 import com.nick.wood.hdd.event_bus.busses.RenderBus;
-import com.nick.wood.hdd.event_bus.data.AltimeterChangeData;
 import com.nick.wood.hdd.event_bus.data.PlotsListChangeData;
 import com.nick.wood.hdd.event_bus.data.RenderManagementInitData;
-import com.nick.wood.hdd.event_bus.event_types.AltimeterChangeDataType;
 import com.nick.wood.hdd.event_bus.event_types.PlotListChangeDataType;
 import com.nick.wood.hdd.event_bus.event_types.RenderManagementEventType;
-import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
 import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
 import com.nick.wood.hdd.event_bus.subscribables.RendererManager;
@@ -52,7 +45,7 @@ public class Main2 {
 		TransformBuilder transformBuilder = new TransformBuilder();
 
 		// main scene
-		SceneGraph rootGameObject = new SceneGraph();
+		RootObject rootGameObject = new RootObject();
 		Transform playerViewTransform = transformBuilder.build();
 		TransformSceneGraph playerViewTransformGraph = new TransformSceneGraph(rootGameObject, playerViewTransform);
 
@@ -71,7 +64,7 @@ public class Main2 {
 				.build();
 		TransformSceneGraph cameraTransformGameObject = new TransformSceneGraph(playerViewTransformGraph, cameraTransform);
 
-		CameraSceneGraph cameraGameObject = new CameraSceneGraph(cameraTransformGameObject, camera, CameraType.PRIMARY);
+		CameraSceneGraph cameraGameObject = new CameraSceneGraph(cameraTransformGameObject, camera);
 
 		// lights
 		PointLight pointLight = new PointLight(
@@ -83,8 +76,8 @@ public class Main2 {
 				.setRotation(QuaternionF.Identity).build());
 
 		// add roots to map
-		HashMap<UUID, SceneGraph> gameObjects = new HashMap<>();
-		gameObjects.put(rootGameObject.getSceneGraphNodeData().getUuid(), rootGameObject);
+		ArrayList<RootObject> gameObjects = new ArrayList<>();
+		gameObjects.add(rootGameObject);
 
 		WindowInitialisationParametersBuilder windowInitialisationParametersBuilder = new WindowInitialisationParametersBuilder();
 		windowInitialisationParametersBuilder.setDecorated(true);
@@ -183,7 +176,7 @@ public class Main2 {
 				new RenderManagementEvents(
 						new RenderManagementInitData(
 								gameObjects,
-								new HashMap<>(),
+								new ArrayList<>(),
 								cameraGameObject.getSceneGraphNodeData().getUuid(),
 								windowInitialisationParametersBuilder.build()
 						),

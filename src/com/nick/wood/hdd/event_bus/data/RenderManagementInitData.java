@@ -1,21 +1,22 @@
 package com.nick.wood.hdd.event_bus.data;
 
 import com.nick.wood.graphics_library.WindowInitialisationParameters;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.SceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.RootObject;
 import com.nick.wood.hdd.event_bus.interfaces.RenderManagementData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class RenderManagementInitData implements RenderManagementData {
 
-	private final HashMap<UUID, SceneGraph> gameObjects;
-	private final HashMap<UUID, SceneGraph> hudObjects;
+	private final ArrayList<RootObject> gameObjects;
+	private final ArrayList<RootObject> hudObjects;
 	private final UUID cameraUUID;
 	private final WindowInitialisationParameters windowInitialisationParameters;
 
-	public RenderManagementInitData(HashMap<UUID, SceneGraph> gameObjects,
-	                                HashMap<UUID, SceneGraph> hudObjects,
+	public RenderManagementInitData(ArrayList<RootObject> gameObjects,
+	                                ArrayList<RootObject> hudObjects,
 	                                UUID cameraUUID,
 	                                WindowInitialisationParameters windowInitialisationParameters) {
 
@@ -26,11 +27,11 @@ public class RenderManagementInitData implements RenderManagementData {
 
 	}
 
-	public HashMap<UUID, SceneGraph> getGameObjects() {
+	public ArrayList<RootObject> getGameObjects() {
 		return gameObjects;
 	}
 
-	public HashMap<UUID, SceneGraph> getHudObjects() {
+	public ArrayList<RootObject> getHudObjects() {
 		return hudObjects;
 	}
 

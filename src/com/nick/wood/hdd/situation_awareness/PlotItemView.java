@@ -1,9 +1,9 @@
 package com.nick.wood.hdd.situation_awareness;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.*;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
+import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;

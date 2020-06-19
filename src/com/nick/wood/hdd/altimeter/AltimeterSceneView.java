@@ -5,8 +5,7 @@ import com.nick.wood.graphics_library.objects.Camera;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.scene_graph_objects.*;
+import com.nick.wood.graphics_library.objects.game_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.Main;
 import com.nick.wood.hdd.gui_components.*;
@@ -48,7 +47,7 @@ public class AltimeterSceneView {
 				.resetRotation()
 				.build();
 		TransformSceneGraph fboCameraTransformGameObject = new TransformSceneGraph(persistentFboCameraTransformGameObject, fobCameraTransform);
-		this.fboCameraGameObject = new CameraSceneGraph(fboCameraTransformGameObject, fboCamera, CameraType.FBO_CAMERA);
+		this.fboCameraGameObject = new CameraSceneGraph(fboCameraTransformGameObject, fboCamera);
 
 
 		MeshObject levelBlackMarkers = new MeshBuilder()
@@ -67,11 +66,25 @@ public class AltimeterSceneView {
 						.setScale(new Vec3f(0.01f, 0.01f, 0.2f))
 						.build()).build();
 
+		MeshObject aimMarker = new MeshBuilder()
+				.setMeshType(MeshType.MODEL)
+				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\aimMarker.obj")
+				.setTexture("/textures/gunMetalTexture.jpg")
+				.setNormalTexture("/textures/gunMetalNormal.jpg")
+				.setTransform(transformBuilder
+						.resetPosition()
+						.setRotation(
+								QuaternionF.RotationZ(Math.PI/2)
+								.multiply(QuaternionF.RotationX(Math.PI/2))
+						)
+						.setScale(new Vec3f(0.1f, 0.1f, 0.1f))
+						.build()).build();
+
 
 		// Level marker
 		double angleToRotate = Math.atan2(1, 1);
 		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), QuaternionF.RotationY(-angleToRotate), fboCameraTransformGameObject, levelBlackMarkers);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, levelBlackMarkers);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, aimMarker);
 		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), QuaternionF.RotationY(angleToRotate), fboCameraTransformGameObject, levelBlackMarkers);
 		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, -0.8f, 0)), QuaternionF.RotationZ(Math.PI/2).multiply(QuaternionF.RotationY(angleToRotate)), fboCameraTransformGameObject, levelBlackMarkers);
 
