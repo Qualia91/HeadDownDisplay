@@ -1,12 +1,9 @@
 package com.nick.wood.hdd;
 
-import com.nick.wood.game_object_serialiser.IO;
-import com.nick.wood.game_object_serialiser.OI;
 import com.nick.wood.graphics_library.WindowInitialisationParametersBuilder;
 import com.nick.wood.graphics_library.lighting.PointLight;
 import com.nick.wood.graphics_library.objects.Camera;
 import com.nick.wood.graphics_library.objects.game_objects.CameraSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.CameraType;
 import com.nick.wood.graphics_library.objects.game_objects.RootObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
 import com.nick.wood.graphics_library.utils.Creation;
@@ -161,12 +158,6 @@ public class MainFull {
 		RenderBus renderBus = new RenderBus();
 		ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-		IO io = new IO();
-		io.apply(gameObjects, "MainFullTest.json");
-
-		OI oi = new OI();
-		ArrayList<RootObject> newGameObjects = oi.apply("MainFullTest.json");
-
 
 		// create controllers and attach to Bus
 		AltimeterSceneController altimeterSceneController = new AltimeterSceneController(altimeterSceneView, renderBus);
@@ -290,7 +281,7 @@ public class MainFull {
 		renderBus.dispatch(
 				new RenderManagementEvents(
 						new RenderManagementInitData(
-								newGameObjects,
+								gameObjects,
 								new ArrayList<>(),
 								cameraGameObject.getSceneGraphNodeData().getUuid(),
 								windowInitialisationParametersBuilder.build()
