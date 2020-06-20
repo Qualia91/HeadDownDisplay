@@ -3,8 +3,8 @@ package com.nick.wood.hdd.situation_awareness;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
@@ -22,7 +22,7 @@ public class SelectedInformationView {
 	private final TextItem enemyRollText;
 	private final TextItem allegianceText;
 
-	public SelectedInformationView(TransformSceneGraph parent) {
+	public SelectedInformationView(TransformObject parent) {
 
 		this.idText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
@@ -82,7 +82,7 @@ public class SelectedInformationView {
 
 	}
 
-	private void createTextLine(Vec3f position, TransformSceneGraph parent, String label, TextItem textItem) {
+	private void createTextLine(Vec3f position, TransformObject parent, String label, TextItem textItem) {
 
 		TextItem labelTextItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
@@ -95,18 +95,18 @@ public class SelectedInformationView {
 				.setPosition(position)
 				.build();
 
-		TransformSceneGraph labelTextTransformGraph = new TransformSceneGraph(parent, labelTransform);
+		TransformObject labelTextTransformGraph = new TransformObject(parent, labelTransform);
 
-		new MeshSceneGraph(labelTextTransformGraph, labelTextItem);
+		new MeshObject(labelTextTransformGraph, labelTextItem);
 
 		Transform textTransform = transformBuilder
 				.reset()
 				.setPosition(position.add(new Vec3f(0, -1.25f, 0)))
 				.build();
 
-		TransformSceneGraph textTransformGraph = new TransformSceneGraph(parent, textTransform);
+		TransformObject textTransformGraph = new TransformObject(parent, textTransform);
 
-		new MeshSceneGraph(textTransformGraph, textItem);
+		new MeshObject(textTransformGraph, textItem);
 	}
 
 	public TextItem getIdText() {

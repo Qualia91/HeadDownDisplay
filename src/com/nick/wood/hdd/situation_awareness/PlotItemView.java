@@ -1,9 +1,9 @@
 package com.nick.wood.hdd.situation_awareness;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.*;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -21,15 +21,15 @@ public class PlotItemView {
 	private final Transform selectedMeshTransform;
 
 	private static final Vec3f outOfTheWayVec = new Vec3f(-100, 0, 0);
-	private final MeshObject neutralTrackMesh;
-	private final MeshObject friendlyTrackMesh;
-	private final MeshObject enemyTrackMesh;
-	private final MeshObject unknownTrackMesh;
-	private final MeshSceneGraph trackMeshGraph;
+	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject neutralTrackMesh;
+	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject friendlyTrackMesh;
+	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject enemyTrackMesh;
+	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject unknownTrackMesh;
+	private final MeshObject trackMeshGraph;
 
-	public PlotItemView(Vec3f position, QuaternionF orientation, SceneGraphNode parent, float maxWidth, float maxHeight) {
+	public PlotItemView(Vec3f position, QuaternionF orientation, GameObject parent, float maxWidth, float maxHeight) {
 
-		MeshObject selectedOutline = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject selectedOutline = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
 				.setTexture("/textures/selectedTexture.png")
 				.build();
@@ -96,16 +96,16 @@ public class PlotItemView {
 				.setScale(0.2f)
 				.build();
 
-		TransformSceneGraph trackLocationTransformGraph = new TransformSceneGraph(parent, trackLocationTransform);
+		TransformObject trackLocationTransformGraph = new TransformObject(parent, trackLocationTransform);
 
 		this.trackRotationTransform = transformBuilder
 				.reset()
 				.setRotation(orientation)
 				.build();
 
-		TransformSceneGraph trackRotationTransformGraph = new TransformSceneGraph(trackLocationTransformGraph, trackRotationTransform);
+		TransformObject trackRotationTransformGraph = new TransformObject(trackLocationTransformGraph, trackRotationTransform);
 
-		this.trackMeshGraph = new MeshSceneGraph(trackRotationTransformGraph, unknownTrackMesh);
+		this.trackMeshGraph = new MeshObject(trackRotationTransformGraph, unknownTrackMesh);
 
 		this.selectedMeshTransform = transformBuilder
 				.reset()
@@ -113,9 +113,9 @@ public class PlotItemView {
 				.setPosition(outOfTheWayVec)
 				.build();
 
-		TransformSceneGraph selectedMeshTransformGraph = new TransformSceneGraph(trackMeshGraph, selectedMeshTransform);
+		TransformObject selectedMeshTransformGraph = new TransformObject(trackMeshGraph, selectedMeshTransform);
 
-		MeshSceneGraph selectedMeshSceneGraph = new MeshSceneGraph(selectedMeshTransformGraph, selectedOutline);
+		MeshObject selectedMeshObject = new MeshObject(selectedMeshTransformGraph, selectedOutline);
 
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
@@ -128,9 +128,9 @@ public class PlotItemView {
 				.setScale(5)
 				.build();
 
-		TransformSceneGraph textTransformGraph = new TransformSceneGraph(trackLocationTransformGraph, textTransform);
+		TransformObject textTransformGraph = new TransformObject(trackLocationTransformGraph, textTransform);
 
-		MeshSceneGraph textSceneGraph = new MeshSceneGraph(textTransformGraph, textItem);
+		MeshObject textSceneGraph = new MeshObject(textTransformGraph, textItem);
 
 	}
 

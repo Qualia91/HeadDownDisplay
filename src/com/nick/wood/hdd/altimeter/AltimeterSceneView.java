@@ -3,7 +3,6 @@ package com.nick.wood.hdd.altimeter;
 import com.nick.wood.graphics_library.lighting.PointLight;
 import com.nick.wood.graphics_library.objects.Camera;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.game_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
@@ -23,7 +22,7 @@ public class AltimeterSceneView {
 	private final LinearInfiniteReadout altitudeReadout;
 	private final ChangeIndicator pitchChangeIndicator;
 	private final ChangeIndicator yawChangeIndicator;
-	private final CameraSceneGraph fboCameraGameObject;
+	private final CameraObject fboCameraObject;
 	private final LinearInfiniteReadout speedReadout;
 	private TransformBuilder transformBuilder = new TransformBuilder();
 
@@ -31,7 +30,7 @@ public class AltimeterSceneView {
 	private final CylindricalReadout pitchReadout;
 	private final CylindricalReadout headingReadout;
 
-	public AltimeterSceneView(SceneGraphNode fboViewTransformGraph) {
+	public AltimeterSceneView(GameObject fboViewTransformGraph) {
 
 		TransformBuilder transformBuilder = new TransformBuilder();
 
@@ -42,15 +41,15 @@ public class AltimeterSceneView {
 				.setScale(Vec3f.ONE)
 				.setRotation(Main.CAMERA_ROTATION)
 				.build();
-		TransformSceneGraph persistentFboCameraTransformGameObject = new TransformSceneGraph(fboViewTransformGraph, persistentFobCameraTransform);
+		TransformObject persistentFboCameraTransformGameObject = new TransformObject(fboViewTransformGraph, persistentFobCameraTransform);
 		this.fobCameraTransform = transformBuilder
 				.resetRotation()
 				.build();
-		TransformSceneGraph fboCameraTransformGameObject = new TransformSceneGraph(persistentFboCameraTransformGameObject, fobCameraTransform);
-		this.fboCameraGameObject = new CameraSceneGraph(fboCameraTransformGameObject, fboCamera);
+		TransformObject fboCameraTransformGameObject = new TransformObject(persistentFboCameraTransformGameObject, fobCameraTransform);
+		this.fboCameraObject = new CameraObject(fboCameraTransformGameObject, fboCamera);
 
 
-		MeshObject levelBlackMarkers = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject levelBlackMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/gunMetalTexture.jpg")
 				.setNormalTexture("/textures/gunMetalNormal.jpg")
@@ -58,7 +57,7 @@ public class AltimeterSceneView {
 						.setRotation(QuaternionF.RotationZ(Math.PI/2.0))
 						.setScale(new Vec3f(0.03f, 0.5f, 0.03f)).build()).build();
 
-		MeshObject whiteMarkers = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
@@ -66,7 +65,7 @@ public class AltimeterSceneView {
 						.setScale(new Vec3f(0.01f, 0.01f, 0.2f))
 						.build()).build();
 
-		MeshObject aimMarker = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject aimMarker = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\aimMarker.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
@@ -80,7 +79,7 @@ public class AltimeterSceneView {
 						.setScale(new Vec3f(0.1f, 0.1f, 0.1f))
 						.build()).build();
 
-		MeshObject pinMesh = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject pinMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\pin.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
@@ -108,8 +107,8 @@ public class AltimeterSceneView {
 				.setPosition(new Vec3f(0, 0, 0))
 				.setRotation(QuaternionF.Identity)
 				.build();
-		TransformSceneGraph sphereTransformSceneGraph = new TransformSceneGraph(fboViewTransformGraph, skyboxTransform);
-		MeshObject sphere = new MeshBuilder()
+		TransformObject sphereTransformObject = new TransformObject(fboViewTransformGraph, skyboxTransform);
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject sphere = new MeshBuilder()
 				.setMeshType(MeshType.SPHERE)
 				.setTexture("/textures/altimeterSphere.png")
 				.setTriangleNumber(10)
@@ -119,7 +118,7 @@ public class AltimeterSceneView {
 						.setRotation(QuaternionF.RotationY(Math.PI))
 						.setScale(Vec3f.ONE.scale(100)).build())
 				.build();
-		MeshSceneGraph sphereMeshObject = new MeshSceneGraph(sphereTransformSceneGraph, sphere);
+		MeshObject sphereMeshObject = new MeshObject(sphereTransformObject, sphere);
 
 		PointLight pointLight = new PointLight(
 				Vec3f.ONE,
@@ -216,7 +215,7 @@ public class AltimeterSceneView {
 		return yawChangeIndicator;
 	}
 
-	public CameraSceneGraph getFboCameraGameObject() {
-		return fboCameraGameObject;
+	public CameraObject getFboCameraObject() {
+		return fboCameraObject;
 	}
 }

@@ -1,12 +1,11 @@
 package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -21,7 +20,7 @@ public class SquareGrid {
 	// player is in the middle
 	// width and height increments are either side
 	// make a grid with dimensions of 2 in y and z plane, center at 0
-	public SquareGrid(SceneGraphNode parent,
+	public SquareGrid(GameObject parent,
 	                  Vec3f position,
 	                  QuaternionF rotation,
 	                  int widthIncrements,
@@ -32,7 +31,7 @@ public class SquareGrid {
 		stepWidthsReal = (int) (widthMaxValue / widthIncrements);
 		stepHeightsReal = (int) (heightMaxValue / heightIncrements);
 
-		MeshObject whiteMarkers = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
@@ -45,7 +44,7 @@ public class SquareGrid {
 				.setRotation(rotation)
 				.build();
 
-		TransformSceneGraph gridTransformGraph = new TransformSceneGraph(parent, gridTransform);
+		TransformObject gridTransformGraph = new TransformObject(parent, gridTransform);
 
 		float widthStepSize = 1.0f/widthIncrements;
 		float heightStepSize = 1.0f/heightIncrements;
@@ -58,9 +57,9 @@ public class SquareGrid {
 					.setScale(new Vec3f(0.01f, 0.01f, 2))
 					.build();
 
-			TransformSceneGraph stepTransformGraph = new TransformSceneGraph(gridTransformGraph, transform);
+			TransformObject stepTransformGraph = new TransformObject(gridTransformGraph, transform);
 
-			MeshSceneGraph stepMeshGraph = new MeshSceneGraph(stepTransformGraph, whiteMarkers);
+			MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, whiteMarkers);
 
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
@@ -73,9 +72,9 @@ public class SquareGrid {
 					.setPosition(new Vec3f(0, (i * widthStepSize) - 0.07f - textItem.getWidth()/2, 1.1f))
 					.build();
 
-			TransformSceneGraph textTransformGraph = new TransformSceneGraph(gridTransformGraph, textTransform);
+			TransformObject textTransformGraph = new TransformObject(gridTransformGraph, textTransform);
 
-			MeshSceneGraph textSceneGraph = new MeshSceneGraph(textTransformGraph, textItem);
+			MeshObject textSceneGraph = new MeshObject(textTransformGraph, textItem);
 
 		}
 
@@ -87,9 +86,9 @@ public class SquareGrid {
 					.setScale(new Vec3f(0.01f, 2, 0.01f))
 					.build();
 
-			TransformSceneGraph stepTransformGraph = new TransformSceneGraph(gridTransformGraph, transform);
+			TransformObject stepTransformGraph = new TransformObject(gridTransformGraph, transform);
 
-			MeshSceneGraph stepMeshGraph = new MeshSceneGraph(stepTransformGraph, whiteMarkers);
+			MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, whiteMarkers);
 
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
@@ -102,9 +101,9 @@ public class SquareGrid {
 					.setPosition(new Vec3f(0,  1 - 0.02f, i * widthStepSize - textItem.getHeight()/2))
 					.build();
 
-			TransformSceneGraph textTransformGraph = new TransformSceneGraph(gridTransformGraph, textTransform);
+			TransformObject textTransformGraph = new TransformObject(gridTransformGraph, textTransform);
 
-			MeshSceneGraph textSceneGraph = new MeshSceneGraph(textTransformGraph, textItem);
+			MeshObject textSceneGraph = new MeshObject(textTransformGraph, textItem);
 
 		}
 

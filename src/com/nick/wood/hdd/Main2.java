@@ -3,10 +3,9 @@ package com.nick.wood.hdd;
 import com.nick.wood.graphics_library.WindowInitialisationParametersBuilder;
 import com.nick.wood.graphics_library.lighting.PointLight;
 import com.nick.wood.graphics_library.objects.Camera;
-import com.nick.wood.graphics_library.objects.game_objects.CameraSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.CameraType;
+import com.nick.wood.graphics_library.objects.game_objects.CameraObject;
 import com.nick.wood.graphics_library.objects.game_objects.RootObject;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.event_bus.busses.RenderBus;
 import com.nick.wood.hdd.event_bus.data.PlotsListChangeData;
@@ -23,8 +22,6 @@ import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,11 +44,11 @@ public class Main2 {
 		// main scene
 		RootObject rootGameObject = new RootObject();
 		Transform playerViewTransform = transformBuilder.build();
-		TransformSceneGraph playerViewTransformGraph = new TransformSceneGraph(rootGameObject, playerViewTransform);
+		TransformObject playerViewTransformGraph = new TransformObject(rootGameObject, playerViewTransform);
 
 		Transform altimeterTransform = transformBuilder
 				.setPosition(new Vec3f(2, 0, 0)).build();
-		TransformSceneGraph saTransformGraph = new TransformSceneGraph(playerViewTransformGraph, altimeterTransform);
+		TransformObject saTransformGraph = new TransformObject(playerViewTransformGraph, altimeterTransform);
 
 		SAView saView = new SAView(saTransformGraph);
 
@@ -62,9 +59,9 @@ public class Main2 {
 				.setScale(Vec3f.ONE)
 				.setRotation(CAMERA_ROTATION)
 				.build();
-		TransformSceneGraph cameraTransformGameObject = new TransformSceneGraph(playerViewTransformGraph, cameraTransform);
+		TransformObject cameraTransformGameObject = new TransformObject(playerViewTransformGraph, cameraTransform);
 
-		CameraSceneGraph cameraGameObject = new CameraSceneGraph(cameraTransformGameObject, camera);
+		CameraObject cameraObject = new CameraObject(cameraTransformGameObject, camera);
 
 		// lights
 		PointLight pointLight = new PointLight(
@@ -177,7 +174,7 @@ public class Main2 {
 						new RenderManagementInitData(
 								gameObjects,
 								new ArrayList<>(),
-								cameraGameObject.getSceneGraphNodeData().getUuid(),
+								cameraObject.getGameObjectData().getUuid(),
 								windowInitialisationParametersBuilder.build()
 						),
 						RenderManagementEventType.START));

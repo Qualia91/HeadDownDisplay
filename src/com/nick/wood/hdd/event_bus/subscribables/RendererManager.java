@@ -1,7 +1,7 @@
 package com.nick.wood.hdd.event_bus.subscribables;
 
 import com.nick.wood.graphics_library.Window;
-import com.nick.wood.graphics_library.objects.game_objects.RootObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.hdd.event_bus.data.RenderManagementInitData;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
 import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
@@ -18,8 +18,8 @@ public class RendererManager implements Subscribable {
 	private Window window;
 
 	private final ConcurrentLinkedQueue<RenderUpdateEvents> renderUpdateEvents = new ConcurrentLinkedQueue<>();
-	private final ArrayList<RootObject> gameObjects;
-	private final ArrayList<RootObject> hudObjects;
+	private final ArrayList<GameObject> gameObjects;
+	private final ArrayList<GameObject> hudObjects;
 	private UUID cameraUUID;
 
 	public RendererManager() {

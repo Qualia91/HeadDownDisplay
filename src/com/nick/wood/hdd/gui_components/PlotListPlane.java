@@ -1,6 +1,6 @@
 package com.nick.wood.hdd.gui_components;
 
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.hdd.situation_awareness.Plot;
 import com.nick.wood.hdd.situation_awareness.PlotItemView;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -13,16 +13,16 @@ import java.util.ArrayList;
 public class PlotListPlane {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
-	private final TransformSceneGraph parent;
+	private final TransformObject parent;
 	private final Transform transform;
-	private final TransformSceneGraph transformGraph;
+	private final TransformObject transformGraph;
 	private final Vec3f middle;
 	private final float maxWidth;
 	private final float maxHeight;
 
 	private final ArrayList<PlotItemView> plotItemViews = new ArrayList<>();
 
-	public PlotListPlane(TransformSceneGraph parent, Vec3f position, QuaternionF rotation, int maxWidth, int maxHeight, Vec3f middle) {
+	public PlotListPlane(TransformObject parent, Vec3f position, QuaternionF rotation, int maxWidth, int maxHeight, Vec3f middle) {
 
 		this.parent = parent;
 		this.middle = middle;
@@ -36,7 +36,7 @@ public class PlotListPlane {
 				.setRotation(rotation)
 				.build();
 
-		this.transformGraph = new TransformSceneGraph(parent, transform);
+		this.transformGraph = new TransformObject(parent, transform);
 
 	}
 

@@ -1,12 +1,11 @@
 package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -20,16 +19,16 @@ public class LinearReadout {
 	private final double heightDiff = 0.25 + 0.24;
 	private final TextItem textItem;
 
-	public LinearReadout(SceneGraphNode parent, Vec3f position) {
+	public LinearReadout(GameObject parent, Vec3f position) {
 
-		MeshObject whiteMarkers = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
 						.build())
 				.build();
 
-		MeshObject redMarkers = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject redMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/red.png")
 				.setTransform(transformBuilder
@@ -37,7 +36,7 @@ public class LinearReadout {
 				.build();
 
 		// thrust indicator
-		MeshObject arrowMesh = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject arrowMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\arrow.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
@@ -56,16 +55,16 @@ public class LinearReadout {
 				.setPosition(position)
 				.build();
 
-		TransformSceneGraph indicatorTransformGraph = new TransformSceneGraph(parent, indicatorTransform);
+		TransformObject indicatorTransformGraph = new TransformObject(parent, indicatorTransform);
 
 		Transform whiteLineTransform = transformBuilder
 				.reset()
 				.setScale(new Vec3f(1, 1, 2))
 				.build();
 
-		TransformSceneGraph whiteLineTransformGraph = new TransformSceneGraph(indicatorTransformGraph, whiteLineTransform);
+		TransformObject whiteLineTransformGraph = new TransformObject(indicatorTransformGraph, whiteLineTransform);
 
-		MeshSceneGraph meshGameObject = new MeshSceneGraph(
+		MeshObject meshObject = new MeshObject(
 				whiteLineTransformGraph,
 				whiteMarkers
 		);
@@ -76,9 +75,9 @@ public class LinearReadout {
 				.setScale(new Vec3f(0.01f, 0.01f, 0.1f))
 				.build();
 
-		TransformSceneGraph redIndicatorTransformGraph = new TransformSceneGraph(indicatorTransformGraph, redIndicatorTransform);
+		TransformObject redIndicatorTransformGraph = new TransformObject(indicatorTransformGraph, redIndicatorTransform);
 
-		MeshSceneGraph redMeshGameObject = new MeshSceneGraph(
+		MeshObject redMeshObject = new MeshObject(
 				redIndicatorTransformGraph,
 				redMarkers
 		);
@@ -88,9 +87,9 @@ public class LinearReadout {
 				.setPosition(new Vec3f(0, -0.05f, -0.24f))
 				.build();
 
-		TransformSceneGraph arrowTransformGraph = new TransformSceneGraph(indicatorTransformGraph, arrowTransform);
+		TransformObject arrowTransformGraph = new TransformObject(indicatorTransformGraph, arrowTransform);
 
-		MeshSceneGraph arrowGameObject = new MeshSceneGraph(
+		MeshObject arrowGameObject = new MeshObject(
 				arrowTransformGraph,
 				arrowMesh
 		);
@@ -104,8 +103,8 @@ public class LinearReadout {
 				.reset()
 				.setPosition(new Vec3f(0, -0.25f, -textItem.getHeight()/2))
 				.build();
-		TransformSceneGraph transformSceneGraphThrottle = new TransformSceneGraph(arrowTransformGraph, textTransform);
-		MeshSceneGraph textMeshObjectThrottle = new MeshSceneGraph(transformSceneGraphThrottle, textItem);
+		TransformObject transformObjectThrottle = new TransformObject(arrowTransformGraph, textTransform);
+		MeshObject textMeshObjectThrottle = new MeshObject(transformObjectThrottle, textItem);
 
 	}
 

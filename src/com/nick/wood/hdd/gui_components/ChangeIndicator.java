@@ -1,11 +1,10 @@
 package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -16,9 +15,9 @@ public class ChangeIndicator {
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final Transform wholeTransform;
 
-	public ChangeIndicator(SceneGraphNode parent, Vec3f position, QuaternionF rot) {
+	public ChangeIndicator(GameObject parent, Vec3f position, QuaternionF rot) {
 
-		MeshObject whiteMarkers = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
@@ -31,12 +30,12 @@ public class ChangeIndicator {
 				.setScale(0.25f)
 				.build();
 
-		TransformSceneGraph wholeTransformGraphPers = new TransformSceneGraph(parent, wholeTransformPers);
+		TransformObject wholeTransformGraphPers = new TransformObject(parent, wholeTransformPers);
 
 		this.wholeTransform = transformBuilder.reset()
 				.build();
 
-		TransformSceneGraph wholeTransformGraph = new TransformSceneGraph(wholeTransformGraphPers, wholeTransform);
+		TransformObject wholeTransformGraph = new TransformObject(wholeTransformGraphPers, wholeTransform);
 
 		// add 5 markers along the depth axis
 		for (int i = 0; i < 5; i++) {
@@ -47,9 +46,9 @@ public class ChangeIndicator {
 					.setRotation(QuaternionF.RotationX(Math.PI/2))
 					.build();
 
-			TransformSceneGraph thisTransformGraph = new TransformSceneGraph(wholeTransformGraph, thisTransform);
+			TransformObject thisTransformGraph = new TransformObject(wholeTransformGraph, thisTransform);
 
-			MeshSceneGraph meshSceneGraph = new MeshSceneGraph(thisTransformGraph, whiteMarkers);
+			MeshObject meshObject = new MeshObject(thisTransformGraph, whiteMarkers);
 
 		}
 

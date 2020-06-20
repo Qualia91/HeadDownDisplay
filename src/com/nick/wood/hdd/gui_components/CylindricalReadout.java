@@ -1,12 +1,11 @@
 package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -25,9 +24,9 @@ public class CylindricalReadout {
 
 	public CylindricalReadout(int intervals,
 	                          Vec3f origin,
-	                          SceneGraphNode parent,
+	                          GameObject parent,
 	                          double radius,
-	                          MeshObject markerMesh,
+	                          com.nick.wood.graphics_library.objects.mesh_objects.MeshObject markerMesh,
 	                          QuaternionF cylinderPersistentRotation,
 	                          boolean hasText,
 	                          Function<Double, String> stringFunction,
@@ -47,8 +46,8 @@ public class CylindricalReadout {
 				.reset()
 				.build();
 
-		TransformSceneGraph cylindricalHeadingTransformObjectPers = new TransformSceneGraph(parent, cylindricalTransformPers);
-		TransformSceneGraph cylindricalHeadingTransformObject = new TransformSceneGraph(cylindricalHeadingTransformObjectPers, cylindricalTransform);
+		TransformObject cylindricalHeadingTransformObjectPers = new TransformObject(parent, cylindricalTransformPers);
+		TransformObject cylindricalHeadingTransformObject = new TransformObject(cylindricalHeadingTransformObjectPers, cylindricalTransform);
 
 		// create boxes all around at regular angular intervals
 		for (int i = -intervals/2; i < intervals/2; i++) {
@@ -62,9 +61,9 @@ public class CylindricalReadout {
 					.setRotation(QuaternionF.RotationZ(angleRad))
 					.build();
 
-			TransformSceneGraph meshTransform = new TransformSceneGraph(cylindricalHeadingTransformObject, transformMesh);
+			TransformObject meshTransform = new TransformObject(cylindricalHeadingTransformObject, transformMesh);
 
-			MeshSceneGraph meshSceneGraph = new MeshSceneGraph(
+			MeshObject meshObject = new MeshObject(
 					meshTransform,
 					markerMesh
 			);
@@ -78,8 +77,8 @@ public class CylindricalReadout {
 						.build();
 				Transform textTransform = textTransformFunction.apply(angleRad, text);
 
-				TransformSceneGraph textSceneGraph = new TransformSceneGraph(meshTransform, textTransform);
-				MeshSceneGraph textMeshObject = new MeshSceneGraph(textSceneGraph, text);
+				TransformObject textSceneGraph = new TransformObject(meshTransform, textTransform);
+				MeshObject textMeshObject = new MeshObject(textSceneGraph, text);
 			}
 		}
 	}

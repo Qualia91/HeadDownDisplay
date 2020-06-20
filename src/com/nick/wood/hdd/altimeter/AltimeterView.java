@@ -1,10 +1,9 @@
 package com.nick.wood.hdd.altimeter;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -14,14 +13,14 @@ public class AltimeterView {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 
-	public AltimeterView(TransformSceneGraph parentTransformGraph) {
+	public AltimeterView(TransformObject parentTransformGraph) {
 
 		// sphere
 		Transform sphereTransform = transformBuilder
 				.reset()
 				.build();
-		TransformSceneGraph sphereTransformSceneGraph = new TransformSceneGraph(parentTransformGraph, sphereTransform);
-		MeshObject sphere = new MeshBuilder()
+		TransformObject sphereTransformObject = new TransformObject(parentTransformGraph, sphereTransform);
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject sphere = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
 				.setTransform(transformBuilder
 						.setRotation(QuaternionF.RotationX(-Math.PI/2))
@@ -29,7 +28,7 @@ public class AltimeterView {
 						.build())
 				.setTextureViaFbo(true)
 				.build();
-		MeshSceneGraph sphereMeshObject = new MeshSceneGraph(sphereTransformSceneGraph, sphere);
+		MeshObject sphereMeshObject = new MeshObject(sphereTransformObject, sphere);
 
 	}
 

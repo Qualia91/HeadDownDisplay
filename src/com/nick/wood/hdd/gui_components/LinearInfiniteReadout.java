@@ -1,12 +1,11 @@
 package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -28,12 +27,12 @@ public class LinearInfiniteReadout {
 	private final float stepWidth;
 	private final Transform textTransform;
 
-	public LinearInfiniteReadout(SceneGraphNode parent, Vec3f position, double stepValue) {
+	public LinearInfiniteReadout(GameObject parent, Vec3f position, double stepValue) {
 
 		this.stepValue = stepValue;
 		stepWidth = (float) (0.05 / stepValue);
 
-		MeshObject whiteMarkers = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
@@ -42,7 +41,7 @@ public class LinearInfiniteReadout {
 				.build();
 
 		// indicator
-		MeshObject arrowMesh = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject arrowMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\arrow.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
@@ -60,7 +59,7 @@ public class LinearInfiniteReadout {
 				.setPosition(position)
 				.build();
 
-		TransformSceneGraph indicatorTransformGraph = new TransformSceneGraph(parent, indicatorTransform);
+		TransformObject indicatorTransformGraph = new TransformObject(parent, indicatorTransform);
 
 
 		// create steps
@@ -74,9 +73,9 @@ public class LinearInfiniteReadout {
 
 			stepTransforms.add(transform);
 
-			TransformSceneGraph stepTransformGraph = new TransformSceneGraph(indicatorTransformGraph, transform);
+			TransformObject stepTransformGraph = new TransformObject(indicatorTransformGraph, transform);
 
-			MeshSceneGraph stepMeshGraph = new MeshSceneGraph(stepTransformGraph, whiteMarkers);
+			MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, whiteMarkers);
 
 		}
 
@@ -86,9 +85,9 @@ public class LinearInfiniteReadout {
 				.setRotation(QuaternionF.RotationX(Math.PI))
 				.build();
 
-		TransformSceneGraph arrowTransformGraph = new TransformSceneGraph(indicatorTransformGraph, arrowTransform);
+		TransformObject arrowTransformGraph = new TransformObject(indicatorTransformGraph, arrowTransform);
 
-		MeshSceneGraph arrowGameObject = new MeshSceneGraph(
+		MeshObject arrowGameObject = new MeshObject(
 				arrowTransformGraph,
 				arrowMesh
 		);
@@ -105,8 +104,8 @@ public class LinearInfiniteReadout {
 		this.textTransform = transformBuilder
 				.reset()
 				.build();
-		TransformSceneGraph transformSceneGraphThrottle = new TransformSceneGraph(indicatorTransformGraph, textTransform);
-		MeshSceneGraph textMeshObjectThrottle = new MeshSceneGraph(transformSceneGraphThrottle, textItem);
+		TransformObject transformObjectThrottle = new TransformObject(indicatorTransformGraph, textTransform);
+		MeshObject textMeshObjectThrottle = new MeshObject(transformObjectThrottle, textItem);
 
 	}
 

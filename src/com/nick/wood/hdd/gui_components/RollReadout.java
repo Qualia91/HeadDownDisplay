@@ -1,12 +1,11 @@
 package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.SceneGraphNode;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.GameObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -16,16 +15,16 @@ public class RollReadout {
 
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final TextItem rollTextItem;
-	private final TransformSceneGraph rollTextTransformGraph;
-	private final TransformSceneGraph circleTransformSceneGraph;
+	private final TransformObject rollTextTransformGraph;
+	private final TransformObject circleTransformObject;
 
-	public RollReadout(SceneGraphNode parent, Vec3f position) {
+	public RollReadout(GameObject parent, Vec3f position) {
 
 		Transform rollReadoutTransform = transformBuilder
 				.reset()
 				.setPosition(position)
 				.build();
-		TransformSceneGraph rollTransformGraph = new TransformSceneGraph(parent, rollReadoutTransform);
+		TransformObject rollTransformGraph = new TransformObject(parent, rollReadoutTransform);
 
 		// roll text
 		this.rollTextItem = (TextItem) new MeshBuilder()
@@ -36,15 +35,15 @@ public class RollReadout {
 				.reset()
 				.setPosition(new Vec3f(-0.005f, -0.075f, 0.15f))
 				.build();
-		TransformSceneGraph rollTextTransformGraphPers = new TransformSceneGraph(rollTransformGraph, rollTextTransformPers);
+		TransformObject rollTextTransformGraphPers = new TransformObject(rollTransformGraph, rollTextTransformPers);
 		Transform rollTextTransform = transformBuilder
 				.reset()
 				.build();
-		this.rollTextTransformGraph = new TransformSceneGraph(rollTextTransformGraphPers, rollTextTransform);
-		MeshSceneGraph textMeshObjectRoll = new MeshSceneGraph(rollTextTransformGraph, rollTextItem);
+		this.rollTextTransformGraph = new TransformObject(rollTextTransformGraphPers, rollTextTransform);
+		MeshObject textMeshObjectRoll = new MeshObject(rollTextTransformGraph, rollTextItem);
 
 		// curve
-		MeshObject curveMesh = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject curveMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\curve.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
@@ -58,15 +57,15 @@ public class RollReadout {
 				)
 				.build();
 
-		TransformSceneGraph curveMeshTransformSceneGraph = new TransformSceneGraph(rollTransformGraph,
+		TransformObject curveMeshTransformObject = new TransformObject(rollTransformGraph,
 				transformBuilder
 						.reset()
 						.build());
 
-		MeshSceneGraph curveMeshSceneGraph = new MeshSceneGraph(curveMeshTransformSceneGraph, curveMesh);
+		MeshObject curveMeshObject = new MeshObject(curveMeshTransformObject, curveMesh);
 
 		// requested roll arrow
-		MeshObject arrowMesh = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject arrowMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
 				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\arrow.obj")
 				.setTexture("/textures/black.png")
@@ -78,11 +77,11 @@ public class RollReadout {
 				)
 				.build();
 
-		this.circleTransformSceneGraph = new TransformSceneGraph(curveMeshTransformSceneGraph,
+		this.circleTransformObject = new TransformObject(curveMeshTransformObject,
 				transformBuilder
 						.reset().build());
 
-		TransformSceneGraph arrowMeshTransformSceneGraph = new TransformSceneGraph(circleTransformSceneGraph,
+		TransformObject arrowMeshTransformObject = new TransformObject(circleTransformObject,
 				transformBuilder
 						.reset()
 						.setPosition(new Vec3f(0, 0, 0.1f))
@@ -91,7 +90,7 @@ public class RollReadout {
 								.multiply(QuaternionF.RotationY(-Math.PI/2))
 						).build());
 
-		MeshSceneGraph arrowMeshSceneGraph = new MeshSceneGraph(arrowMeshTransformSceneGraph, arrowMesh);
+		MeshObject arrowMeshObject = new MeshObject(arrowMeshTransformObject, arrowMesh);
 
 	}
 
@@ -109,7 +108,7 @@ public class RollReadout {
 	}
 
 	public void setRollStick(double rollStick) {
-		circleTransformSceneGraph.setRotation(
+		circleTransformObject.setRotation(
 				QuaternionF.RotationX(rollStick)
 		);
 	}

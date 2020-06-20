@@ -1,9 +1,8 @@
 package com.nick.wood.hdd.situation_awareness;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
-import com.nick.wood.graphics_library.objects.game_objects.MeshSceneGraph;
-import com.nick.wood.graphics_library.objects.game_objects.TransformSceneGraph;
+import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.hdd.gui_components.SquareGrid;
 import com.nick.wood.hdd.gui_components.PlotListPlane;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -12,11 +11,11 @@ import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
 
 public class SAView {
-	private final TransformSceneGraph saTransformGraph;
+	private final TransformObject saTransformGraph;
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final PlotListPlane plotListPlane;
 
-	public SAView(TransformSceneGraph saTransformGraph) {
+	public SAView(TransformObject saTransformGraph) {
 
 		this.saTransformGraph = saTransformGraph;
 
@@ -30,7 +29,7 @@ public class SAView {
 				1000);
 
 		// aircraft
-		MeshObject build = new MeshBuilder()
+		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject build = new MeshBuilder()
 				.setTexture("/textures/green.png").build();
 
 		Transform transform = transformBuilder
@@ -38,9 +37,9 @@ public class SAView {
 				.setScale(0.05f)
 				.build();
 
-		TransformSceneGraph stepTransformGraph = new TransformSceneGraph(saTransformGraph, transform);
+		TransformObject stepTransformGraph = new TransformObject(saTransformGraph, transform);
 
-		MeshSceneGraph stepMeshGraph = new MeshSceneGraph(stepTransformGraph, build);
+		MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, build);
 
 		this.plotListPlane = new PlotListPlane(
 				saTransformGraph,
