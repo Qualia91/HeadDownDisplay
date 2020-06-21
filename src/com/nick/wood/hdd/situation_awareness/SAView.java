@@ -1,7 +1,7 @@
 package com.nick.wood.hdd.situation_awareness;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.hdd.gui_components.SquareGrid;
 import com.nick.wood.hdd.gui_components.PlotListPlane;
@@ -39,7 +39,7 @@ public class SAView {
 
 		TransformObject stepTransformGraph = new TransformObject(saTransformGraph, transform);
 
-		MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, build);
+		MeshGameObject stepMeshGraph = new MeshGameObject(stepTransformGraph, build);
 
 		this.plotListPlane = new PlotListPlane(
 				saTransformGraph,

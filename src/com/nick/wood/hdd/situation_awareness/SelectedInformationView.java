@@ -3,7 +3,7 @@ package com.nick.wood.hdd.situation_awareness;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -97,7 +97,7 @@ public class SelectedInformationView {
 
 		TransformObject labelTextTransformGraph = new TransformObject(parent, labelTransform);
 
-		new MeshObject(labelTextTransformGraph, labelTextItem);
+		new MeshGameObject(labelTextTransformGraph, labelTextItem);
 
 		Transform textTransform = transformBuilder
 				.reset()
@@ -106,7 +106,7 @@ public class SelectedInformationView {
 
 		TransformObject textTransformGraph = new TransformObject(parent, textTransform);
 
-		new MeshObject(textTransformGraph, textItem);
+		new MeshGameObject(textTransformGraph, textItem);
 	}
 
 	public TextItem getIdText() {

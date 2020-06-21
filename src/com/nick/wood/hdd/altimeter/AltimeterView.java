@@ -2,7 +2,7 @@ package com.nick.wood.hdd.altimeter;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
@@ -28,7 +28,7 @@ public class AltimeterView {
 						.build())
 				.setTextureViaFbo(true)
 				.build();
-		MeshObject sphereMeshObject = new MeshObject(sphereTransformObject, sphere);
+		MeshGameObject sphereMeshGameObject = new MeshGameObject(sphereTransformObject, sphere);
 
 	}
 

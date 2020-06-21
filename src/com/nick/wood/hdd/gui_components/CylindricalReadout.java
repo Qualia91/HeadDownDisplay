@@ -3,7 +3,7 @@ package com.nick.wood.hdd.gui_components;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -63,7 +63,7 @@ public class CylindricalReadout {
 
 			TransformObject meshTransform = new TransformObject(cylindricalHeadingTransformObject, transformMesh);
 
-			MeshObject meshObject = new MeshObject(
+			MeshGameObject meshGameObject = new MeshGameObject(
 					meshTransform,
 					markerMesh
 			);
@@ -78,7 +78,7 @@ public class CylindricalReadout {
 				Transform textTransform = textTransformFunction.apply(angleRad, text);
 
 				TransformObject textSceneGraph = new TransformObject(meshTransform, textTransform);
-				MeshObject textMeshObject = new MeshObject(textSceneGraph, text);
+				MeshGameObject textMeshGameObject = new MeshGameObject(textSceneGraph, text);
 			}
 		}
 	}

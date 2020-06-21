@@ -3,7 +3,7 @@ package com.nick.wood.hdd.gui_components;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -59,7 +59,7 @@ public class SquareGrid {
 
 			TransformObject stepTransformGraph = new TransformObject(gridTransformGraph, transform);
 
-			MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, whiteMarkers);
+			MeshGameObject stepMeshGraph = new MeshGameObject(stepTransformGraph, whiteMarkers);
 
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
@@ -74,7 +74,7 @@ public class SquareGrid {
 
 			TransformObject textTransformGraph = new TransformObject(gridTransformGraph, textTransform);
 
-			MeshObject textSceneGraph = new MeshObject(textTransformGraph, textItem);
+			MeshGameObject textSceneGraph = new MeshGameObject(textTransformGraph, textItem);
 
 		}
 
@@ -88,7 +88,7 @@ public class SquareGrid {
 
 			TransformObject stepTransformGraph = new TransformObject(gridTransformGraph, transform);
 
-			MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, whiteMarkers);
+			MeshGameObject stepMeshGraph = new MeshGameObject(stepTransformGraph, whiteMarkers);
 
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
@@ -103,7 +103,7 @@ public class SquareGrid {
 
 			TransformObject textTransformGraph = new TransformObject(gridTransformGraph, textTransform);
 
-			MeshObject textSceneGraph = new MeshObject(textTransformGraph, textItem);
+			MeshGameObject textSceneGraph = new MeshGameObject(textTransformGraph, textItem);
 
 		}
 

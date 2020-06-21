@@ -3,7 +3,7 @@ package com.nick.wood.hdd.gui_components;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -75,7 +75,7 @@ public class LinearInfiniteReadout {
 
 			TransformObject stepTransformGraph = new TransformObject(indicatorTransformGraph, transform);
 
-			MeshObject stepMeshGraph = new MeshObject(stepTransformGraph, whiteMarkers);
+			MeshGameObject stepMeshGraph = new MeshGameObject(stepTransformGraph, whiteMarkers);
 
 		}
 
@@ -87,7 +87,7 @@ public class LinearInfiniteReadout {
 
 		TransformObject arrowTransformGraph = new TransformObject(indicatorTransformGraph, arrowTransform);
 
-		MeshObject arrowGameObject = new MeshObject(
+		MeshGameObject arrowGameObject = new MeshGameObject(
 				arrowTransformGraph,
 				arrowMesh
 		);
@@ -105,7 +105,7 @@ public class LinearInfiniteReadout {
 				.reset()
 				.build();
 		TransformObject transformObjectThrottle = new TransformObject(indicatorTransformGraph, textTransform);
-		MeshObject textMeshObjectThrottle = new MeshObject(transformObjectThrottle, textItem);
+		MeshGameObject textMeshGameObjectThrottle = new MeshGameObject(transformObjectThrottle, textItem);
 
 	}
 

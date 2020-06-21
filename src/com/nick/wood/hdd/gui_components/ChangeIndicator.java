@@ -2,7 +2,7 @@ package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -48,7 +48,7 @@ public class ChangeIndicator {
 
 			TransformObject thisTransformGraph = new TransformObject(wholeTransformGraph, thisTransform);
 
-			MeshObject meshObject = new MeshObject(thisTransformGraph, whiteMarkers);
+			MeshGameObject meshGameObject = new MeshGameObject(thisTransformGraph, whiteMarkers);
 
 		}
 

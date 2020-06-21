@@ -3,7 +3,7 @@ package com.nick.wood.hdd.gui_components;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -64,7 +64,7 @@ public class LinearReadout {
 
 		TransformObject whiteLineTransformGraph = new TransformObject(indicatorTransformGraph, whiteLineTransform);
 
-		MeshObject meshObject = new MeshObject(
+		MeshGameObject meshGameObject = new MeshGameObject(
 				whiteLineTransformGraph,
 				whiteMarkers
 		);
@@ -77,7 +77,7 @@ public class LinearReadout {
 
 		TransformObject redIndicatorTransformGraph = new TransformObject(indicatorTransformGraph, redIndicatorTransform);
 
-		MeshObject redMeshObject = new MeshObject(
+		MeshGameObject redMeshGameObject = new MeshGameObject(
 				redIndicatorTransformGraph,
 				redMarkers
 		);
@@ -89,7 +89,7 @@ public class LinearReadout {
 
 		TransformObject arrowTransformGraph = new TransformObject(indicatorTransformGraph, arrowTransform);
 
-		MeshObject arrowGameObject = new MeshObject(
+		MeshGameObject arrowGameObject = new MeshGameObject(
 				arrowTransformGraph,
 				arrowMesh
 		);
@@ -104,7 +104,7 @@ public class LinearReadout {
 				.setPosition(new Vec3f(0, -0.25f, -textItem.getHeight()/2))
 				.build();
 		TransformObject transformObjectThrottle = new TransformObject(arrowTransformGraph, textTransform);
-		MeshObject textMeshObjectThrottle = new MeshObject(transformObjectThrottle, textItem);
+		MeshGameObject textMeshGameObjectThrottle = new MeshGameObject(transformObjectThrottle, textItem);
 
 	}
 

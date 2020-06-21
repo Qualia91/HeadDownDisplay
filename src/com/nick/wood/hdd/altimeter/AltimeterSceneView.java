@@ -118,7 +118,7 @@ public class AltimeterSceneView {
 						.setRotation(QuaternionF.RotationY(Math.PI))
 						.setScale(Vec3f.ONE.scale(100)).build())
 				.build();
-		MeshObject sphereMeshObject = new MeshObject(sphereTransformObject, sphere);
+		MeshGameObject sphereMeshGameObject = new MeshGameObject(sphereTransformObject, sphere);
 
 		PointLight pointLight = new PointLight(
 				Vec3f.ONE,

@@ -1,7 +1,7 @@
 package com.nick.wood.hdd.situation_awareness;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.*;
-import com.nick.wood.graphics_library.objects.game_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -25,7 +25,7 @@ public class PlotItemView {
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject friendlyTrackMesh;
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject enemyTrackMesh;
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject unknownTrackMesh;
-	private final MeshObject trackMeshGraph;
+	private final MeshGameObject trackMeshGraph;
 
 	public PlotItemView(Vec3f position, QuaternionF orientation, GameObject parent, float maxWidth, float maxHeight) {
 
@@ -105,7 +105,7 @@ public class PlotItemView {
 
 		TransformObject trackRotationTransformGraph = new TransformObject(trackLocationTransformGraph, trackRotationTransform);
 
-		this.trackMeshGraph = new MeshObject(trackRotationTransformGraph, unknownTrackMesh);
+		this.trackMeshGraph = new MeshGameObject(trackRotationTransformGraph, unknownTrackMesh);
 
 		this.selectedMeshTransform = transformBuilder
 				.reset()
@@ -115,7 +115,7 @@ public class PlotItemView {
 
 		TransformObject selectedMeshTransformGraph = new TransformObject(trackMeshGraph, selectedMeshTransform);
 
-		MeshObject selectedMeshObject = new MeshObject(selectedMeshTransformGraph, selectedOutline);
+		MeshGameObject selectedMeshGameObject = new MeshGameObject(selectedMeshTransformGraph, selectedOutline);
 
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
@@ -130,7 +130,7 @@ public class PlotItemView {
 
 		TransformObject textTransformGraph = new TransformObject(trackLocationTransformGraph, textTransform);
 
-		MeshObject textSceneGraph = new MeshObject(textTransformGraph, textItem);
+		MeshGameObject textSceneGraph = new MeshGameObject(textTransformGraph, textItem);
 
 	}
 
