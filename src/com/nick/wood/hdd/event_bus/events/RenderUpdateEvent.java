@@ -4,12 +4,12 @@ import com.nick.wood.hdd.event_bus.data.RenderUpdateData;
 import com.nick.wood.hdd.event_bus.event_types.RenderUpdateEventType;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 
-public class RenderUpdateEvents implements Event<RenderUpdateData> {
+public class RenderUpdateEvent implements Event<RenderUpdateData> {
 
 	private final RenderUpdateData renderUpdateData;
 	private final RenderUpdateEventType renderUpdateEventType;
 
-	public RenderUpdateEvents(RenderUpdateData renderUpdateData, RenderUpdateEventType renderUpdateEventType) {
+	public RenderUpdateEvent(RenderUpdateData renderUpdateData, RenderUpdateEventType renderUpdateEventType) {
 		this.renderUpdateData = renderUpdateData;
 		this.renderUpdateEventType = renderUpdateEventType;
 	}

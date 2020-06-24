@@ -26,47 +26,47 @@ public class SelectedInformationView {
 
 		this.idText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.typeText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.bearingText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.rangeText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.altText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.enemyHeadingText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.enemyPitchText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.enemyRollText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		this.allegianceText = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 
@@ -87,7 +87,7 @@ public class SelectedInformationView {
 		TextItem labelTextItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
 				.setText(label)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
 		Transform labelTransform = transformBuilder

@@ -43,9 +43,9 @@ public class LinearInfiniteReadout {
 		// indicator
 		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject arrowMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\arrow.obj")
+				.setModelFile("\\models\\arrow.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/textures/gunMetalNormal.jpg")
+				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
 				.setTransform(
 						transformBuilder
 								.reset()
@@ -94,7 +94,7 @@ public class LinearInfiniteReadout {
 
 		// text
 		this.textItem = (TextItem) new MeshBuilder()
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.setMeshType(MeshType.TEXT)
 				.setTransform(
 						transformBuilder

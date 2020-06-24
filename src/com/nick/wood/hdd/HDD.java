@@ -20,7 +20,7 @@ import com.nick.wood.hdd.event_bus.event_types.PlotListChangeDataType;
 import com.nick.wood.hdd.event_bus.event_types.RenderManagementEventType;
 import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
 import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
-import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
+import com.nick.wood.hdd.event_bus.events.RenderManagementEvent;
 import com.nick.wood.hdd.event_bus.subscribables.RendererManager;
 import com.nick.wood.hdd.situation_awareness.*;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainFull {
+public class HDD {
 
 	// this is to get world in sensible coordinate system to start with
 	static private final QuaternionF quaternionX = QuaternionF.RotationX((float) Math.toRadians(-90));
@@ -41,7 +41,7 @@ public class MainFull {
 	public static final QuaternionF CAMERA_ROTATION = quaternionZ.multiply(quaternionY).multiply(quaternionX);
 
 	public static void main(String[] args) {
-		new MainFull().launch();
+		new HDD().launch();
 	}
 
 	private void launch() {
@@ -149,9 +149,9 @@ public class MainFull {
 		ArrayList<RootObject> gameObjects = new ArrayList<>();
 		gameObjects.add(rootGameObject);
 
-		WindowInitialisationParametersBuilder windowInitialisationParametersBuilder = new WindowInitialisationParametersBuilder();
-		windowInitialisationParametersBuilder.setDecorated(true);
-		windowInitialisationParametersBuilder.setSceneAmbientLight(new Vec3f(.8f, .8f, .8f));
+		WindowInitialisationParametersBuilder windowInitialisationParametersBuilder = new WindowInitialisationParametersBuilder()
+				.setDecorated(true)
+				.setSceneAmbientLight(new Vec3f(.8f, .8f, .8f));
 
 		RenderBus renderBus = new RenderBus();
 		ExecutorService executorService = Executors.newFixedThreadPool(4);
@@ -277,7 +277,7 @@ public class MainFull {
 
 
 		renderBus.dispatch(
-				new RenderManagementEvents(
+				new RenderManagementEvent(
 						new RenderManagementInitData(
 								gameObjects,
 								new ArrayList<>(),

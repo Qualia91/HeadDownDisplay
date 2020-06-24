@@ -64,7 +64,7 @@ public class SquareGrid {
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
 					.setText(String.valueOf(-i * stepWidthsReal))
-					.setFontFile("/font/verandaGreenBold.png")
+					.setFontFile("/fonts/verandaGreenBold.png")
 					.build();
 
 			Transform textTransform = transformBuilder
@@ -93,7 +93,7 @@ public class SquareGrid {
 			TextItem textItem = (TextItem) new MeshBuilder()
 					.setMeshType(MeshType.TEXT)
 					.setText(String.valueOf(i * stepWidthsReal))
-					.setFontFile("/font/verandaGreenBold.png")
+					.setFontFile("/fonts/verandaGreenBold.png")
 					.build();
 
 			Transform textTransform = transformBuilder

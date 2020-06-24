@@ -3,9 +3,8 @@ package com.nick.wood.hdd.situation_awareness;
 import com.nick.wood.hdd.event_bus.busses.RenderBus;
 import com.nick.wood.hdd.event_bus.data.RenderUpdateData;
 import com.nick.wood.hdd.event_bus.event_types.RenderUpdateEventType;
-import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
 import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
-import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
+import com.nick.wood.hdd.event_bus.events.RenderUpdateEvent;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
 
@@ -26,7 +25,7 @@ public class SAController implements Subscribable {
 	private void update(PlotListChangeEvent plotListChangeEvent) {
 
 
-		renderBus.dispatch(new RenderUpdateEvents(
+		renderBus.dispatch(new RenderUpdateEvent(
 				new RenderUpdateData(() -> {
 					saView.getPlotListPlane().drawPlotList(plotListChangeEvent.getData().getPlotList());
 				}),
@@ -38,7 +37,8 @@ public class SAController implements Subscribable {
 	@Override
 	public void handle(Event<?> event) {
 
-		if (event instanceof PlotListChangeEvent plotListChangeEvent) {
+		if (event instanceof PlotListChangeEvent) {
+			PlotListChangeEvent plotListChangeEvent = (PlotListChangeEvent) event;
 			update(plotListChangeEvent);
 		}
 	}

@@ -3,8 +3,8 @@ package com.nick.wood.hdd.event_bus.subscribables;
 import com.nick.wood.graphics_library.Window;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.hdd.event_bus.data.RenderManagementInitData;
-import com.nick.wood.hdd.event_bus.events.RenderManagementEvents;
-import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
+import com.nick.wood.hdd.event_bus.events.RenderManagementEvent;
+import com.nick.wood.hdd.event_bus.events.RenderUpdateEvent;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
 
@@ -17,7 +17,7 @@ public class RendererManager implements Subscribable {
 
 	private Window window;
 
-	private final ConcurrentLinkedQueue<RenderUpdateEvents> renderUpdateEvents = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<RenderUpdateEvent> renderUpdateEvents = new ConcurrentLinkedQueue<>();
 	private final ArrayList<GameObject> gameObjects;
 	private final ArrayList<GameObject> hudObjects;
 	private UUID cameraUUID;
@@ -28,8 +28,8 @@ public class RendererManager implements Subscribable {
 		this.hudObjects = new ArrayList<>();
 		this.cameraUUID = UUID.randomUUID();
 
-		supports.add(RenderManagementEvents.class);
-		supports.add(RenderUpdateEvents.class);
+		supports.add(RenderManagementEvent.class);
+		supports.add(RenderUpdateEvent.class);
 	}
 
 
@@ -59,12 +59,14 @@ public class RendererManager implements Subscribable {
 		int size = renderUpdateEvents.size();
 
 		for (int i = 0; i < size; i++) {
-			RenderUpdateEvents poll = renderUpdateEvents.poll();
+			RenderUpdateEvent poll = renderUpdateEvents.poll();
 			if (poll != null) {
 				switch (poll.getType()) {
-					case FUNCTION -> poll.getData().getRunnable().run();
-					default -> {
+					case FUNCTION: poll.getData().getRunnable().run();
+					break;
+					default: {
 						System.out.println("Wut?");
+						break;
 					}
 				}
 			}
@@ -82,11 +84,16 @@ public class RendererManager implements Subscribable {
 	@Override
 	public void handle(Event<?> event) {
 
-		if (event instanceof RenderManagementEvents renderManagementEvents) {
-			switch (renderManagementEvents.getType()) {
-				case START -> init((RenderManagementInitData) renderManagementEvents.getData());
+		if (event instanceof RenderManagementEvent) {
+			RenderManagementEvent renderManagementEvent = (RenderManagementEvent) event;
+			switch (renderManagementEvent.getType()) {
+				case START: {
+					init((RenderManagementInitData) renderManagementEvent.getData());
+					break;
+				}
 			}
-		} else if (event instanceof RenderUpdateEvents renderUpdateEvent) {
+		} else if (event instanceof RenderUpdateEvent) {
+			RenderUpdateEvent renderUpdateEvent = (RenderUpdateEvent) event;
 			renderUpdateEvents.add(renderUpdateEvent);
 		}
 

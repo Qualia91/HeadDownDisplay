@@ -6,12 +6,13 @@ import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.game_objects.*;
 import com.nick.wood.graphics_library.utils.Creation;
-import com.nick.wood.hdd.Main;
 import com.nick.wood.hdd.gui_components.*;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
 import com.nick.wood.maths.objects.vector.Vec3f;
+
+import static com.nick.wood.hdd.HDD.CAMERA_ROTATION;
 
 public class AltimeterSceneView {
 
@@ -39,7 +40,7 @@ public class AltimeterSceneView {
 		Transform persistentFobCameraTransform = transformBuilder
 				.setPosition(new Vec3f(0, 0, 0))
 				.setScale(Vec3f.ONE)
-				.setRotation(Main.CAMERA_ROTATION)
+				.setRotation(CAMERA_ROTATION)
 				.build();
 		TransformObject persistentFboCameraTransformGameObject = new TransformObject(fboViewTransformGraph, persistentFobCameraTransform);
 		this.fobCameraTransform = transformBuilder
@@ -52,7 +53,7 @@ public class AltimeterSceneView {
 		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject levelBlackMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/textures/gunMetalNormal.jpg")
+				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
 				.setTransform(transformBuilder
 						.setRotation(QuaternionF.RotationZ(Math.PI/2.0))
 						.setScale(new Vec3f(0.03f, 0.5f, 0.03f)).build()).build();
@@ -67,9 +68,9 @@ public class AltimeterSceneView {
 
 		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject aimMarker = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\aimMarker.obj")
+				.setModelFile("\\models\\aimMarker.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/textures/gunMetalNormal.jpg")
+				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
 				.setTransform(transformBuilder
 						.resetPosition()
 						.setRotation(
@@ -81,9 +82,9 @@ public class AltimeterSceneView {
 
 		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject pinMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\pin.obj")
+				.setModelFile("\\models\\pin.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/textures/gunMetalNormal.jpg")
+				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
 				.setTransform(transformBuilder
 						.resetPosition()
 						.setRotation(

@@ -4,7 +4,7 @@ import com.nick.wood.hdd.event_bus.busses.RenderBus;
 import com.nick.wood.hdd.event_bus.data.RenderUpdateData;
 import com.nick.wood.hdd.event_bus.event_types.RenderUpdateEventType;
 import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
-import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
+import com.nick.wood.hdd.event_bus.events.RenderUpdateEvent;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -38,10 +38,9 @@ public class AltimeterSceneController implements Subscribable {
 	@Override
 	public void handle(Event<?> event) {
 
-		if (event instanceof AltimeterChangeEvent altimeterChangeEvent) {
+		if (event instanceof AltimeterChangeEvent) {
+			AltimeterChangeEvent altimeterChangeEvent = (AltimeterChangeEvent) event;
 			moveCamera(altimeterChangeEvent);
-		}
-		if (event instanceof AltimeterChangeEvent altimeterChangeEvent) {
 			move(altimeterChangeEvent);
 		}
 
@@ -61,7 +60,7 @@ public class AltimeterSceneController implements Subscribable {
 		altimeterSceneView.getSpeedReadout().moveToValue(altimeterChangeEvent.getData().getSpeed());
 		altimeterSceneView.getAltitudeReadout().moveToValue(altimeterChangeEvent.getData().getAltitude());
 
-		renderBus.dispatch(new RenderUpdateEvents(
+		renderBus.dispatch(new RenderUpdateEvent(
 				new RenderUpdateData(() -> {
 					altimeterSceneView.getRollReadout().setRoll(altimeterChangeEvent.getData().getRoll());
 					altimeterSceneView.getAltitudeReadout().getTextItem().changeText(String.valueOf((int) altimeterChangeEvent.getData().getAltitude()));

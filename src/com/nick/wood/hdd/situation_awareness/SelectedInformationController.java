@@ -4,11 +4,10 @@ import com.nick.wood.hdd.event_bus.busses.RenderBus;
 import com.nick.wood.hdd.event_bus.data.RenderUpdateData;
 import com.nick.wood.hdd.event_bus.event_types.RenderUpdateEventType;
 import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
-import com.nick.wood.hdd.event_bus.events.RenderUpdateEvents;
+import com.nick.wood.hdd.event_bus.events.RenderUpdateEvent;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
 
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashSet;
@@ -29,7 +28,7 @@ public class SelectedInformationController implements Subscribable {
 
 	private void update(PlotListChangeEvent plotListChangeEvent) {
 
-		renderBus.dispatch(new RenderUpdateEvents(
+		renderBus.dispatch(new RenderUpdateEvent(
 				new RenderUpdateData(() -> {
 					for (Plot plot : plotListChangeEvent.getData().getPlotList()) {
 						if (plot.isSelected()) {
@@ -54,7 +53,8 @@ public class SelectedInformationController implements Subscribable {
 	@Override
 	public void handle(Event<?> event) {
 
-		if (event instanceof PlotListChangeEvent plotListChangeEvent) {
+		if (event instanceof PlotListChangeEvent) {
+			PlotListChangeEvent plotListChangeEvent = (PlotListChangeEvent) event;
 			update(plotListChangeEvent);
 		}
 	}

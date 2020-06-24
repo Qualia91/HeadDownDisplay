@@ -38,9 +38,9 @@ public class LinearReadout {
 		// thrust indicator
 		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject arrowMesh = new MeshBuilder()
 				.setMeshType(MeshType.MODEL)
-				.setModelFile("D:\\Software\\Programming\\projects\\Java\\GraphicsLibrary\\src\\main\\resources\\models\\arrow.obj")
+				.setModelFile("\\models\\arrow.obj")
 				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/textures/gunMetalNormal.jpg")
+				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
 				.setTransform(
 						transformBuilder
 								.reset()
@@ -97,7 +97,7 @@ public class LinearReadout {
 		// text
 		this.textItem = (TextItem) new MeshBuilder()
 				.setMeshType(MeshType.TEXT)
-				.setFontFile("/font/verandaGreenBold.png")
+				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 		Transform textTransform = transformBuilder
 				.reset()
