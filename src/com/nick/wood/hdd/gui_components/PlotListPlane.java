@@ -50,24 +50,22 @@ public class PlotListPlane {
 
 	}
 
-	public void drawPlotList(ArrayList<Plot> plots) {
-		for (int index = 0; index < plots.size(); index++) {
+	public void drawPlotList(Plot[] plots, float playerHeading) {
+		for (int index = 0; index < plots.length; index++) {
 
-			if (plotItemViews.size() > index) {
-				plotItemViews.get(index).updateInformation(plots.get(index));
-			} else {
+			if (!(plotItemViews.size() > index)) {
 				plotItemViews.add(new PlotItemView(
-						plots.get(index).getBra(),
-						plots.get(index).getOrientation(),
 						transformGraph,
 						this.maxWidth,
 						this.maxHeight,
 						modelManager));
 			}
 
+			plotItemViews.get(index).updateInformation(plots[index], playerHeading);
+
 		}
 
-		for (int i = plots.size(); i < plotItemViews.size(); i++) {
+		for (int i = plots.length; i < plotItemViews.size(); i++) {
 			plotItemViews.get(i).hide();
 		}
 

@@ -53,12 +53,10 @@ public class HDD {
 		TransformBuilder transformBuilder = new TransformBuilder();
 
 
-
 		// main scene
 		RootObject rootGameObject = new RootObject();
 		Transform playerViewTransform = transformBuilder.build();
 		TransformObject playerViewTransformGraph = new TransformObject(rootGameObject, playerViewTransform);
-
 
 
 		// view wheel transform
@@ -66,7 +64,6 @@ public class HDD {
 				.reset()
 				.build();
 		TransformObject wheelTransformGraph = new TransformObject(playerViewTransformGraph, wheelTransform);
-
 
 
 		// selected item information
@@ -77,15 +74,12 @@ public class HDD {
 		TransformObject siiTransformGraph = new TransformObject(wheelTransformGraph, siiTransform);
 
 
-
-
 		// sa transform
 		Transform saTransform = transformBuilder
 				.setPosition(new Vec3f(7, 0, 0))
 				.setScale(2.5f)
 				.build();
 		TransformObject saTransformGraph = new TransformObject(wheelTransformGraph, saTransform);
-
 
 
 		// altimeter transform
@@ -96,7 +90,6 @@ public class HDD {
 		TransformObject altimeterTransformGraph = new TransformObject(wheelTransformGraph, altimeterTransform);
 
 
-
 		// fbo scene transform
 		Transform fboViewTransform = transformBuilder
 				.setPosition(new Vec3f(1000, 0, 0))
@@ -104,11 +97,9 @@ public class HDD {
 		TransformObject fboViewTransformGraph = new TransformObject(rootGameObject, fboViewTransform);
 
 
-
 		// build all models used in app
 
 		ModelManager modelManager = new ModelManager();
-
 
 
 		// create views
@@ -116,7 +107,6 @@ public class HDD {
 		AltimeterView altimeterView = new AltimeterView(altimeterTransformGraph);
 		AltimeterSceneView altimeterSceneView = new AltimeterSceneView(fboViewTransformGraph, modelManager);
 		SelectedInformationView selectedInformationView = new SelectedInformationView(siiTransformGraph);
-
 
 
 		// create camera
@@ -142,7 +132,6 @@ public class HDD {
 			cameraTransformGameObject = new TransformObject(playerViewTransformGraph, cameraTransform);
 		}
 		CameraObject cameraObject = new CameraObject(cameraTransformGameObject, camera);
-
 
 
 		// lights
@@ -178,7 +167,6 @@ public class HDD {
 		renderBus.register(selectedInformationController);
 
 
-
 		RendererManager renderer = new RendererManager();
 		renderBus.register(renderer);
 
@@ -186,95 +174,78 @@ public class HDD {
 
 		executorService.submit(() -> {
 
-			ArrayList<Plot> plots = new ArrayList<>();
+			Plot[] plots = new Plot[13];
 
-			for (int j = 1; j < 3; j++) {
-				plots.add(new Plot(
+			for (int j = 0; j < 3; j++) {
+				plots[j] = (new Plot(
 						j,
+						j + 1,
 						sisoEnum,
-						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
-						QuaternionF.RotationX((float) (Math.PI/8 * j)),
+						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
+						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
 						j == 1,
 						Allegiance.UNKNOWN
 				));
 			}
 
 			for (int j = 3; j < 8; j++) {
-				plots.add(new Plot(
+				plots[j] = (new Plot(
 						j,
+						j + 1,
 						sisoEnum,
-						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
-						QuaternionF.RotationX((float) (Math.PI/8 * j)),
+						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
+						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
 						false,
 						Allegiance.FRIENDLY
 				));
 			}
 
 			for (int j = 8; j < 10; j++) {
-				plots.add(new Plot(
+				plots[j] = (new Plot(
 						j,
+						j + 1,
 						sisoEnum,
-						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
-						QuaternionF.RotationX((float) (Math.PI/8 * j)),
+						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
+						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
 						false,
 						Allegiance.ENEMY
 				));
 			}
 
 			for (int j = 10; j < 13; j++) {
-				plots.add(new Plot(
+				plots[j] = (new Plot(
 						j,
+						j + 1,
 						sisoEnum,
-						new Vec3f((float) (Math.PI/8 * j), j * 100, 0),
-						QuaternionF.RotationX((float) (Math.PI/8 * j)),
+						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
+						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
 						false,
 						Allegiance.NEUTRAL
 				));
 			}
 
-			float bearingIncrement = 0.01f;
-
-			int i = 0;
-			while (true) {
-				Thread.sleep(100);
-
-				ArrayList<Plot> newPlots = new ArrayList<>();
-
-				for (Plot plot : plots) {
-					newPlots.add(new Plot(
-							plot.getId(),
-							plot.getSisoEnum(),
-							new Vec3f(plot.getBra().getX() + (i * bearingIncrement), plot.getBra().getY(), 0),
-							plot.getOrientation(),
-							plot.isSelected(),
-							plot.getAllegiance()
-					));
-				}
-
-				renderBus.dispatch(new PlotListChangeEvent(
-						new PlotsListChangeData(
-								newPlots
-						),
-						PlotListChangeDataType.CHANGE
-				));
-				i++;
-			}
+			renderBus.dispatch(new PlotListChangeEvent(
+					new PlotsListChangeData(
+							plots
+					),
+					PlotListChangeDataType.CHANGE
+			));
 		});
 
 		executorService.submit(() -> {
 			int i = 0;
 			while (true) {
 				Thread.sleep(10);
-				float angle = (float) ((i/1000.0) % Math.PI);
-				float angleRequest = (float) (-Math.PI/2 + ((i/100.0) % Math.PI));
+				float angle = (float) ((i / 1000.0) % Math.PI);
+				float angleRequest = (float) (-Math.PI / 2 + ((i / 100.0) % Math.PI));
 				renderBus.dispatch(new AltimeterChangeEvent(
 						new AltimeterChangeData(
 								angle,
 								angle,
 								angle,
 								(float) i,
-								(float) i/50,
-								(float)((i/10) % 120)/ 100,
+								(float) i / 50,
+								(float) ((i / 10) % 120) / 100,
 								angleRequest,
 								angleRequest,
 								angleRequest

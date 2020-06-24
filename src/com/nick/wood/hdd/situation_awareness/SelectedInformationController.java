@@ -37,9 +37,9 @@ public class SelectedInformationController implements Subscribable {
 							selectedInformationView.getBearingText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getBra().getX()))));
 							selectedInformationView.getRangeText().changeText(String.valueOf(formatter.format(plot.getBra().getY())));
 							selectedInformationView.getAltText().changeText(String.valueOf(formatter.format(plot.getBra().getZ())));
-							selectedInformationView.getEnemyHeadingText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getOrientation().getI()))));
-							selectedInformationView.getEnemyPitchText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getOrientation().getJ()))));
-							selectedInformationView.getEnemyRollText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getOrientation().getK()))));
+							selectedInformationView.getEnemyHeadingText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getHpr().getX()))));
+							selectedInformationView.getEnemyPitchText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getHpr().getY()))));
+							selectedInformationView.getEnemyRollText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getHpr().getZ()))));
 							selectedInformationView.getAllegianceText().changeText(plot.getAllegiance().toString());
 						}
 					}

@@ -21,14 +21,14 @@ public class PlotItemView {
 	private final Transform trackRotationTransform;
 	private final Transform selectedMeshTransform;
 
-	private static final Vec3f outOfTheWayVec = new Vec3f(-100, 0, 0);
+	private static final Vec3f OUT_OF_THE_WAY_VEC = new Vec3f(-100, 0, 0);
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject neutralTrackMesh;
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject friendlyTrackMesh;
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject enemyTrackMesh;
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject unknownTrackMesh;
 	private final MeshGameObject trackMeshGraph;
 
-	public PlotItemView(Vec3f position, QuaternionF orientation, GameObject parent, float maxWidth, float maxHeight, ModelManager modelManager) {
+	public PlotItemView(GameObject parent, float maxWidth, float maxHeight, ModelManager modelManager) {
 
 		MeshObject selectedOutline = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
@@ -46,14 +46,8 @@ public class PlotItemView {
 		this.maxWidth = maxWidth;
 		this.maxHeight = maxHeight;
 
-		// calc position in grid
-		// find "forward" and "side" locations
-		float forward = (float) (position.getY() * Math.cos(position.getX())) / maxWidth;
-		float side = (float) (position.getY() * Math.sin(position.getX())) / maxHeight;
-
 		this.trackLocationTransform = transformBuilder
 				.reset()
-				.setPosition(new Vec3f(0, forward, side))
 				.setScale(0.2f)
 				.build();
 
@@ -61,7 +55,6 @@ public class PlotItemView {
 
 		this.trackRotationTransform = transformBuilder
 				.reset()
-				.setRotation(orientation)
 				.build();
 
 		TransformObject trackRotationTransformGraph = new TransformObject(trackLocationTransformGraph, trackRotationTransform);
@@ -71,7 +64,7 @@ public class PlotItemView {
 		this.selectedMeshTransform = transformBuilder
 				.reset()
 				.setScale(0.5f)
-				.setPosition(outOfTheWayVec)
+				.setPosition(OUT_OF_THE_WAY_VEC)
 				.build();
 
 		TransformObject selectedMeshTransformGraph = new TransformObject(trackMeshGraph, selectedMeshTransform);
@@ -95,7 +88,7 @@ public class PlotItemView {
 
 	}
 
-	public void updateInformation(Plot plot) {
+	public void updateInformation(Plot plot, float playerHeading) {
 
 		// calc position in grid
 		// find "forward" and "side" locations
@@ -110,11 +103,14 @@ public class PlotItemView {
 			forward = Math.copySign(1, forward);
 		}
 		this.trackLocationTransform.setPosition(new Vec3f(0, -side, forward));
-		this.trackRotationTransform.setRotation(plot.getOrientation());
+
+		float targetRelativeHeading = plot.getHpr().getX() - playerHeading;
+
+		this.trackRotationTransform.setRotation(QuaternionF.RotationX(targetRelativeHeading));
 
 		this.textItem.changeText(String.valueOf(plot.getId()));
 
-		selectedMeshTransform.setPosition(plot.isSelected() ? new Vec3f(0.01f, 0, 0) : outOfTheWayVec);
+		selectedMeshTransform.setPosition(plot.isSelected() ? new Vec3f(0.01f, 0, 0) : OUT_OF_THE_WAY_VEC);
 
 		switch (plot.getAllegiance()) {
 			case NEUTRAL: trackMeshGraph.setMeshObject(neutralTrackMesh);

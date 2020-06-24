@@ -6,17 +6,17 @@ import java.util.ArrayList;
 
 public class PlotsListChangeData {
 
-	ArrayList<Plot> plotList;
+	Plot[] plotList;
 
-	public PlotsListChangeData(ArrayList<Plot> plotList) {
+	public PlotsListChangeData(Plot[] plotList) {
 		this.plotList = plotList;
 	}
 
-	public ArrayList<Plot> getPlotList() {
+	public Plot[] getPlotList() {
 		return plotList;
 	}
 
-	public void setPlotList(ArrayList<Plot> plotList) {
+	public void setPlotList(Plot[] plotList) {
 		this.plotList = plotList;
 	}
 }
