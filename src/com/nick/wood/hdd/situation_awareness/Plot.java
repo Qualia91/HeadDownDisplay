@@ -5,17 +5,15 @@ import com.nick.wood.maths.objects.vector.Vec3f;
 
 public class Plot {
 
-	private final long source;
-	private final long id;
+	private final TrackID trackID;
 	private final SisoEnum sisoEnum;
 	private final Vec3f bra;
 	private final Vec3f hpr;
 	private final boolean selected;
 	private final Allegiance allegiance;
 
-	public Plot(long source, long id, SisoEnum sisoEnum, Vec3f bra, Vec3f hpr, boolean selected, Allegiance allegiance) {
-		this.source = source;
-		this.id = id;
+	public Plot(TrackID trackID, SisoEnum sisoEnum, Vec3f bra, Vec3f hpr, boolean selected, Allegiance allegiance) {
+		this.trackID = trackID;
 		this.sisoEnum = sisoEnum;
 		this.bra = bra;
 		this.hpr = hpr;
@@ -23,12 +21,8 @@ public class Plot {
 		this.allegiance = allegiance;
 	}
 
-	public long getSource() {
-		return source;
-	}
-
-	public long getId() {
-		return id;
+	public TrackID getTrackID() {
+		return trackID;
 	}
 
 	public SisoEnum getSisoEnum() {

@@ -32,7 +32,7 @@ public class SelectedInformationController implements Subscribable {
 				new RenderUpdateData(() -> {
 					for (Plot plot : plotListChangeEvent.getData().getPlotList()) {
 						if (plot.isSelected()) {
-							selectedInformationView.getIdText().changeText(String.valueOf(plot.getId()));
+							selectedInformationView.getIdText().changeText(String.valueOf(plot.getTrackID().getId()));
 							selectedInformationView.getTypeText().changeText(plot.getSisoEnum().toString());
 							selectedInformationView.getBearingText().changeText(String.valueOf(formatter.format(Math.toDegrees(plot.getBra().getX()))));
 							selectedInformationView.getRangeText().changeText(String.valueOf(formatter.format(plot.getBra().getY())));

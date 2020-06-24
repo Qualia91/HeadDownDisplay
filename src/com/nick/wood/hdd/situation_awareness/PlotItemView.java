@@ -12,6 +12,7 @@ import com.nick.wood.maths.objects.vector.Vec3f;
 
 public class PlotItemView {
 
+	private TrackID trackID;
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final float maxWidth;
 	private final float maxHeight;
@@ -21,18 +22,18 @@ public class PlotItemView {
 	private final Transform selectedMeshTransform;
 
 	private static final Vec3f OUT_OF_THE_WAY_VEC = new Vec3f(-100, 0, 0);
-	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject neutralTrackMesh;
-	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject friendlyTrackMesh;
-	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject enemyTrackMesh;
-	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject unknownTrackMesh;
-	private final MeshGameObject trackMeshGraph;
+	private final MeshObject neutralTrackMesh;
+	private final MeshObject friendlyTrackMesh;
+	private final MeshObject enemyTrackMesh;
+	private final MeshObject unknownTrackMesh;
+	private final MeshGameObject trackGameObject;
 	private final TransformObject textTransformGraph;
 
 	public PlotItemView(GameObject parent, float maxWidth, float maxHeight, ModelManager modelManager) {
 
 		MeshObject selectedOutline = new MeshBuilder()
-				.setMeshType(MeshType.SQUARE)
-				.setTexture("/textures/selectedTexture.png")
+				.setMeshType(MeshType.SPHERE)
+				.setTexture("/textures/selectedCuboidTexture.png")
 				.build();
 
 		this.enemyTrackMesh = modelManager.getModel("ENEMY_TRACK");
@@ -59,7 +60,7 @@ public class PlotItemView {
 
 		TransformObject trackRotationTransformGraph = new TransformObject(trackLocationTransformGraph, trackRotationTransform);
 
-		this.trackMeshGraph = new MeshGameObject(trackRotationTransformGraph, unknownTrackMesh);
+		this.trackGameObject = new MeshGameObject(trackRotationTransformGraph, unknownTrackMesh);
 
 		this.selectedMeshTransform = transformBuilder
 				.reset()
@@ -67,7 +68,7 @@ public class PlotItemView {
 				.setPosition(OUT_OF_THE_WAY_VEC)
 				.build();
 
-		TransformObject selectedMeshTransformGraph = new TransformObject(trackMeshGraph, selectedMeshTransform);
+		TransformObject selectedMeshTransformGraph = new TransformObject(trackGameObject, selectedMeshTransform);
 
 		MeshGameObject selectedMeshGameObject = new MeshGameObject(selectedMeshTransformGraph, selectedOutline);
 
@@ -90,6 +91,7 @@ public class PlotItemView {
 
 	public void updateInformation(Plot plot) {
 
+		this.trackID = plot.getTrackID();
 		// calc position in grid
 		// find "forward" and "side" locations
 		float forward = (float) (plot.getBra().getY() * Math.cos(plot.getBra().getX())) / maxWidth;
@@ -108,18 +110,18 @@ public class PlotItemView {
 
 		this.trackRotationTransform.setRotation(QuaternionF.RotationX(heading));
 
-		this.textItem.changeText(String.valueOf(plot.getId()));
+		this.textItem.changeText(String.valueOf(plot.getTrackID().getId()));
 
 		selectedMeshTransform.setPosition(plot.isSelected() ? new Vec3f(0.01f, 0, 0) : OUT_OF_THE_WAY_VEC);
 
 		switch (plot.getAllegiance()) {
-			case NEUTRAL: trackMeshGraph.setMeshObject(neutralTrackMesh);
+			case NEUTRAL: trackGameObject.setMeshObject(neutralTrackMesh);
 			break;
-			case FRIENDLY: trackMeshGraph.setMeshObject(friendlyTrackMesh);
+			case FRIENDLY: trackGameObject.setMeshObject(friendlyTrackMesh);
 			break;
-			case ENEMY: trackMeshGraph.setMeshObject(enemyTrackMesh);
+			case ENEMY: trackGameObject.setMeshObject(enemyTrackMesh);
 			break;
-			case UNKNOWN: trackMeshGraph.setMeshObject(unknownTrackMesh);
+			case UNKNOWN: trackGameObject.setMeshObject(unknownTrackMesh);
 			break;
 		}
 	}
@@ -130,5 +132,13 @@ public class PlotItemView {
 
 	public TransformObject getTextTransformGraph() {
 		return textTransformGraph;
+	}
+
+	public MeshGameObject getTrackGameObject() {
+		return trackGameObject;
+	}
+
+	public TrackID getTrackID() {
+		return trackID;
 	}
 }

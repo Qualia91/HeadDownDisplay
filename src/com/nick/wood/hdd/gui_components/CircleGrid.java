@@ -62,7 +62,7 @@ public class CircleGrid {
 						.setScale(i)
 						.build();
 
-				TransformObject circleTransformGraph = new TransformObject(editableTransformGraph, circleTransform);
+				TransformObject circleTransformGraph = new TransformObject(gridTransformGraph, circleTransform);
 
 				MeshGameObject circleMeshGameObj = new MeshGameObject(circleTransformGraph, circle);
 			}
@@ -75,7 +75,7 @@ public class CircleGrid {
 
 			Transform textTransform = transformBuilder
 					.reset()
-					.setPosition(new Vec3f(0,  1 - 0.02f, i * widthStepSize - textItem.getHeight()/2))
+					.setPosition(new Vec3f(0,  1 - 0.01f, i * widthStepSize - textItem.getHeight()/2))
 					.build();
 
 			TransformObject textTransformGraph = new TransformObject(gridTransformGraph, textTransform);

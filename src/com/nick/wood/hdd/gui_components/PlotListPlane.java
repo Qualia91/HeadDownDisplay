@@ -76,4 +76,8 @@ public class PlotListPlane {
 			plotItemView.getTextTransformGraph().setRotation(rotation.inverse());
 		}
 	}
+
+	public ArrayList<PlotItemView> getPlotItemViews() {
+		return plotItemViews;
+	}
 }

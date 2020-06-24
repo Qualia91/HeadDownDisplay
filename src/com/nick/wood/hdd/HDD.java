@@ -46,6 +46,8 @@ public class HDD {
 
 	public static void main(String[] args) {
 		new HDD().launch();
+
+		System.exit(0);
 	}
 
 	private void launch() {
@@ -110,7 +112,7 @@ public class HDD {
 
 
 		// create camera
-		Camera camera = new Camera(1.22173f, 0.001f, 100);
+		Camera camera = new Camera(1.22173f, 1, 10);
 		TransformObject cameraTransformGameObject;
 
 		// attach camera to fbo
@@ -150,7 +152,9 @@ public class HDD {
 
 		WindowInitialisationParametersBuilder windowInitialisationParametersBuilder = new WindowInitialisationParametersBuilder()
 				.setDecorated(true)
-				.setSceneAmbientLight(new Vec3f(.8f, .8f, .8f));
+				.setSceneAmbientLight(new Vec3f(.8f, .8f, .8f))
+				.setLockCursor(false)
+				.setPicking(true);
 
 		RenderBus renderBus = new RenderBus();
 		ExecutorService executorService = Executors.newFixedThreadPool(4);
@@ -167,7 +171,7 @@ public class HDD {
 		renderBus.register(selectedInformationController);
 
 
-		RendererManager renderer = new RendererManager();
+		RendererManager renderer = new RendererManager(renderBus);
 		renderBus.register(renderer);
 
 		SisoEnum sisoEnum = new SisoEnum(1, 2, 227, 23, 42, 1, 1);
@@ -178,8 +182,7 @@ public class HDD {
 
 			for (int j = 0; j < 3; j++) {
 				plots[j] = (new Plot(
-						j,
-						j + 1,
+						new TrackID(j, j),
 						sisoEnum,
 						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
 						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
@@ -190,8 +193,7 @@ public class HDD {
 
 			for (int j = 3; j < 8; j++) {
 				plots[j] = (new Plot(
-						j,
-						j + 1,
+						new TrackID(j, j),
 						sisoEnum,
 						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
 						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
@@ -202,8 +204,7 @@ public class HDD {
 
 			for (int j = 8; j < 10; j++) {
 				plots[j] = (new Plot(
-						j,
-						j + 1,
+						new TrackID(j, j),
 						sisoEnum,
 						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
 						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
@@ -214,8 +215,7 @@ public class HDD {
 
 			for (int j = 10; j < 13; j++) {
 				plots[j] = (new Plot(
-						j,
-						j + 1,
+						new TrackID(j, j),
 						sisoEnum,
 						new Vec3f((float) (Math.PI / 8 * j), j * 100, 0),
 						new Vec3f((float) Math.toRadians(j * 10), 0, 0),
@@ -266,6 +266,7 @@ public class HDD {
 								windowInitialisationParametersBuilder.build()
 						),
 						RenderManagementEventType.START));
+
 
 	}
 }

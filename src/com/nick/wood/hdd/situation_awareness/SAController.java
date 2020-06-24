@@ -3,9 +3,7 @@ package com.nick.wood.hdd.situation_awareness;
 import com.nick.wood.hdd.event_bus.busses.RenderBus;
 import com.nick.wood.hdd.event_bus.data.RenderUpdateData;
 import com.nick.wood.hdd.event_bus.event_types.RenderUpdateEventType;
-import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
-import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
-import com.nick.wood.hdd.event_bus.events.RenderUpdateEvent;
+import com.nick.wood.hdd.event_bus.events.*;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -21,6 +19,7 @@ public class SAController implements Subscribable {
 	public SAController(SAView saView, RenderBus renderBus) {
 		supports.add(PlotListChangeEvent.class);
 		supports.add(AltimeterChangeEvent.class);
+		supports.add(GameObjectSelectedEvent.class);
 		this.saView = saView;
 		this.renderBus = renderBus;
 	}
@@ -28,9 +27,7 @@ public class SAController implements Subscribable {
 	private void updatePlotList(Plot[] plotList) {
 
 		renderBus.dispatch(new RenderUpdateEvent(
-				new RenderUpdateData(() -> {
-					saView.getPlotListPlane().drawPlotList(plotList);
-				}),
+				new RenderUpdateData(() -> saView.getPlotListPlane().drawPlotList(plotList)),
 				RenderUpdateEventType.FUNCTION));
 
 	}
@@ -56,6 +53,13 @@ public class SAController implements Subscribable {
 		} else if (event instanceof AltimeterChangeEvent) {
 			AltimeterChangeEvent plotListChangeEvent = (AltimeterChangeEvent) event;
 			updateSAOrientation(plotListChangeEvent.getData().getHeading());
+		} else if (event instanceof GameObjectSelectedEvent) {
+			GameObjectSelectedEvent gameObjectSelectedEvent = (GameObjectSelectedEvent) event;
+			for (PlotItemView plotItemView : saView.getPlotListPlane().getPlotItemViews()) {
+				if (plotItemView.getTrackGameObject().getGameObjectData().getUuid().equals(gameObjectSelectedEvent.getData().getUuid())) {
+					renderBus.dispatch(new TrackSelectedEvent(plotItemView.getTrackID()));
+				}
+			}
 		}
 	}
 
