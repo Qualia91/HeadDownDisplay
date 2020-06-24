@@ -1,11 +1,12 @@
 package com.nick.wood.hdd.gui_components;
 
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
+import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -19,36 +20,23 @@ public class LinearReadout {
 	private final double heightDiff = 0.25 + 0.24;
 	private final TextItem textItem;
 
-	public LinearReadout(GameObject parent, Vec3f position) {
+	public LinearReadout(GameObject parent, Vec3f position, ModelManager modelManager) {
 
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
+		MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder
 						.build())
 				.build();
 
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject redMarkers = new MeshBuilder()
+		MeshObject redMarkers = new MeshBuilder()
 				.setMeshType(MeshType.CUBOID)
 				.setTexture("/textures/red.png")
 				.setTransform(transformBuilder
 						.build())
 				.build();
 
-		// thrust indicator
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject arrowMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\arrow.obj")
-				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
-				.setTransform(
-						transformBuilder
-								.reset()
-								.setScale(0.025f)
-								.setRotation(QuaternionF.RotationZ(Math.PI/2))
-								.build()
-				)
-				.build();
+
 
 		Transform indicatorTransform = transformBuilder
 				.reset()
@@ -91,7 +79,7 @@ public class LinearReadout {
 
 		MeshGameObject arrowGameObject = new MeshGameObject(
 				arrowTransformGraph,
-				arrowMesh
+				modelManager.getModel("ARROW")
 		);
 
 		// text

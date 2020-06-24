@@ -3,6 +3,8 @@ package com.nick.wood.hdd.situation_awareness;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
+import com.nick.wood.hdd.gui_components.ModelManager;
 import com.nick.wood.hdd.gui_components.SquareGrid;
 import com.nick.wood.hdd.gui_components.PlotListPlane;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -15,7 +17,10 @@ public class SAView {
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final PlotListPlane plotListPlane;
 
-	public SAView(TransformObject saTransformGraph) {
+	public SAView(TransformObject saTransformGraph,
+	              int width,
+	              int height,
+	              ModelManager modelManager) {
 
 		this.saTransformGraph = saTransformGraph;
 
@@ -25,11 +30,11 @@ public class SAView {
 				QuaternionF.Identity,
 				2,
 				2,
-				1000,
-				1000);
+				width,
+				height);
 
 		// aircraft
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject build = new MeshBuilder()
+		MeshObject build = new MeshBuilder()
 				.setTexture("/textures/green.png").build();
 
 		Transform transform = transformBuilder
@@ -45,9 +50,10 @@ public class SAView {
 				saTransformGraph,
 				new Vec3f(0, 0, 0),
 				QuaternionF.Identity,
-				1000,
-				1000,
-				Vec3f.ZERO
+				width,
+				height,
+				Vec3f.ZERO,
+				modelManager
 		);
 
 	}

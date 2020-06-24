@@ -1,6 +1,7 @@
 package com.nick.wood.hdd.gui_components;
 
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.hdd.situation_awareness.Plot;
 import com.nick.wood.hdd.situation_awareness.PlotItemView;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -21,8 +22,17 @@ public class PlotListPlane {
 	private final float maxHeight;
 
 	private final ArrayList<PlotItemView> plotItemViews = new ArrayList<>();
+	private final ModelManager modelManager;
 
-	public PlotListPlane(TransformObject parent, Vec3f position, QuaternionF rotation, int maxWidth, int maxHeight, Vec3f middle) {
+	public PlotListPlane(TransformObject parent,
+	                     Vec3f position,
+	                     QuaternionF rotation,
+	                     int maxWidth,
+	                     int maxHeight,
+	                     Vec3f middle,
+	                     ModelManager modelManager) {
+
+		this.modelManager = modelManager;
 
 		this.parent = parent;
 		this.middle = middle;
@@ -51,7 +61,8 @@ public class PlotListPlane {
 						plots.get(index).getOrientation(),
 						transformGraph,
 						this.maxWidth,
-						this.maxHeight));
+						this.maxHeight,
+						modelManager));
 			}
 
 		}

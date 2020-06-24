@@ -1,6 +1,7 @@
 package com.nick.wood.hdd.altimeter;
 
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
@@ -20,15 +21,16 @@ public class AltimeterView {
 				.reset()
 				.build();
 		TransformObject sphereTransformObject = new TransformObject(parentTransformGraph, sphereTransform);
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject sphere = new MeshBuilder()
+		MeshObject altimeterScreen = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
 				.setTransform(transformBuilder
 						.setRotation(QuaternionF.RotationX(-Math.PI/2))
 						.setScale(Vec3f.ONE.scale(5))
 						.build())
-				.setTextureViaFbo(true)
+				.setTextureFboIndex(1)
 				.build();
-		MeshGameObject sphereMeshGameObject = new MeshGameObject(sphereTransformObject, sphere);
+
+		MeshGameObject sphereMeshGameObject = new MeshGameObject(sphereTransformObject, altimeterScreen);
 
 	}
 

@@ -27,7 +27,7 @@ public class LinearInfiniteReadout {
 	private final float stepWidth;
 	private final Transform textTransform;
 
-	public LinearInfiniteReadout(GameObject parent, Vec3f position, double stepValue) {
+	public LinearInfiniteReadout(GameObject parent, Vec3f position, double stepValue, ModelManager modelManager) {
 
 		this.stepValue = stepValue;
 		stepWidth = (float) (0.05 / stepValue);
@@ -39,20 +39,6 @@ public class LinearInfiniteReadout {
 						.setScale(new Vec3f(0.01f, 0.01f, 0.5f))
 						.build())
 				.build();
-
-		// indicator
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject arrowMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\arrow.obj")
-				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
-				.setTransform(
-						transformBuilder
-								.reset()
-								.setScale(0.025f)
-								.setRotation(QuaternionF.RotationZ(Math.PI/2))
-								.build()
-				).build();
 
 		Transform indicatorTransform = transformBuilder
 				.reset()
@@ -89,7 +75,7 @@ public class LinearInfiniteReadout {
 
 		MeshGameObject arrowGameObject = new MeshGameObject(
 				arrowTransformGraph,
-				arrowMesh
+				modelManager.getModel("ARROW")
 		);
 
 		// text

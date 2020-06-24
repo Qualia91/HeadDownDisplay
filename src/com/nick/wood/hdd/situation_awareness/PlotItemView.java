@@ -4,6 +4,7 @@ import com.nick.wood.graphics_library.objects.mesh_objects.*;
 import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
+import com.nick.wood.hdd.gui_components.ModelManager;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -27,60 +28,20 @@ public class PlotItemView {
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject unknownTrackMesh;
 	private final MeshGameObject trackMeshGraph;
 
-	public PlotItemView(Vec3f position, QuaternionF orientation, GameObject parent, float maxWidth, float maxHeight) {
+	public PlotItemView(Vec3f position, QuaternionF orientation, GameObject parent, float maxWidth, float maxHeight, ModelManager modelManager) {
 
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject selectedOutline = new MeshBuilder()
+		MeshObject selectedOutline = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
 				.setTexture("/textures/selectedTexture.png")
 				.build();
 
-		this.enemyTrackMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\flatCone.obj")
-				.setTexture("/textures/red.png")
-				.setTransform(transformBuilder
-						.setScale(0.2f)
-						.setRotation(
-								QuaternionF.RotationY(-Math.PI/2)
-										.multiply(QuaternionF.RotationX(Math.PI/2))
-						)
-						.build()).build();
+		this.enemyTrackMesh = modelManager.getModel("ENEMY_TRACK");
 
-		this.unknownTrackMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\flatCone.obj")
-				.setTexture("/textures/yellow.png")
-				.setTransform(transformBuilder
-						.setScale(0.2f)
-						.setRotation(
-								QuaternionF.RotationY(-Math.PI/2)
-										.multiply(QuaternionF.RotationX(Math.PI/2))
-						)
-						.build()).build();
+		this.unknownTrackMesh = modelManager.getModel("UNKNOWN_TRACK");
 
-		this.friendlyTrackMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\flatCone.obj")
-				.setTexture("/textures/blue.png")
-				.setTransform(transformBuilder
-						.setScale(0.2f)
-						.setRotation(
-								QuaternionF.RotationY(-Math.PI/2)
-										.multiply(QuaternionF.RotationX(Math.PI/2))
-						)
-						.build()).build();
+		this.friendlyTrackMesh = modelManager.getModel("FRIENDLY_TRACK");
 
-		this.neutralTrackMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\flatCone.obj")
-				.setTexture("/textures/green.png")
-				.setTransform(transformBuilder
-						.setScale(0.2f)
-						.setRotation(
-								QuaternionF.RotationY(-Math.PI/2)
-										.multiply(QuaternionF.RotationX(Math.PI/2))
-						)
-						.build()).build();
+		this.neutralTrackMesh = modelManager.getModel("NEUTRAL_TRACK");
 
 		this.maxWidth = maxWidth;
 		this.maxHeight = maxHeight;

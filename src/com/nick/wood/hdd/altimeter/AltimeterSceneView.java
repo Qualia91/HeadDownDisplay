@@ -2,9 +2,11 @@ package com.nick.wood.hdd.altimeter;
 
 import com.nick.wood.graphics_library.lighting.PointLight;
 import com.nick.wood.graphics_library.objects.Camera;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.objects.game_objects.*;
+import com.nick.wood.graphics_library.objects.mesh_objects.Mesh;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.gui_components.*;
 import com.nick.wood.maths.objects.QuaternionF;
@@ -31,12 +33,12 @@ public class AltimeterSceneView {
 	private final CylindricalReadout pitchReadout;
 	private final CylindricalReadout headingReadout;
 
-	public AltimeterSceneView(GameObject fboViewTransformGraph) {
+	public AltimeterSceneView(GameObject fboViewTransformGraph, ModelManager modelManager) {
 
 		TransformBuilder transformBuilder = new TransformBuilder();
 
 		// camera for viewing thing rendered to fbo
-		Camera fboCamera = new Camera(CameraType.FBO_CAMERA, 1024, 1024, 1.5708f, 0.01f, 100f);
+		Camera fboCamera = new Camera(CameraType.FBO_CAMERA, 1024, 1024, 1.5708f, 0.01f, 100f, 1);
 		Transform persistentFobCameraTransform = transformBuilder
 				.setPosition(new Vec3f(0, 0, 0))
 				.setScale(Vec3f.ONE)
@@ -49,58 +51,12 @@ public class AltimeterSceneView {
 		TransformObject fboCameraTransformGameObject = new TransformObject(persistentFboCameraTransformGameObject, fobCameraTransform);
 		this.fboCameraObject = new CameraObject(fboCameraTransformGameObject, fboCamera);
 
-
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject levelBlackMarkers = new MeshBuilder()
-				.setMeshType(MeshType.CUBOID)
-				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
-				.setTransform(transformBuilder
-						.setRotation(QuaternionF.RotationZ(Math.PI/2.0))
-						.setScale(new Vec3f(0.03f, 0.5f, 0.03f)).build()).build();
-
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
-				.setMeshType(MeshType.CUBOID)
-				.setTexture("/textures/white.png")
-				.setTransform(transformBuilder
-						.resetPosition()
-						.setScale(new Vec3f(0.01f, 0.01f, 0.2f))
-						.build()).build();
-
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject aimMarker = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\aimMarker.obj")
-				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
-				.setTransform(transformBuilder
-						.resetPosition()
-						.setRotation(
-								QuaternionF.RotationZ(Math.PI/2)
-								.multiply(QuaternionF.RotationX(Math.PI/2))
-						)
-						.setScale(new Vec3f(0.1f, 0.1f, 0.1f))
-						.build()).build();
-
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject pinMesh = new MeshBuilder()
-				.setMeshType(MeshType.MODEL)
-				.setModelFile("\\models\\pin.obj")
-				.setTexture("/textures/gunMetalTexture.jpg")
-				.setNormalTexture("/normalMaps/gunMetalNormal.jpg")
-				.setTransform(transformBuilder
-						.resetPosition()
-						.setRotation(
-								QuaternionF.RotationZ(Math.PI/2)
-										.multiply(QuaternionF.RotationX(Math.PI/2))
-						)
-						.setScale(new Vec3f(0.2f, 0.2f, 0.2f))
-						.build()).build();
-
-
 		// Level marker
 		double angleToRotate = Math.atan2(1, 1);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), QuaternionF.RotationY(-angleToRotate), fboCameraTransformGameObject, pinMesh);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, aimMarker);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), QuaternionF.RotationY(angleToRotate), fboCameraTransformGameObject, pinMesh);
-		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, -1f, 0)), QuaternionF.RotationZ(Math.PI/2).multiply(QuaternionF.RotationY(angleToRotate)), fboCameraTransformGameObject, pinMesh);
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(1, 0, 0)), QuaternionF.RotationY(-angleToRotate), fboCameraTransformGameObject, modelManager.getModel("PIN"));
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, 0, 0)), fboCameraTransformGameObject, modelManager.getModel("AIM_MARKER"));
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(-1, 0, 0)), QuaternionF.RotationY(angleToRotate), fboCameraTransformGameObject, modelManager.getModel("PIN"));
+		Creation.CreateObject(Vec3f.Z.scale(-1).add(new Vec3f(0, -1f, 0)), QuaternionF.RotationZ(Math.PI/2).multiply(QuaternionF.RotationY(angleToRotate)), fboCameraTransformGameObject, modelManager.getModel("PIN"));
 
 		// skybox
 		this.skyboxTransform = transformBuilder
@@ -109,7 +65,7 @@ public class AltimeterSceneView {
 				.setRotation(QuaternionF.Identity)
 				.build();
 		TransformObject sphereTransformObject = new TransformObject(fboViewTransformGraph, skyboxTransform);
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject sphere = new MeshBuilder()
+		MeshObject sphere = new MeshBuilder()
 				.setMeshType(MeshType.SPHERE)
 				.setTexture("/textures/altimeterSphere.png")
 				.setTriangleNumber(10)
@@ -140,7 +96,7 @@ public class AltimeterSceneView {
 				Vec3f.ZERO,
 				fboViewTransformGraph,
 				2.5,
-				whiteMarkers,
+				modelManager.getModel("WHITE_MARKER"),
 				QuaternionF.RotationX(-Math.PI/2),
 				true,
 				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0) * 10)),
@@ -155,7 +111,7 @@ public class AltimeterSceneView {
 				new Vec3f(0, 0, -1.2f),
 				fboViewTransformGraph,
 				2,
-				whiteMarkers,
+				modelManager.getModel("WHITE_MARKER"),
 				QuaternionF.Identity,
 				true,
 				(angle) -> String.valueOf((int)(Math.round( Math.toDegrees(-angle) / 10.0) * 10)),
@@ -165,10 +121,10 @@ public class AltimeterSceneView {
 						.resetScale()
 				.build());
 
-		this.throttleReadout = new LinearReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, 0.5f));
+		this.throttleReadout = new LinearReadout(fboViewTransformGraph, new Vec3f(1, 0.95f, 0.5f), modelManager);
 
-		this.speedReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, -0.3f), 10);
-		this.altitudeReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, 0.5f), 100);
+		this.speedReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, -0.3f), 10, modelManager);
+		this.altitudeReadout = new LinearInfiniteReadout(fboViewTransformGraph, new Vec3f(1, -0.95f, 0.5f), 100, modelManager);
 
 	}
 

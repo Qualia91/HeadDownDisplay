@@ -6,6 +6,9 @@ import com.nick.wood.graphics_library.objects.Camera;
 import com.nick.wood.graphics_library.objects.game_objects.CameraObject;
 import com.nick.wood.graphics_library.objects.game_objects.RootObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
 import com.nick.wood.graphics_library.utils.Creation;
 import com.nick.wood.hdd.altimeter.AltimeterController;
 import com.nick.wood.hdd.altimeter.AltimeterSceneController;
@@ -22,6 +25,7 @@ import com.nick.wood.hdd.event_bus.events.AltimeterChangeEvent;
 import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
 import com.nick.wood.hdd.event_bus.events.RenderManagementEvent;
 import com.nick.wood.hdd.event_bus.subscribables.RendererManager;
+import com.nick.wood.hdd.gui_components.ModelManager;
 import com.nick.wood.hdd.situation_awareness.*;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
@@ -101,10 +105,16 @@ public class HDD {
 
 
 
+		// build all models used in app
+
+		ModelManager modelManager = new ModelManager();
+
+
+
 		// create views
-		SAView saView = new SAView(saTransformGraph);
+		SAView saView = new SAView(saTransformGraph, 1000, 1000, modelManager);
 		AltimeterView altimeterView = new AltimeterView(altimeterTransformGraph);
-		AltimeterSceneView altimeterSceneView = new AltimeterSceneView(fboViewTransformGraph);
+		AltimeterSceneView altimeterSceneView = new AltimeterSceneView(fboViewTransformGraph, modelManager);
 		SelectedInformationView selectedInformationView = new SelectedInformationView(siiTransformGraph);
 
 
