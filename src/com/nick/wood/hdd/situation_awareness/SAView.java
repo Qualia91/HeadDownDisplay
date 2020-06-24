@@ -4,6 +4,7 @@ import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
 import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
 import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
+import com.nick.wood.hdd.gui_components.CircleGrid;
 import com.nick.wood.hdd.gui_components.ModelManager;
 import com.nick.wood.hdd.gui_components.SquareGrid;
 import com.nick.wood.hdd.gui_components.PlotListPlane;
@@ -16,6 +17,7 @@ public class SAView {
 	private final TransformObject saTransformGraph;
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final PlotListPlane plotListPlane;
+	private final CircleGrid circleGrid;
 
 	public SAView(TransformObject saTransformGraph,
 	              int width,
@@ -24,14 +26,12 @@ public class SAView {
 
 		this.saTransformGraph = saTransformGraph;
 
-		SquareGrid squareGrid = new SquareGrid(
+		this.circleGrid = new CircleGrid(
 				saTransformGraph,
 				new Vec3f(0, 0, 0),
 				QuaternionF.Identity,
-				2,
-				2,
-				width,
-				height);
+				5,
+				width);
 
 		// aircraft
 		MeshObject build = new MeshBuilder()
@@ -47,7 +47,7 @@ public class SAView {
 		MeshGameObject stepMeshGraph = new MeshGameObject(stepTransformGraph, build);
 
 		this.plotListPlane = new PlotListPlane(
-				saTransformGraph,
+				circleGrid.getEditableTransformGraph(),
 				new Vec3f(0, 0, 0),
 				QuaternionF.Identity,
 				width,
@@ -60,5 +60,9 @@ public class SAView {
 
 	public PlotListPlane getPlotListPlane() {
 		return plotListPlane;
+	}
+
+	public CircleGrid getCircleGrid() {
+		return circleGrid;
 	}
 }

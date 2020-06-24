@@ -8,6 +8,7 @@ import com.nick.wood.hdd.event_bus.events.PlotListChangeEvent;
 import com.nick.wood.hdd.event_bus.events.RenderUpdateEvent;
 import com.nick.wood.hdd.event_bus.interfaces.Event;
 import com.nick.wood.hdd.event_bus.interfaces.Subscribable;
+import com.nick.wood.maths.objects.QuaternionF;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,8 +17,6 @@ public class SAController implements Subscribable {
 	private final SAView saView;
 	private final RenderBus renderBus;
 	private Set<Class<?>> supports = new HashSet<>();
-	private float playerHeading = 0;
-	private Plot[] recentPlots = new Plot[0];
 
 	public SAController(SAView saView, RenderBus renderBus) {
 		supports.add(PlotListChangeEvent.class);
@@ -26,15 +25,25 @@ public class SAController implements Subscribable {
 		this.renderBus = renderBus;
 	}
 
-	private void update() {
-
+	private void updatePlotList(Plot[] plotList) {
 
 		renderBus.dispatch(new RenderUpdateEvent(
 				new RenderUpdateData(() -> {
-					saView.getPlotListPlane().drawPlotList(recentPlots, playerHeading);
+					saView.getPlotListPlane().drawPlotList(plotList);
 				}),
 				RenderUpdateEventType.FUNCTION));
 
+	}
+
+	private void updateSAOrientation(float playerHeading) {
+
+		renderBus.dispatch(new RenderUpdateEvent(
+				new RenderUpdateData(() -> {
+					QuaternionF rotation = QuaternionF.RotationX(-playerHeading);
+					saView.getCircleGrid().getEditableTransformGraph().setRotation(rotation);
+					saView.getPlotListPlane().orientateText(rotation);
+				}),
+				RenderUpdateEventType.FUNCTION));
 
 	}
 
@@ -43,12 +52,10 @@ public class SAController implements Subscribable {
 
 		if (event instanceof PlotListChangeEvent) {
 			PlotListChangeEvent plotListChangeEvent = (PlotListChangeEvent) event;
-			recentPlots = plotListChangeEvent.getData().getPlotList();
-			update();
+			updatePlotList(plotListChangeEvent.getData().getPlotList());
 		} else if (event instanceof AltimeterChangeEvent) {
 			AltimeterChangeEvent plotListChangeEvent = (AltimeterChangeEvent) event;
-			this.playerHeading = plotListChangeEvent.getData().getHeading();
-			update();
+			updateSAOrientation(plotListChangeEvent.getData().getHeading());
 		}
 	}
 

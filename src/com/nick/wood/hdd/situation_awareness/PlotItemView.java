@@ -15,7 +15,6 @@ public class PlotItemView {
 	private final TransformBuilder transformBuilder = new TransformBuilder();
 	private final float maxWidth;
 	private final float maxHeight;
-	private final Transform textTransform;
 	private final TextItem textItem;
 	private final Transform trackLocationTransform;
 	private final Transform trackRotationTransform;
@@ -27,6 +26,7 @@ public class PlotItemView {
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject enemyTrackMesh;
 	private final com.nick.wood.graphics_library.objects.mesh_objects.MeshObject unknownTrackMesh;
 	private final MeshGameObject trackMeshGraph;
+	private final TransformObject textTransformGraph;
 
 	public PlotItemView(GameObject parent, float maxWidth, float maxHeight, ModelManager modelManager) {
 
@@ -76,19 +76,19 @@ public class PlotItemView {
 				.setFontFile("/fonts/verandaGreenBold.png")
 				.build();
 
-		this.textTransform = transformBuilder
+		Transform textTransform = transformBuilder
 				.reset()
 				.setPosition(new Vec3f(-1, 0, 0))
 				.setScale(5)
 				.build();
 
-		TransformObject textTransformGraph = new TransformObject(trackLocationTransformGraph, textTransform);
+		this.textTransformGraph = new TransformObject(trackLocationTransformGraph, textTransform);
 
 		MeshGameObject textSceneGraph = new MeshGameObject(textTransformGraph, textItem);
 
 	}
 
-	public void updateInformation(Plot plot, float playerHeading) {
+	public void updateInformation(Plot plot) {
 
 		// calc position in grid
 		// find "forward" and "side" locations
@@ -104,9 +104,9 @@ public class PlotItemView {
 		}
 		this.trackLocationTransform.setPosition(new Vec3f(0, -side, forward));
 
-		float targetRelativeHeading = plot.getHpr().getX() - playerHeading;
+		float heading = plot.getHpr().getX();
 
-		this.trackRotationTransform.setRotation(QuaternionF.RotationX(targetRelativeHeading));
+		this.trackRotationTransform.setRotation(QuaternionF.RotationX(heading));
 
 		this.textItem.changeText(String.valueOf(plot.getId()));
 
@@ -126,5 +126,9 @@ public class PlotItemView {
 
 	public void hide() {
 		this.trackLocationTransform.setPosition(new Vec3f(-100, 0, 0));
+	}
+
+	public TransformObject getTextTransformGraph() {
+		return textTransformGraph;
 	}
 }

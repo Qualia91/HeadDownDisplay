@@ -1,11 +1,12 @@
 package com.nick.wood.hdd.gui_components;
 
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
-import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
-import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.graphics_library.objects.game_objects.MeshGameObject;
 import com.nick.wood.graphics_library.objects.game_objects.GameObject;
 import com.nick.wood.graphics_library.objects.game_objects.TransformObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshBuilder;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshObject;
+import com.nick.wood.graphics_library.objects.mesh_objects.MeshType;
+import com.nick.wood.graphics_library.objects.mesh_objects.TextItem;
 import com.nick.wood.maths.objects.QuaternionF;
 import com.nick.wood.maths.objects.srt.Transform;
 import com.nick.wood.maths.objects.srt.TransformBuilder;
@@ -31,7 +32,7 @@ public class SquareGrid {
 		stepWidthsReal = (int) (widthMaxValue / widthIncrements);
 		stepHeightsReal = (int) (heightMaxValue / heightIncrements);
 
-		com.nick.wood.graphics_library.objects.mesh_objects.MeshObject whiteMarkers = new MeshBuilder()
+		MeshObject whiteMarkers = new MeshBuilder()
 				.setMeshType(MeshType.SQUARE)
 				.setTexture("/textures/white.png")
 				.setTransform(transformBuilder

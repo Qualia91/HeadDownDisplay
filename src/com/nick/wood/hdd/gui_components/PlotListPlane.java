@@ -50,7 +50,7 @@ public class PlotListPlane {
 
 	}
 
-	public void drawPlotList(Plot[] plots, float playerHeading) {
+	public void drawPlotList(Plot[] plots) {
 		for (int index = 0; index < plots.length; index++) {
 
 			if (!(plotItemViews.size() > index)) {
@@ -61,7 +61,7 @@ public class PlotListPlane {
 						modelManager));
 			}
 
-			plotItemViews.get(index).updateInformation(plots[index], playerHeading);
+			plotItemViews.get(index).updateInformation(plots[index]);
 
 		}
 
@@ -69,5 +69,11 @@ public class PlotListPlane {
 			plotItemViews.get(i).hide();
 		}
 
+	}
+
+	public void orientateText(QuaternionF rotation) {
+		for (PlotItemView plotItemView : plotItemViews) {
+			plotItemView.getTextTransformGraph().setRotation(rotation.inverse());
+		}
 	}
 }
